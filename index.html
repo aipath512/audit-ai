@@ -1041,7 +1041,8 @@ function sendEmailReport(emailOverride) {
   const email = emailOverride || capturedLead.email || '';
   const subj = encodeURIComponent(`Audit·AI™ Report — ${currentUrl}`);
   const body = encodeURIComponent(report.slice(0,1900)+'…\n[Truncated — use Copy Full Report for complete version]');
-  window.location.href = `mailto:${email}?subject=${subj}&body=${body}`;
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${email}&su=${subj}&body=${body}`;
+  window.open(gmailUrl, '_blank');
 }
 
 function copyReport() {
