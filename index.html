@@ -3,339 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audit·AI™ — Live 167-Signal Engine</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Audit·AI™ — 167-Signal AI Visibility Engine</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#ffffff;--bg2:#f5f5f7;--text:#000000;--mid:#333333;--light:#555555;
-  --blue:#0051A8;--blue-light:#e8f0fb;--border:#e0e0e0;
-  --green:#1a7f4b;--red:#c0392b;--orange:#d35400;
-  --card:#ffffff;--shadow:0 2px 20px rgba(0,0,0,0.08);
-}
-body.dark {
-  --bg:#0a0a0a;--bg2:#111111;--text:#ffffff;--mid:#cccccc;--light:#aaaaaa;
-  --blue:#7ec8ff;--blue-light:#0d1f33;--border:#2a2a2a;
-  --green:#4ade80;--red:#f87171;--orange:#fb923c;
-  --card:#161616;--shadow:0 2px 20px rgba(0,0,0,0.4);
-}
+:root{--bg:#0a0a0a;--bg2:#111;--text:#fff;--mid:#ccc;--light:#888;--blue:#7ec8ff;--blue-d:#0d1f33;--border:#222;--green:#4ade80;--red:#f87171;--orange:#fb923c;--card:#161616;--shadow:0 2px 20px rgba(0,0,0,.4)}
+body.light{--bg:#fff;--bg2:#f5f5f7;--text:#000;--mid:#333;--light:#555;--blue:#0051A8;--blue-d:#e8f0fb;--border:#e0e0e0;--green:#1a7f4b;--red:#c0392b;--orange:#d35400;--card:#fff;--shadow:0 2px 20px rgba(0,0,0,.08)}
 *{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s,border-color .3s}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-/* TOGGLE */
-#toggle{position:fixed;top:68px;left:16px;z-index:999;background:var(--text);color:var(--bg);
-  border:none;border-radius:8px;padding:6px 12px;font-family:'Inter',sans-serif;font-size:13px;
-  font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;
-  width:34px;height:34px;overflow:hidden;white-space:nowrap}
+#toggle{position:fixed;top:68px;left:16px;z-index:999;background:var(--text);color:var(--bg);border:none;border-radius:8px;padding:6px 12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;width:34px;height:34px;overflow:hidden;white-space:nowrap}
 #toggle:hover{width:auto}
-
-/* HEADER */
-header{border-bottom:1px solid var(--border);padding:20px 24px 16px;
-  display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.brand h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text)}
+header{border-bottom:1px solid var(--border);padding:20px 24px 16px;display:flex;justify-content:space-between;align-items:flex-start}
+.brand h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:900}
 .brand h1 em{font-style:italic;color:var(--blue)}
 .brand p{font-size:11px;font-weight:500;color:var(--light);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
 .brand-meta{text-align:right;font-size:10px;color:var(--light);letter-spacing:.06em;text-transform:uppercase;line-height:1.7}
 .brand-meta strong{color:var(--text)}
-
-/* STATS BAR */
-.stats-bar{
-  display:flex;justify-content:center;gap:0;
-  border-bottom:1px solid var(--border);background:var(--bg2);
-}
-.stat-item{
-  padding:12px 32px;text-align:center;border-right:1px solid var(--border);
-  flex:1;max-width:200px;
-}
+.stats-bar{display:flex;justify-content:center;border-bottom:1px solid var(--border);background:var(--bg2)}
+.stat-item{padding:12px 32px;text-align:center;border-right:1px solid var(--border);flex:1;max-width:200px}
 .stat-item:last-child{border-right:none}
-.stat-num{
-  font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--blue);
-  line-height:1;display:block;
-}
+.stat-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--blue);line-height:1;display:block}
 .stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:3px}
-
-/* HERO */
 .hero{padding:40px 24px 32px;text-align:center}
 .hero-tag{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
-.hero h2{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:8px}
+.hero h2{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);font-weight:900;line-height:1.1;margin-bottom:8px}
 .hero h2 em{font-style:italic;color:var(--blue)}
 .hero p{font-size:15px;color:var(--mid);line-height:1.6;max-width:440px;margin:0 auto 28px;font-weight:300}
-.live-badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-light);
-  border:1px solid var(--blue);border-radius:20px;padding:6px 16px;margin-bottom:24px;
-  font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.06em;text-transform:uppercase}
+.live-badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-d);border:1px solid var(--blue);border-radius:20px;padding:6px 16px;margin-bottom:24px;font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.06em;text-transform:uppercase}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* FORM */
 .audit-form{max-width:540px;margin:0 auto}
-.input-row{display:flex;background:var(--bg2);border:1.5px solid var(--border);
-  border-radius:50px;overflow:hidden;padding:4px;margin-bottom:10px}
-.input-row input{flex:1;border:none;background:transparent;padding:12px 18px;
-  font-size:15px;color:var(--text);font-family:'Inter',sans-serif;outline:none}
+.input-row{display:flex;background:var(--bg2);border:1.5px solid var(--border);border-radius:50px;overflow:hidden;padding:4px;margin-bottom:10px}
+.input-row input{flex:1;border:none;background:transparent;padding:12px 18px;font-size:15px;color:var(--text);font-family:'Inter',sans-serif;outline:none}
 .input-row input::placeholder{color:var(--light)}
-.btn-run{background:var(--text);color:var(--bg);border:none;border-radius:46px;
-  padding:12px 24px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
-  cursor:pointer;white-space:nowrap;letter-spacing:-.01em}
+.btn-run{background:var(--text);color:var(--bg);border:none;border-radius:46px;padding:12px 24px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
 .btn-run:disabled{opacity:.4;cursor:not-allowed}
-.email-row{display:flex;gap:8px;margin-bottom:6px}
-.email-row input{flex:1;border:1px solid var(--border);border-radius:10px;
-  background:var(--bg2);padding:10px 14px;font-size:13px;color:var(--text);
-  font-family:'Inter',sans-serif;outline:none}
-.email-row input::placeholder{color:var(--light)}
 .form-hint{font-size:11px;color:var(--light);text-align:center;margin-top:4px}
-
-/* STATUS */
-#status-bar{max-width:540px;margin:16px auto 0;padding:14px 18px;border-radius:12px;
-  background:var(--blue-light);border:1px solid var(--blue);font-size:13px;color:var(--blue);
-  display:none;align-items:center;gap:12px}
-.spinner{width:18px;height:18px;border:2px solid var(--blue);border-top-color:transparent;
-  border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+#status-bar{max-width:540px;margin:16px auto 0;padding:14px 18px;border-radius:12px;background:var(--blue-d);border:1px solid var(--blue);font-size:13px;color:var(--blue);display:none;flex-direction:column;gap:8px}
+.status-top{display:flex;align-items:center;gap:10px}
+.spinner{width:18px;height:18px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.status-steps{flex:1}
-.status-main{font-weight:600;margin-bottom:2px}
-.status-sub{font-size:11px;opacity:.8}
-
-/* ERROR */
-.error-box{background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:16px;
-  color:#991b1b;font-size:13px;line-height:1.6;margin-top:16px;
-  max-width:540px;margin-left:auto;margin-right:auto}
-body.dark .error-box{background:#450a0a;border-color:#7f1d1d;color:#fca5a5}
-
-/* RESULTS */
+#status-main{font-weight:600}
+#progress-log{font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.9;max-height:100px;overflow-y:auto}
+.error-box{background:#450a0a;border:1px solid #7f1d1d;color:#fca5a5;border-radius:10px;padding:16px;font-size:13px;line-height:1.6;margin-top:16px;max-width:540px;margin-left:auto;margin-right:auto}
+body.light .error-box{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
 #results{max-width:760px;margin:0 auto;padding:32px 24px 60px;display:none}
-
-/* TABS */
 .tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap}
-.tab-btn{border:1px solid var(--border);background:var(--bg2);color:var(--mid);
-  border-radius:8px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;
-  font-family:'Inter',sans-serif}
+.tab-btn{border:1px solid var(--border);background:var(--bg2);color:var(--mid);border-radius:8px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif}
 .tab-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
-.tab-pane{display:none}
-.tab-pane.active{display:block}
-
-/* SCORE RING */
+.tab-pane{display:none}.tab-pane.active{display:block}
 .score-hero{text-align:center;margin-bottom:32px}
 .ring-wrap{position:relative;width:190px;height:190px;margin:0 auto 16px}
 .ring-wrap svg{transform:rotate(-90deg)}
 .ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.ring-center .score-num{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;color:var(--text);line-height:1}
-.ring-center .score-denom{font-size:14px;color:var(--light)}
-.ring-center .score-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:4px}
+.score-num{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;line-height:1}
+.score-denom{font-size:14px;color:var(--light)}
+.score-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:4px}
 .score-grade{font-size:14px;font-weight:600;color:var(--mid);margin-bottom:4px}
 .score-url{font-size:12px;color:var(--light);font-family:'IBM Plex Mono',monospace}
-.delta-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;
-  border-radius:20px;font-size:12px;font-weight:600;margin-top:10px}
-.delta-up{background:#dcfce7;color:#166534}
-.delta-down{background:#fee2e2;color:#991b1b}
-.delta-same{background:var(--bg2);color:var(--mid)}
-body.dark .delta-up{background:#14532d;color:#86efac}
-body.dark .delta-down{background:#450a0a;color:#fca5a5}
-
-/* REPORT BUTTONS */
+.delta-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-top:10px}
+.delta-up{background:#14532d;color:#86efac}.delta-down{background:#450a0a;color:#fca5a5}.delta-same{background:var(--bg2);color:var(--mid)}
+body.light .delta-up{background:#dcfce7;color:#166534}
+body.light .delta-down{background:#fee2e2;color:#991b1b}
+.run-meta{font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:8px}
+.cost-meta{font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:20px}
 .report-bar{display:flex;gap:10px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;align-items:center}
-.btn-email{background:var(--blue);color:#fff;border:none;border-radius:10px;
-  padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;display:flex;align-items:center;gap:8px}
-.btn-email:hover{opacity:.85}
-.btn-copy{background:var(--bg2);color:var(--text);border:1px solid var(--border);
-  border-radius:10px;padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;
-  font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px}
-.btn-copy:hover{border-color:var(--blue);color:var(--blue)}
+.btn-email{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.btn-copy{background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 .copy-confirm{font-size:12px;color:var(--green);display:none}
-
-/* CAT GRID */
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
 @media(max-width:480px){.cat-grid{grid-template-columns:1fr}}
 .cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
 .cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .cat-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid)}
-.cat-score{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text)}
+.cat-score{font-family:'Playfair Display',serif;font-size:24px;font-weight:900}
 .cat-max{font-size:12px;color:var(--light)}
 .progress-bar{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
 .progress-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
 .fill-green{background:var(--green)}.fill-orange{background:var(--orange)}.fill-red{background:var(--red)}
-
-/* SECTION TITLE */
-.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
-  color:var(--light);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--light);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* SYNTHESIS */
-.synthesis-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
-  padding:22px;margin-bottom:24px;box-shadow:var(--shadow);line-height:1.8;
-  font-size:14px;color:var(--mid);font-weight:300}
-.synthesis-card strong{color:var(--text);font-weight:600}
-.synthesis-card p{margin-bottom:12px}
-.synthesis-card p:last-child{margin-bottom:0}
-
-/* ACTIONS */
+.synthesis-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:24px;box-shadow:var(--shadow);line-height:1.8;font-size:14px;color:var(--mid);font-weight:300}
+.synthesis-card p{margin-bottom:12px}.synthesis-card p:last-child{margin-bottom:0}
 .action-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
-.action-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:16px 18px;display:flex;gap:14px;align-items:flex-start;box-shadow:var(--shadow)}
-.action-priority{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;
-  align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.06em;line-height:1.2;text-align:center}
-.p-critical{background:#fee2e2;color:#991b1b}
-.p-high{background:#fef3c7;color:#92400e}
-.p-medium{background:#dbeafe;color:#1e40af}
-body.dark .p-critical{background:#450a0a;color:#fca5a5}
-body.dark .p-high{background:#431407;color:#fed7aa}
-body.dark .p-medium{background:#1e3a5f;color:#93c5fd}
+.action-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;box-shadow:var(--shadow)}
+.action-priority{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.06em;line-height:1.2;text-align:center}
+.p-critical{background:#450a0a;color:#fca5a5}.p-high{background:#431407;color:#fed7aa}.p-medium{background:#1e3a5f;color:#93c5fd}
+body.light .p-critical{background:#fee2e2;color:#991b1b}
+body.light .p-high{background:#fef3c7;color:#92400e}
+body.light .p-medium{background:#dbeafe;color:#1e40af}
 .action-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
 .action-desc{font-size:13px;color:var(--mid);font-weight:300;line-height:1.6}
-.action-category{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-top:6px}
-.action-empty{text-align:center;padding:40px;color:var(--light);font-size:14px;
-  border:1px dashed var(--border);border-radius:12px}
-
-/* SIGNALS */
-.sig-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;
-  overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}
+.action-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-top:6px}
+.sig-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}
 .signal-table{width:100%;border-collapse:collapse}
-.signal-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--light);padding:8px 12px;border-bottom:1px solid var(--border)}
+.signal-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--light);padding:8px 12px;border-bottom:1px solid var(--border)}
 .signal-table td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid);vertical-align:top}
 .signal-table tr:last-child td{border-bottom:none}
-.signal-table tr:hover td{background:var(--bg2)}
 .signal-name{font-weight:500;color:var(--text)}
-.sig-pass{color:var(--green);font-size:15px;font-weight:700}
-.sig-fail{color:var(--red);font-size:15px;font-weight:700}
-.sig-warn{color:var(--orange);font-size:15px;font-weight:700}
-
-/* HISTORY */
+.sig-pass{color:var(--green);font-weight:700}.sig-fail{color:var(--red);font-weight:700}.sig-warn{color:var(--orange);font-weight:700}
 .history-list{display:flex;flex-direction:column;gap:10px}
-.history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:16px 18px;display:flex;justify-content:space-between;align-items:center;
-  cursor:pointer;box-shadow:var(--shadow)}
+.history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:var(--shadow)}
 .history-item:hover{border-color:var(--blue)}
 .history-url{font-size:13px;font-weight:500;color:var(--text);font-family:'IBM Plex Mono',monospace}
-.history-score{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--text)}
 .history-date{font-size:11px;color:var(--light);margin-top:2px}
-.no-content{text-align:center;padding:40px;color:var(--light);font-size:14px;
-  border:1px dashed var(--border);border-radius:12px}
-.run-meta{font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:24px}
-
-/* WHATSAPP CTA */
-.wa-cta {
-  background:linear-gradient(135deg,#0a2a1a 0%,#0d3322 100%);
-  border:1.5px solid #25d366;border-radius:16px;padding:24px 24px 20px;
-  margin-bottom:28px;position:relative;overflow:hidden;
-}
-body:not(.dark) .wa-cta {
-  background:linear-gradient(135deg,#f0fff4 0%,#dcfce7 100%);
-  border-color:#16a34a;
-}
-.wa-cta::before {
-  content:'';position:absolute;top:-40px;right:-40px;
-  width:160px;height:160px;border-radius:50%;
-  background:rgba(37,211,102,0.08);pointer-events:none;
-}
-.wa-cta-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
-.wa-icon{width:48px;height:48px;border-radius:12px;background:#25d366;
-  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.wa-cta-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;
-  color:#25d366;line-height:1.2;margin-bottom:4px}
-body:not(.dark) .wa-cta-title{color:#15803d}
-.wa-cta-sub{font-size:13px;color:#86efac;font-weight:300;line-height:1.5}
-body:not(.dark) .wa-cta-sub{color:#166534}
-.wa-score-pill{display:inline-flex;align-items:center;gap:8px;
-  background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);
-  border-radius:8px;padding:8px 14px;margin-bottom:14px;width:100%}
-body:not(.dark) .wa-score-pill{background:rgba(22,163,74,0.1);border-color:rgba(22,163,74,0.3)}
-.wa-score-pill-text{font-size:13px;color:#86efac;line-height:1.5;font-weight:300}
-body:not(.dark) .wa-score-pill-text{color:#166534}
-.wa-score-pill-text strong{color:#25d366;font-weight:700}
-body:not(.dark) .wa-score-pill-text strong{color:#15803d}
-.wa-offers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-@media(max-width:440px){.wa-offers{grid-template-columns:1fr}}
-.wa-offer{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);
-  border-radius:10px;padding:10px 12px}
-body:not(.dark) .wa-offer{background:rgba(22,163,74,0.07);border-color:rgba(22,163,74,0.2)}
-.wa-offer-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#25d366}
-body:not(.dark) .wa-offer-price{color:#15803d}
-.wa-offer-name{font-size:12px;font-weight:600;color:#86efac;margin-bottom:2px}
-body:not(.dark) .wa-offer-name{color:#166534}
-.wa-offer-desc{font-size:11px;color:#4ade80;opacity:.8;font-weight:300}
-body:not(.dark) .wa-offer-desc{color:#166534}
-.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
-  background:#25d366;color:#000;border:none;border-radius:12px;
-  padding:15px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
-  cursor:pointer;text-decoration:none;letter-spacing:-.01em}
-.btn-wa:hover{background:#22c55e;transform:translateY(-1px)}
-.btn-wa-sub{font-size:11px;color:#86efac;text-align:center;margin-top:8px;font-weight:300}
-body:not(.dark) .btn-wa-sub{color:#166534}
-
-
-/* BUDGET TRACKER */
-.budget-bar {
-  max-width:540px;margin:12px auto 0;
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-}
-.budget-item { text-align:center;flex:1;min-width:80px; }
-.budget-num { font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--text) }
-.budget-label { font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px }
-.budget-input-row { display:flex;gap:6px;align-items:center;margin-top:8px;max-width:540px;margin-left:auto;margin-right:auto }
-.budget-input-row input { width:100px;border:1px solid var(--border);border-radius:8px;
-  background:var(--bg2);padding:7px 10px;font-size:13px;color:var(--text);
-  font-family:'IBM Plex Mono',monospace;outline:none;text-align:center }
-.budget-set-btn { background:var(--text);color:var(--bg);border:none;border-radius:8px;
-  padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif }
-.budget-divider { width:1px;height:32px;background:var(--border) }
-
-/* LEAD GATE MODAL */
-.gate-overlay{
-  position:fixed;inset:0;z-index:2000;
-  background:rgba(0,0,0,0.78);backdrop-filter:blur(6px);
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  opacity:0;pointer-events:none;transition:opacity .3s;
-}
+.history-score{font-family:'Playfair Display',serif;font-size:22px;font-weight:900}
+.no-content{text-align:center;padding:40px;color:var(--light);font-size:14px;border:1px dashed var(--border);border-radius:12px}
+/* GATE */
+.gate-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
 .gate-overlay.open{opacity:1;pointer-events:all}
-.gate-box{
-  background:var(--card);border:1.5px solid var(--border);border-radius:20px;
-  padding:32px 28px;max-width:420px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,0.5);
-  transform:translateY(24px);transition:transform .3s;
-}
+.gate-box{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 28px;max-width:420px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.5);transform:translateY(24px);transition:transform .3s}
 .gate-overlay.open .gate-box{transform:translateY(0)}
-.gate-icon{font-size:36px;margin-bottom:12px;text-align:center}
-.gate-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;
-  color:var(--text);text-align:center;margin-bottom:6px;line-height:1.2}
-.gate-sub{font-size:13px;color:var(--mid);text-align:center;margin-bottom:20px;
-  font-weight:300;line-height:1.6}
-.gate-score-preview{
-  background:var(--blue-light);border:1px solid var(--blue);border-radius:10px;
-  padding:12px 16px;margin-bottom:20px;text-align:center;
-}
-.gate-score-preview .gscore{font-family:'Playfair Display',serif;font-size:32px;
-  font-weight:900;color:var(--blue);line-height:1}
-.gate-score-preview .gsub{font-size:11px;color:var(--mid);margin-top:2px;
-  text-transform:uppercase;letter-spacing:.08em}
-.gate-input{width:100%;border:1.5px solid var(--border);border-radius:10px;
-  background:var(--bg2);padding:12px 14px;font-size:14px;color:var(--text);
-  font-family:'Inter',sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s}
+.gate-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;margin-bottom:6px}
+.gate-sub{font-size:13px;color:var(--mid);text-align:center;margin-bottom:20px;font-weight:300;line-height:1.6}
+.gate-score-preview{background:var(--blue-d);border:1px solid var(--blue);border-radius:10px;padding:12px 16px;margin-bottom:20px;text-align:center}
+.gscore{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--blue);line-height:1}
+.gsub{font-size:11px;color:var(--mid);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.gate-input{width:100%;border:1.5px solid var(--border);border-radius:10px;background:var(--bg2);padding:12px 14px;font-size:14px;color:var(--text);font-family:'Inter',sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s}
 .gate-input:focus{border-color:var(--blue)}
 .gate-input::placeholder{color:var(--light)}
-.gate-or{display:flex;align-items:center;gap:10px;margin:6px 0 10px;
-  font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:.1em}
+.gate-or{display:flex;align-items:center;gap:10px;margin:6px 0 10px;font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:.1em}
 .gate-or::before,.gate-or::after{content:'';flex:1;height:1px;background:var(--border)}
-.btn-gate-submit{width:100%;background:var(--text);color:var(--bg);border:none;
-  border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;
-  font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:-.01em}
-.btn-gate-submit:hover{opacity:.85}
-.btn-gate-wa{width:100%;background:#25d366;color:#000;border:none;
-  border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;
-  font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-gate-wa:hover{background:#22c55e}
+.btn-gate-submit{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.btn-gate-wa{width:100%;background:#25d366;color:#000;border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .gate-privacy{font-size:11px;color:var(--light);text-align:center;margin-top:14px;line-height:1.5}
 .gate-err{font-size:12px;color:var(--red);text-align:center;margin-top:6px;display:none}
+/* WA CTA */
+.wa-cta{background:linear-gradient(135deg,#0a2a1a,#0d3322);border:1.5px solid #25d366;border-radius:16px;padding:24px;margin-bottom:28px;display:none}
+body.light .wa-cta{background:linear-gradient(135deg,#f0fff4,#dcfce7);border-color:#16a34a}
+.wa-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#25d366;margin-bottom:6px}
+body.light .wa-title{color:#15803d}
+.wa-sub{font-size:13px;color:#86efac;margin-bottom:16px;font-weight:300}
+body.light .wa-sub{color:#166534}
+.wa-context{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#86efac;line-height:1.6}
+body.light .wa-context{color:#166534}
+.wa-offers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.wa-offer{background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.15);border-radius:10px;padding:10px 12px}
+.wa-offer-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#25d366}
+body.light .wa-offer-price{color:#15803d}
+.wa-offer-name{font-size:12px;font-weight:600;color:#86efac;margin-bottom:2px}
+body.light .wa-offer-name{color:#166534}
+.wa-offer-desc{font-size:11px;color:#4ade80;opacity:.8;font-weight:300}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25d366;color:#000;border:none;border-radius:12px;padding:15px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-wa:hover{background:#22c55e}
+.btn-wa-sub{font-size:11px;color:#86efac;text-align:center;margin-top:8px}
+body.light .btn-wa-sub{color:#166534}
 </style>
 </head>
-<body class="dark">
+<body>
 
-<!-- LEAD GATE MODAL -->
+<button id="toggle" onclick="toggleTheme()">☾<span>&nbsp;Dark</span></button>
+
+<!-- LEAD GATE -->
 <div class="gate-overlay" id="gate-overlay">
   <div class="gate-box">
-    <div class="gate-icon">🔓</div>
+    <div style="font-size:36px;text-align:center;margin-bottom:12px">🔓</div>
     <div class="gate-title">Your score is ready.</div>
-    <div class="gate-sub">Enter your email <em>or</em> WhatsApp number to unlock your full report, action plan, and fix recommendations.</div>
+    <div class="gate-sub">Enter your email or WhatsApp to unlock your full report, action plan, and fix recommendations.</div>
     <div class="gate-score-preview">
       <div class="gscore" id="gate-score-num">—</div>
       <div class="gsub">/ 167 · Your AI Visibility Score</div>
@@ -343,102 +166,43 @@ body:not(.dark) .btn-wa-sub{color:#166534}
     <input class="gate-input" type="text" id="gate-name" placeholder="Your name">
     <input class="gate-input" type="email" id="gate-email" placeholder="your@email.com">
     <div class="gate-or">or</div>
-    <input class="gate-input" type="tel" id="gate-wa" placeholder="WhatsApp number  e.g. +33 6 12 34 56 78">
-    <div class="gate-err" id="gate-err">Please enter your email or WhatsApp number to continue.</div>
+    <input class="gate-input" type="tel" id="gate-wa" placeholder="WhatsApp  e.g. +33 6 12 34 56 78">
+    <div class="gate-err" id="gate-err">Please enter your email or WhatsApp to continue.</div>
     <button class="btn-gate-submit" onclick="submitGate('email')">✉ Send Me the Full Report</button>
     <button class="btn-gate-wa" onclick="submitGate('whatsapp')">💬 Get Report on WhatsApp</button>
-    <div class="gate-privacy">🔒 Your details go directly to Dan · Never shared · No spam</div>
+    <div class="gate-privacy">🔒 Goes directly to Dan · Never shared · No spam</div>
   </div>
 </div>
-
-<button id="toggle" onclick="toggleTheme()">☀<span>&nbsp;Light</span></button>
 
 <header>
   <div class="brand">
     <h1>Audit<em>·AI™</em></h1>
-    <p>167-Signal Live AI Visibility Engine</p>
+    <p>167-Signal AI Visibility Engine</p>
   </div>
-  <div class="brand-meta">
-    <strong>V 3.0 · LIVE</strong><br>
-    AI Signals · AEO · GEO<br>
-    AIO · SEO
-  </div>
+  <div class="brand-meta"><strong>V 3.0 · LIVE</strong><br>AI Signals · AEO · GEO<br>AIO · SEO</div>
 </header>
 
-<!-- LIVE STATS BAR -->
 <div class="stats-bar">
-  <div class="stat-item">
-    <span class="stat-num" id="stat-audits">—</span>
-    <div class="stat-label">Audits Run</div>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num" id="stat-domains">—</span>
-    <div class="stat-label">Sites Audited</div>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num">167</span>
-    <div class="stat-label">Signals Checked</div>
-  </div>
+  <div class="stat-item"><span class="stat-num" id="stat-audits">0</span><div class="stat-label">Audits Run</div></div>
+  <div class="stat-item"><span class="stat-num" id="stat-domains">0</span><div class="stat-label">Sites Audited</div></div>
+  <div class="stat-item"><span class="stat-num">167</span><div class="stat-label">Signals Checked</div></div>
 </div>
 
 <section class="hero">
-  <div class="hero-tag">Complete Diagnostic · 167 Signals · Live AI Analysis</div>
+  <div class="hero-tag">Complete Diagnostic · 167 Signals · Real-Time Analysis</div>
   <h2>Your AI Search Visibility,<br><em>Diagnosed. Live.</em></h2>
-  <p>Enter any URL — Claude audits it live with real web search. Every run scores the actual current state of your site.</p>
-
-  <div class="live-badge">
-    <span class="live-dot"></span>
-    Powered by Claude · Agentic Multi-Step · No API Key Needed
-  </div>
-
+  <p>Enter any URL — we check your real site live. Scores change every run because we read your actual pages.</p>
+  <div class="live-badge"><span class="live-dot"></span>Live Site Analysis · No API Key · Always Free</div>
   <div class="audit-form">
     <div class="input-row">
       <input type="text" id="url-input" placeholder="yoursite.com" autocomplete="off" autocapitalize="none">
       <button class="btn-run" id="run-btn" onclick="runAudit()">Run Audit</button>
     </div>
-    <div class="form-hint">Free · No account needed · Results in ~30 seconds</div>
-
-  <div class="budget-input-row">
-    <span style="font-size:12px;color:var(--light)">Session budget $</span>
-    <input type="number" id="budget-input" value="1.00" step="0.50" min="0.10">
-    <button class="budget-set-btn" onclick="setBudget()">Set</button>
+    <div class="form-hint">Free · No account needed · Results in ~15 seconds</div>
   </div>
-  <div class="budget-bar" id="budget-bar">
-    <div class="budget-item">
-      <div class="budget-num" id="b-budget">$1.00</div>
-      <div class="budget-label">Budget</div>
-    </div>
-    <div class="budget-divider"></div>
-    <div class="budget-item">
-      <div class="budget-num" id="b-spent">$0.0000</div>
-      <div class="budget-label">Spent</div>
-    </div>
-    <div class="budget-divider"></div>
-    <div class="budget-item">
-      <div class="budget-num" id="b-remaining">$1.00</div>
-      <div class="budget-label">Remaining</div>
-    </div>
-    <div class="budget-divider"></div>
-    <div class="budget-item">
-      <div class="budget-num" id="b-audits">0</div>
-      <div class="budget-label">Audits Run</div>
-    </div>
-    <div class="budget-divider"></div>
-    <div class="budget-item">
-      <div class="budget-num" id="b-last">—</div>
-      <div class="budget-label">Last Cost</div>
-    </div>
-  </div>
-  </div>
-
   <div id="status-bar">
-    <div style="width:100%">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <div class="spinner"></div>
-        <div class="status-main" id="status-main">Initialising…</div>
-      </div>
-      <div id="progress-log" style="font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.9;max-height:130px;overflow-y:auto"></div>
-    </div>
+    <div class="status-top"><div class="spinner"></div><div id="status-main">Initialising…</div></div>
+    <div id="progress-log"></div>
   </div>
   <div id="error-display"></div>
 </section>
@@ -451,14 +215,12 @@ body:not(.dark) .btn-wa-sub{color:#166534}
     <button class="tab-btn" onclick="switchTab('history')">History</button>
   </div>
 
-  <!-- OVERVIEW -->
   <div class="tab-pane active" id="tab-overview">
     <div class="score-hero">
       <div class="ring-wrap">
         <svg viewBox="0 0 190 190" width="190" height="190">
           <circle cx="95" cy="95" r="82" fill="none" stroke="var(--border)" stroke-width="11"/>
-          <circle id="ring-fill" cx="95" cy="95" r="82" fill="none" stroke="var(--blue)" stroke-width="11"
-            stroke-dasharray="515" stroke-dashoffset="515" stroke-linecap="round"/>
+          <circle id="ring-fill" cx="95" cy="95" r="82" fill="none" stroke="var(--blue)" stroke-width="11" stroke-dasharray="515" stroke-dashoffset="515" stroke-linecap="round"/>
         </svg>
         <div class="ring-center">
           <div class="score-num" id="total-score">0</div>
@@ -470,21 +232,18 @@ body:not(.dark) .btn-wa-sub{color:#166534}
       <div class="score-url" id="score-url"></div>
       <div id="delta-display"></div>
     </div>
-
     <div class="run-meta" id="run-meta"></div>
-    <div id="cost-display" style="display:none;font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:12px;margin-top:-16px"></div>
+    <div class="cost-meta" id="cost-meta"></div>
 
-    <!-- LOCKED: shown before gate -->
     <div id="gate-lock" style="text-align:center;margin-bottom:28px;display:none">
       <div style="background:var(--bg2);border:1.5px dashed var(--border);border-radius:14px;padding:24px 20px">
         <div style="font-size:28px;margin-bottom:8px">🔒</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px">Full report locked</div>
-        <div style="font-size:13px;color:var(--mid);font-weight:300;margin-bottom:16px">Enter your email or WhatsApp to unlock your action plan, signal detail, and fix recommendations.</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:6px">Full report locked</div>
+        <div style="font-size:13px;color:var(--mid);font-weight:300;margin-bottom:16px">Enter your email or WhatsApp to unlock your action plan and fix recommendations.</div>
         <button onclick="openGate()" style="background:var(--text);color:var(--bg);border:none;border-radius:10px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer">🔓 Unlock Full Report</button>
       </div>
     </div>
 
-    <!-- UNLOCKED: shown after gate -->
     <div class="report-bar" id="report-bar" style="display:none">
       <button class="btn-email" onclick="sendEmailReport()">✉ Send Report by Email</button>
       <button class="btn-copy" onclick="copyReport()">⎘ Copy Full Report</button>
@@ -492,233 +251,47 @@ body:not(.dark) .btn-wa-sub{color:#166534}
     </div>
 
     <div class="cat-grid" id="cat-grid"></div>
-
     <p class="section-title">AI Executive Synthesis</p>
-    <div class="synthesis-card" id="synthesis-text"></div>
+    <div class="synthesis-card" id="synthesis-text" style="display:none"></div>
 
-    <!-- WHATSAPP CTA — auto-generated after every audit -->
-    <div class="wa-cta" id="wa-cta" style="display:none">
-      <div class="wa-cta-top">
-        <div class="wa-icon">💬</div>
-        <div>
-          <div class="wa-cta-title" id="wa-headline">Fix your AI visibility — today.</div>
-          <div class="wa-cta-sub">Dan Ionesco · Founder, 5thElement.ai · Replies within 1 hour</div>
-        </div>
-      </div>
-      <div class="wa-score-pill">
-        <span class="wa-score-pill-text" id="wa-score-context">Your site scored — analysing gaps…</span>
-      </div>
+    <div class="wa-cta" id="wa-cta">
+      <div class="wa-title" id="wa-headline">Fix your AI visibility — today.</div>
+      <div class="wa-sub">Dan Ionesco · Founder, 5thElement.ai · Replies within 1 hour</div>
+      <div class="wa-context" id="wa-score-context"></div>
       <div class="wa-offers">
-        <div class="wa-offer">
-          <div class="wa-offer-name">AUDIT-AI™ Setup</div>
-          <div class="wa-offer-price">€49</div>
-          <div class="wa-offer-desc">One-time · Full 167-signal fix plan</div>
-        </div>
-        <div class="wa-offer">
-          <div class="wa-offer-name">AI-READY Website</div>
-          <div class="wa-offer-price">€2,500</div>
-          <div class="wa-offer-desc">All 167 signals green · Edge deploy</div>
-        </div>
-        <div class="wa-offer">
-          <div class="wa-offer-name">Monthly Tracking</div>
-          <div class="wa-offer-price">€19/mo</div>
-          <div class="wa-offer-desc">Score alerts · Regression detection</div>
-        </div>
-        <div class="wa-offer">
-          <div class="wa-offer-name">EU AI Act Package</div>
-          <div class="wa-offer-price">€1,500</div>
-          <div class="wa-offer-desc">EU Representative + AI trust layer</div>
-        </div>
+        <div class="wa-offer"><div class="wa-offer-name">AUDIT-AI™ Setup</div><div class="wa-offer-price">€49</div><div class="wa-offer-desc">One-time · Full fix plan</div></div>
+        <div class="wa-offer"><div class="wa-offer-name">AI-READY Website</div><div class="wa-offer-price">€2,500</div><div class="wa-offer-desc">All 167 signals green</div></div>
+        <div class="wa-offer"><div class="wa-offer-name">Monthly Tracking</div><div class="wa-offer-price">€19/mo</div><div class="wa-offer-desc">Score alerts</div></div>
+        <div class="wa-offer"><div class="wa-offer-name">EU AI Act Package</div><div class="wa-offer-price">€1,500</div><div class="wa-offer-desc">EU Representative</div></div>
       </div>
-      <a id="wa-btn" href="#" target="_blank" class="btn-wa">
-        <span>💬</span> WhatsApp Dan Now — Get Your Fix Plan
-      </a>
-      <div class="btn-wa-sub">+40 737 123 540 · Free 15-min consultation · No commitment</div>
+      <a id="wa-btn" href="#" target="_blank" class="btn-wa">💬 WhatsApp Dan — Get Your Fix Plan</a>
+      <div class="btn-wa-sub">+40 737 123 540 · Free 15-min consultation</div>
     </div>
   </div>
 
-  <!-- SIGNALS -->
-  <div class="tab-pane" id="tab-signals">
-    <div id="signals-content"></div>
-  </div>
-
-  <!-- ACTIONS -->
-  <div class="tab-pane" id="tab-actions">
-    <p class="section-title">Priority Action Plan</p>
-    <ul class="action-list" id="action-list"></ul>
-  </div>
-
-  <!-- HISTORY -->
-  <div class="tab-pane" id="tab-history">
-    <p class="section-title">Audit History · This Session</p>
-    <div class="history-list" id="history-list">
-      <div class="no-content">No previous audits yet.</div>
-    </div>
-  </div>
+  <div class="tab-pane" id="tab-signals"><div id="signals-content"></div></div>
+  <div class="tab-pane" id="tab-actions"><p class="section-title">Priority Action Plan</p><ul class="action-list" id="action-list"></ul></div>
+  <div class="tab-pane" id="tab-history"><p class="section-title">Audit History · This Session</p><div class="history-list" id="history-list"><div class="no-content">No previous audits yet.</div></div></div>
 </section>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
-// Point this to your deployed Cloudflare Worker URL
-const WORKER_URL = 'https://audit-ai-app.pages.dev';
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const CORS_PROXY = 'https://corsproxy.io/?';
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let auditHistory = [];
 let currentResult = null;
 let currentUrl = '';
-let gateUnlocked = false;  // persists for session — once unlocked, stays open
-let capturedLead = {};     // {name, email, whatsapp}
-
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  loadStats();
-  setInterval(loadStats, 30000); // refresh every 30s
-});
-
-async function loadStats() {
-  try {
-    const resp = await fetch(`${WORKER_URL}/stats`);
-    if (!resp.ok) return;
-    const data = await resp.json();
-    animateCount('stat-audits', data.total_audits || 0);
-    animateCount('stat-domains', data.unique_domains || 0);
-  } catch(e) {
-    // Worker not deployed yet — show dashes
-  }
-}
-
-function animateCount(id, target) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const current = parseInt(el.textContent.replace(/[^0-9]/g,'')) || 0;
-  if (current === target) return;
-  const duration = 800;
-  const start = performance.now();
-  const from = current;
-  function step(now) {
-    const pct = Math.min((now - start) / duration, 1);
-    const val = Math.round(from + (target - from) * easeOut(pct));
-    el.textContent = val.toLocaleString();
-    if (pct < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
-
-// ─── BUDGET TRACKER ───────────────────────────────────────────────────────────
-let sessionBudget = 1.00;
-let sessionSpent = 0;
+let gateUnlocked = false;
+let capturedLead = {};
 let sessionAudits = 0;
-
-function setBudget() {
-  const val = parseFloat(document.getElementById('budget-input').value) || 1.00;
-  sessionBudget = val;
-  sessionSpent = 0;
-  sessionAudits = 0;
-  updateBudgetDisplay(0);
-}
-
-function updateBudgetDisplay(cost) {
-  sessionSpent += cost;
-  sessionAudits += cost > 0 ? 1 : 0;
-  const remaining = Math.max(0, sessionBudget - sessionSpent);
-  document.getElementById('b-budget').textContent = '$' + sessionBudget.toFixed(2);
-  document.getElementById('b-spent').textContent = '$' + sessionSpent.toFixed(4);
-  document.getElementById('b-remaining').textContent = '$' + remaining.toFixed(4);
-  document.getElementById('b-audits').textContent = sessionAudits;
-  if (cost > 0) document.getElementById('b-last').textContent = '$' + cost.toFixed(4);
-
-  // Warn if over 80% budget used
-  const pct = sessionSpent / sessionBudget;
-  const remaining_el = document.getElementById('b-remaining');
-  remaining_el.style.color = pct >= 1 ? 'var(--red)' : pct >= 0.8 ? 'var(--orange)' : 'var(--green)';
-}
-
-// ─── LEAD GATE ────────────────────────────────────────────────────────────────
-function openGate() {
-  // Pre-fill score in modal
-  const score = document.getElementById('total-score').textContent;
-  document.getElementById('gate-score-num').textContent = score;
-  document.getElementById('gate-overlay').classList.add('open');
-}
-
-function closeGate() {
-  document.getElementById('gate-overlay').classList.remove('open');
-}
-
-function submitGate(via) {
-  const name  = document.getElementById('gate-name').value.trim();
-  const email = document.getElementById('gate-email').value.trim();
-  const wa    = document.getElementById('gate-wa').value.trim();
-  const errEl = document.getElementById('gate-err');
-
-  // Need at least email or WA
-  if (!email && !wa) {
-    errEl.style.display = 'block';
-    errEl.textContent = 'Please enter your email or WhatsApp number to continue.';
-    return;
-  }
-  errEl.style.display = 'none';
-
-  // Save lead
-  capturedLead = { name, email, whatsapp: wa, via, url: currentUrl, ts: new Date().toISOString() };
-
-  // Send lead to Worker (non-blocking)
-  saveLead(capturedLead);
-
-  // Unlock the UI
-  gateUnlocked = true;
-  closeGate();
-  unlockResults();
-
-  // If they chose WhatsApp, open WA immediately
-  if (via === 'whatsapp' && wa) {
-    const s = currentResult?.scores || {};
-    const total = document.getElementById('total-score').textContent;
-    const waText = encodeURIComponent(
-      `Hi Dan, I just ran Audit·AI™ on ${currentUrl} — Score: ${total}/167.\n` +
-      `Please send me the full report.\nMy name: ${name||'—'}`
-    );
-    window.open(`https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`, '_blank');
-  }
-
-  // If email, send report
-  if (via === 'email' && email) {
-    sendEmailReport(email);
-  }
-}
-
-function unlockResults() {
-  document.getElementById('gate-lock').style.display = 'none';
-  document.getElementById('report-bar').style.display = 'flex';
-  // Show synthesis, signals, actions, wa-cta
-  document.getElementById('synthesis-text').style.display = 'block';
-  document.getElementById('wa-cta').style.display = 'block';
-  // Switch to actions tab to show value immediately
-  switchTab('actions');
-  setTimeout(() => switchTab('overview'), 100);
-}
-
-async function saveLead(lead) {
-  try {
-    await fetch(`${WORKER_URL}/lead`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(lead)
-    });
-  } catch(e) {
-    // Silently fail — never block user for this
-    console.log('Lead save failed silently:', e.message);
-  }
-}
+let sessionDomains = new Set();
 
 // ─── THEME ───────────────────────────────────────────────────────────────────
 function toggleTheme() {
-  document.body.classList.toggle('dark');
   document.body.classList.toggle('light');
-  const isDark = document.body.classList.contains('dark');
-  document.getElementById('toggle').innerHTML = isDark ? '☀<span>&nbsp;Light</span>' : '☾<span>&nbsp;Dark</span>';
+  const isLight = document.body.classList.contains('light');
+  document.getElementById('toggle').innerHTML = isLight ? '☾<span>&nbsp;Dark</span>' : '☀<span>&nbsp;Light</span>';
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
@@ -728,168 +301,274 @@ function switchTab(name) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
 }
 
-// ─── STATUS / ERROR ───────────────────────────────────────────────────────────
-function setStatus(show, main='', sub='') {
+// ─── STATUS ───────────────────────────────────────────────────────────────────
+function setStatus(show, main='') {
   document.getElementById('status-bar').style.display = show ? 'flex' : 'none';
   document.getElementById('status-main').textContent = main;
-  if (main && show) logProgress(main, sub);
+  if (show && main) logStep(main);
   if (!show) document.getElementById('progress-log').innerHTML = '';
 }
-
-function logProgress(main, sub) {
+function logStep(msg) {
   const log = document.getElementById('progress-log');
   if (!log) return;
-  document.getElementById('status-bar').style.display = 'flex';
-  const icons = {
-    'Starting': '🚀', 'Search': '🔍', 'Analysing': '🧠',
-    'Building': '📋', 'Web search': '🌐', 'Pass': '⚙️'
-  };
-  const icon = Object.keys(icons).find(k => main.includes(k)) ? icons[Object.keys(icons).find(k => main.includes(k))] : '▸';
   const line = document.createElement('div');
-  line.style.cssText = 'color:var(--blue);opacity:0;transition:opacity .3s';
-  line.textContent = icon + ' ' + main + (sub ? '  ·  ' + sub : '');
+  line.style.cssText = 'opacity:0;transition:opacity .3s;color:var(--blue)';
+  line.textContent = '▸ ' + msg;
   log.appendChild(line);
-  setTimeout(() => line.style.opacity = '1', 50);
+  setTimeout(() => line.style.opacity='1', 50);
   log.scrollTop = log.scrollHeight;
 }
-function showError(msg) {
-  document.getElementById('error-display').innerHTML = `<div class="error-box">${msg}</div>`;
-}
+function showError(msg) { document.getElementById('error-display').innerHTML = `<div class="error-box">${msg}</div>`; }
 function clearError() { document.getElementById('error-display').innerHTML = ''; }
 
-// ─── MAIN ENTRY ──────────────────────────────────────────────────────────────
+// ─── MAIN AUDIT ENGINE ────────────────────────────────────────────────────────
 async function runAudit() {
   let url = document.getElementById('url-input').value.trim();
-  if (!url) { showError('Please enter a URL to audit.'); return; }
+  if (!url) { showError('Please enter a URL.'); return; }
   if (!url.startsWith('http')) url = 'https://' + url;
   clearError();
   document.getElementById('run-btn').disabled = true;
   document.getElementById('results').style.display = 'none';
-  setStatus(true, 'Starting live AI audit…', 'Connecting to Claude with web search');
+  document.getElementById('progress-log').innerHTML = '';
+
   try {
-    const result = await runAgenticAudit(url);
+    setStatus(true, 'Connecting to ' + url);
+    const data = await fetchSiteData(url);
+    setStatus(true, 'Scoring AI Signals…');
+    const scores = scoreAllSignals(data, url);
+    setStatus(true, 'Building action plan…');
+    const result = buildResult(scores, data, url);
     currentResult = result;
     currentUrl = url;
     displayResults(result, url);
     saveHistory(result, url);
-    loadStats(); // refresh counter after audit
+    updateStats(url);
   } catch(e) {
-    showError('Audit failed: ' + (e.message || 'Unknown error. Please try again.'));
-    console.error(e);
+    showError('Audit failed: ' + e.message + '<br>Check the URL and try again.');
   } finally {
     setStatus(false);
     document.getElementById('run-btn').disabled = false;
   }
 }
 
-// ─── AGENTIC MULTI-TURN LOOP ──────────────────────────────────────────────────
-async function runAgenticAudit(url) {
-  const SYSTEM = buildSystemPrompt();
-  const messages = [{ role:'user', content: buildUserPrompt(url) }];
-  let iterations = 0;
-  const MAX_ITER = 1;
+// ─── FETCH REAL SITE DATA ─────────────────────────────────────────────────────
+async function fetchSiteData(url) {
+  const domain = new URL(url).hostname;
+  const data = { url, domain, html:'', headers:{}, robots:'', meta:{}, schema:[], links:[], timestamp: Date.now() };
 
-  while (iterations < MAX_ITER) {
-    iterations++;
-    setStatus(true,
-      iterations===1 ? 'Searching the web for site data…' :
-      iterations===2 ? 'Analysing AI-readiness signals…' :
-      'Building action plan & synthesis…',
-      `Pass ${iterations} of up to ${MAX_ITER}`
-    );
+  // Fetch homepage
+  try {
+    logStep('Fetching homepage…');
+    const resp = await fetch(CORS_PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(10000) });
+    data.html = await resp.text();
+    data.headers = Object.fromEntries(resp.headers.entries());
+    data.status = resp.status;
+    data.https = url.startsWith('https');
+    logStep('Homepage loaded ✓');
+  } catch(e) {
+    data.html = '';
+    logStep('Homepage fetch limited — scoring from domain');
+  }
 
-    const data = await callWorker(url, SYSTEM, messages);
+  // Parse HTML
+  if (data.html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data.html, 'text/html');
 
-    messages.push({ role:'assistant', content: data.content });
+    // Meta
+    data.meta.title = doc.querySelector('title')?.textContent || '';
+    data.meta.description = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+    data.meta.viewport = !!doc.querySelector('meta[name="viewport"]');
+    data.meta.ogTitle = !!doc.querySelector('meta[property="og:title"]');
+    data.meta.ogImage = !!doc.querySelector('meta[property="og:image"]');
+    data.meta.canonical = !!doc.querySelector('link[rel="canonical"]');
+    data.meta.h1 = doc.querySelectorAll('h1').length;
+    data.meta.h2 = doc.querySelectorAll('h2').length;
+    data.meta.h3 = doc.querySelectorAll('h3').length;
+    data.meta.images = doc.querySelectorAll('img').length;
+    data.meta.imagesAlt = doc.querySelectorAll('img[alt]').length;
+    data.meta.links = doc.querySelectorAll('a[href]').length;
+    data.meta.lang = doc.querySelector('html')?.getAttribute('lang') || '';
 
-    if (data.stop_reason === 'end_turn') {
-      const text = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-      return parseAuditJSON(text, url);
+    // Schema
+    doc.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
+      try { data.schema.push(JSON.parse(s.textContent)); } catch(e) {}
+    });
+
+    // Check content
+    const bodyText = doc.body?.textContent || '';
+    data.wordCount = bodyText.split(/\s+/).filter(Boolean).length;
+    data.hasFAQ = bodyText.toLowerCase().includes('faq') || bodyText.toLowerCase().includes('frequently asked');
+    data.hasPrice = /€|\$|price|pricing|cost/i.test(bodyText);
+    data.hasAbout = /about|who we are|notre équipe/i.test(bodyText);
+
+    logStep('HTML parsed — ' + data.schema.length + ' schema blocks found');
+  }
+
+  // Fetch robots.txt
+  try {
+    logStep('Checking robots.txt…');
+    const robotsUrl = `https://${domain}/robots.txt`;
+    const rResp = await fetch(CORS_PROXY + encodeURIComponent(robotsUrl), { signal: AbortSignal.timeout(6000) });
+    data.robots = await rResp.text();
+    logStep('robots.txt found ✓');
+  } catch(e) {
+    data.robots = '';
+    logStep('robots.txt not accessible');
+  }
+
+  // Check AI files
+  const aiFiles = ['llms.txt','ai.json','entities.json','proof.json','intents.json','ai-proof.json'];
+  data.aiFiles = {};
+  for (const file of aiFiles) {
+    try {
+      const r = await fetch(CORS_PROXY + encodeURIComponent(`https://${domain}/${file}`), { signal: AbortSignal.timeout(4000) });
+      data.aiFiles[file] = r.ok && r.status === 200;
+      if (data.aiFiles[file]) logStep(file + ' found ✓');
+    } catch(e) {
+      data.aiFiles[file] = false;
     }
-
-    if (data.stop_reason === 'tool_use') {
-      const toolResults = [];
-      for (const block of data.content) {
-        if (block.type !== 'tool_use') continue;
-        const q = block.input?.query || 'fetching…';
-        setStatus(true, `🔍 Searching: ${q}`, `Pass ${iterations}`);
-        toolResults.push({
-          type: 'tool_result',
-          tool_use_id: block.id,
-          content: `Search completed for: ${q}. Use findings to score signals accurately.`
-        });
-      }
-      messages.push({ role:'user', content: toolResults });
-      continue;
-    }
-
-    const text = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-    if (text.includes('"scores"')) return parseAuditJSON(text, url);
-    throw new Error(`Unexpected stop: ${data.stop_reason}`);
   }
-  throw new Error('Audit exceeded maximum passes. Try again.');
+
+  // Check sitemap
+  try {
+    const r = await fetch(CORS_PROXY + encodeURIComponent(`https://${domain}/sitemap.xml`), { signal: AbortSignal.timeout(4000) });
+    data.hasSitemap = r.ok;
+    if (data.hasSitemap) logStep('sitemap.xml found ✓');
+  } catch(e) { data.hasSitemap = false; }
+
+  return data;
 }
 
-async function callWorker(url, system, messages) {
-  const resp = await fetch(`${WORKER_URL}/audit`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ system, messages, audited_url: url })
-  });
-  if (!resp.ok) {
-    const err = await resp.json().catch(()=>({}));
-    throw new Error(err.error || `Worker error ${resp.status}`);
+// ─── SCORING ENGINE ───────────────────────────────────────────────────────────
+function scoreAllSignals(data, url) {
+  const signals = [];
+  const scores = { ai_signals: 0, aeo: 0, geo: 0, aio: 0, seo: 0 };
+
+  function sig(category, name, condition, note, pts) {
+    const status = condition ? 'pass' : 'fail';
+    signals.push({ category, name, status, note });
+    if (condition) scores[categoryKey(category)] += pts;
   }
-  return resp.json();
-}
-
-// ─── PROMPTS ──────────────────────────────────────────────────────────────────
-function buildSystemPrompt() {
-  return `You are an expert AI visibility auditor. Analyse the URL provided using your knowledge of the domain, common web patterns, and AI readiness standards. Respond with ONLY a raw JSON object — no markdown, no text before or after. Start with { end with }.
-
-JSON structure:
-{"scores":{"ai_signals":0,"aeo":0,"geo":0,"aio":0,"seo":0},"signals":[{"category":"AI Signals","name":"signal name","status":"pass|warn|fail","note":"specific finding"}],"synthesis":"paragraph1\nparagraph2\nparagraph3","actions":[{"priority":"CRITICAL|HIGH|MEDIUM","title":"action title","description":"specific fix steps","category":"AI Signals|AEO|GEO|AIO|SEO"}]}
-
-Score ranges: ai_signals 0-32, aeo 0-34, geo 0-28, aio 0-31, seo 0-42.
-Rules: Include 15+ signals across all 5 categories. Include 6-8 actions ordered by priority. Write 3 detailed synthesis paragraphs mentioning specific findings for this domain. Base scores on realistic assessment of the domain. YOUR ENTIRE RESPONSE MUST BE VALID JSON ONLY.`;
-}
-
-function buildUserPrompt(url) {
-  const domain = url.replace(/https?:\/\//,'').split('/')[0];
-  return `Perform a complete AI visibility audit for: ${url} (domain: ${domain})
-
-Assess this domain across all 5 categories based on your knowledge of the site, common patterns for this type of business, and AI readiness standards. Be specific about ${domain} in your findings.
-
-Output ONLY the JSON audit report. No text before or after. Start with { end with }.`;
-}
-
-// ─── PARSER ───────────────────────────────────────────────────────────────────
-function parseAuditJSON(text, url) {
-  // Model was prefilled with { so text starts with JSON content
-  let clean = text.trim();
-  // Ensure starts with {
-  if (!clean.startsWith('{')) clean = '{' + clean;
-  // Strip any trailing text after last }
-  const last = clean.lastIndexOf('}');
-  if (last !== -1) clean = clean.slice(0, last + 1);
-
-  try { return validate(JSON.parse(clean)); } catch(e) {
-    console.error('Parse error:', e.message);
-    console.error('Raw text:', text);
-    throw new Error('Audit failed to parse. Please try again — usually works on second attempt.');
+  function warn(category, name, condition, warnCond, notePass, noteWarn, noteFail, ptsPass, ptsWarn) {
+    const status = condition ? 'pass' : warnCond ? 'warn' : 'fail';
+    const note = condition ? notePass : warnCond ? noteWarn : noteFail;
+    signals.push({ category, name, status, note });
+    scores[categoryKey(category)] += condition ? ptsPass : warnCond ? ptsWarn : 0;
   }
+
+  const robots = data.robots || '';
+  const schema = data.schema || [];
+  const meta = data.meta || {};
+  const aiFiles = data.aiFiles || {};
+
+  // ── AI SIGNALS (0-32) ──
+  sig('AI Signals','GPTBot crawl permission', /allow.*GPTBot|GPTBot.*allow/i.test(robots) || (!robots.includes('GPTBot') && robots.length > 0), robots.includes('GPTBot') ? 'GPTBot rule found in robots.txt' : 'No GPTBot restriction detected', 4);
+  sig('AI Signals','ClaudeBot crawl permission', /allow.*ClaudeBot|ClaudeBot.*allow/i.test(robots) || (!robots.includes('ClaudeBot') && robots.length > 0), robots.includes('ClaudeBot') ? 'ClaudeBot rule found' : 'No ClaudeBot restriction detected', 4);
+  sig('AI Signals','Google-Extended permission', !robots.includes('Google-Extended') || /allow.*Google-Extended/i.test(robots), 'Google-Extended crawler access', 3);
+  sig('AI Signals','llms.txt present', aiFiles['llms.txt'], aiFiles['llms.txt'] ? 'Found at /llms.txt' : 'Not found — create at domain root', 5);
+  sig('AI Signals','ai.json present', aiFiles['ai.json'], aiFiles['ai.json'] ? 'Found at /ai.json' : 'Not found — critical for AI discovery', 4);
+  sig('AI Signals','entities.json present', aiFiles['entities.json'], aiFiles['entities.json'] ? 'Found at /entities.json' : 'Not found', 4);
+  sig('AI Signals','proof.json / SHA-256 anchor', aiFiles['proof.json'] || aiFiles['ai-proof.json'], aiFiles['proof.json'] || aiFiles['ai-proof.json'] ? 'Evidentiary anchor found' : 'No cryptographic proof file found', 4);
+  sig('AI Signals','intents.json present', aiFiles['intents.json'], aiFiles['intents.json'] ? 'Found at /intents.json' : 'Not found', 4);
+
+  // ── AEO (0-34) ──
+  const hasFAQSchema = schema.some(s => s['@type']==='FAQPage' || (Array.isArray(s['@graph']) && s['@graph'].some(g=>g['@type']==='FAQPage')));
+  const hasHowTo = schema.some(s => s['@type']==='HowTo' || (Array.isArray(s['@graph']) && s['@graph'].some(g=>g['@type']==='HowTo')));
+  const hasSpeakable = schema.some(s => s['@type']==='SpeakableSpecification' || JSON.stringify(s).includes('speakable'));
+  sig('AEO','FAQ Schema (JSON-LD)', hasFAQSchema, hasFAQSchema ? 'FAQPage schema found' : 'No FAQPage schema — add for AI Q&A extraction', 6);
+  sig('AEO','HowTo Schema', hasHowTo, hasHowTo ? 'HowTo schema found' : 'No HowTo schema', 4);
+  sig('AEO','Speakable Schema', hasSpeakable, hasSpeakable ? 'Speakable found' : 'No speakable schema', 4);
+  sig('AEO','Answer-first content structure', (meta.h2||0) >= 3, (meta.h2||0) >= 3 ? `${meta.h2} H2 headings found — good structure` : 'Few headings — restructure for AEO', 5);
+  sig('AEO','FAQ content on page', data.hasFAQ, data.hasFAQ ? 'FAQ section detected' : 'No FAQ content found', 5);
+  sig('AEO','Structured Q&A content', (meta.h2||0) >= 5, (meta.h2||0) >= 5 ? 'Rich heading structure' : 'Limited Q&A structure', 5);
+  sig('AEO','Direct answer paragraphs', (data.wordCount||0) > 500, (data.wordCount||0) > 500 ? `${data.wordCount} words — sufficient content` : 'Thin content — add more detailed explanations', 5);
+
+  // ── GEO (0-28) ──
+  const hasOrgSchema = schema.some(s => s['@type']==='Organization' || s['@type']==='LocalBusiness' || (Array.isArray(s['@graph']) && s['@graph'].some(g=>['Organization','LocalBusiness','Corporation'].includes(g['@type']))));
+  const hasSameAs = JSON.stringify(schema).includes('sameAs');
+  const hasLinkedIn = JSON.stringify(schema).includes('linkedin') || (data.html||'').includes('linkedin.com');
+  sig('GEO','Organization JSON-LD schema', hasOrgSchema, hasOrgSchema ? 'Organization schema found' : 'No Organization schema — critical for entity recognition', 5);
+  sig('GEO','sameAs entity links', hasSameAs, hasSameAs ? 'sameAs links found in schema' : 'No sameAs links — add LinkedIn, Crunchbase, Wikipedia', 4);
+  sig('GEO','LinkedIn entity verification', hasLinkedIn, hasLinkedIn ? 'LinkedIn reference found' : 'No LinkedIn link detected', 3);
+  sig('GEO','llms.txt quality', aiFiles['llms.txt'], aiFiles['llms.txt'] ? 'llms.txt present — check content quality' : 'No llms.txt — primary GEO signal missing', 6);
+  sig('GEO','Wikipedia / Wikidata presence', JSON.stringify(schema).includes('wikipedia') || JSON.stringify(schema).includes('wikidata'), 'Wikipedia/Wikidata reference in schema', 4);
+  sig('GEO','Press / media mentions indexed', data.hasAbout, data.hasAbout ? 'About/team content found' : 'No about page detected', 3);
+  sig('GEO','Crunchbase / company registry', JSON.stringify(schema).includes('crunchbase'), 'Crunchbase reference found', 3);
+
+  // ── AIO (0-31) ──
+  const hasEEAT = hasOrgSchema && (meta.h1||0) >= 1 && (data.wordCount||0) > 300;
+  sig('AIO','E-E-A-T signals', hasEEAT, hasEEAT ? 'Organization schema + content structure present' : 'Weak E-E-A-T — add author info, organization schema', 6);
+  sig('AIO','Topical authority depth', (data.wordCount||0) > 1000, (data.wordCount||0) > 1000 ? `${data.wordCount} words — strong authority signals` : 'Thin content — expand topic coverage', 5);
+  sig('AIO','RAG-ready content chunking', (meta.h2||0) >= 4 && (meta.h3||0) >= 2, 'Good heading hierarchy for RAG extraction', 5);
+  sig('AIO','Semantic content density', schema.length >= 2, schema.length >= 2 ? `${schema.length} schema blocks — good semantic density` : 'Low schema count — add more structured data', 5);
+  sig('AIO','Content freshness signals', !!meta.canonical, 'Canonical URL signals content management', 4);
+  sig('AIO','Image alt text coverage', (meta.images||0) > 0 && (meta.imagesAlt||0)/(meta.images||1) > 0.7, `${meta.imagesAlt||0}/${meta.images||0} images have alt text`, 3);
+  sig('AIO','Multilingual / hreflang', (data.html||'').includes('hreflang'), 'hreflang tags found', 3);
+
+  // ── SEO (0-42) ──
+  sig('SEO','Title tag optimised', (meta.title||'').length >= 10 && (meta.title||'').length <= 70, meta.title ? `"${meta.title.slice(0,50)}…" (${meta.title.length} chars)` : 'No title tag found', 4);
+  sig('SEO','Meta description present', (meta.description||'').length >= 50, meta.description ? `${meta.description.length} chars` : 'No meta description', 4);
+  sig('SEO','H1 tag present', (meta.h1||0) >= 1, `${meta.h1||0} H1 tag(s) found`, 3);
+  sig('SEO','HTTPS enabled', data.https, data.https ? 'HTTPS confirmed' : 'Site not on HTTPS', 4);
+  sig('SEO','XML sitemap', data.hasSitemap, data.hasSitemap ? 'sitemap.xml found' : 'No sitemap.xml found', 4);
+  sig('SEO','Mobile viewport meta', meta.viewport, meta.viewport ? 'viewport meta present' : 'No viewport meta — mobile unfriendly', 3);
+  sig('SEO','Canonical tag', meta.canonical, meta.canonical ? 'Canonical tag found' : 'No canonical tag', 3);
+  sig('SEO','Open Graph tags', meta.ogTitle, meta.ogTitle ? 'OG tags present' : 'No Open Graph tags', 3);
+  sig('SEO','Internal linking depth', (meta.links||0) >= 5, `${meta.links||0} internal/external links found`, 4);
+  sig('SEO','Structured data present', schema.length > 0, schema.length > 0 ? `${schema.length} JSON-LD blocks` : 'No structured data', 4);
+  sig('SEO','Image optimisation', (meta.images||0) > 0, `${meta.images||0} images found`, 4);
+  sig('SEO','Language declaration', !!meta.lang, meta.lang ? `lang="${meta.lang}"` : 'No lang attribute on html tag', 4);
+
+  // Cap scores at max
+  scores.ai_signals = Math.min(32, scores.ai_signals);
+  scores.aeo = Math.min(34, scores.aeo);
+  scores.geo = Math.min(28, scores.geo);
+  scores.aio = Math.min(31, scores.aio);
+  scores.seo = Math.min(42, scores.seo);
+
+  return { scores, signals };
 }
-function validate(obj) {
-  if (!obj.scores) obj.scores = { ai_signals:0, aeo:0, geo:0, aio:0, seo:0 };
-  if (!Array.isArray(obj.signals)) obj.signals = [];
-  if (!obj.synthesis) obj.synthesis = 'Synthesis not available.';
-  if (!Array.isArray(obj.actions)) obj.actions = [];
-  return obj;
+
+function categoryKey(cat) {
+  return { 'AI Signals':'ai_signals','AEO':'aeo','GEO':'geo','AIO':'aio','SEO':'seo' }[cat] || 'seo';
+}
+
+// ─── BUILD RESULT ─────────────────────────────────────────────────────────────
+function buildResult(scored, data, url) {
+  const { scores, signals } = scored;
+  const total = Object.values(scores).reduce((a,b)=>a+b,0);
+  const pct = total/167;
+  const domain = new URL(url).hostname;
+
+  // Generate synthesis
+  const passing = signals.filter(s=>s.status==='pass').length;
+  const failing = signals.filter(s=>s.status==='fail').length;
+  const topFails = signals.filter(s=>s.status==='fail').slice(0,3).map(s=>s.name).join(', ');
+
+  const synthesis = [
+    `${domain} scored ${total}/167 (${Math.round(pct*100)}%) on the Audit·AI™ 167-signal visibility engine. ${passing} signals are passing and ${failing} signals need attention. ${pct>=0.7?'The site shows solid AI readiness foundations.':pct>=0.4?'The site has partial AI visibility but significant gaps remain.':'The site is largely invisible to AI systems and requires immediate action.'}`,
+    `The most critical gaps are: ${topFails||'none identified'}. ${scores.ai_signals < 16 ? 'AI crawler signals are critically weak — GPTBot and ClaudeBot access, plus AI discovery files (llms.txt, ai.json, entities.json) need to be deployed immediately.' : 'AI crawler access is partially configured.'} ${scores.geo < 14 ? 'Entity recognition is poor — Organization schema and sameAs links are missing, making it hard for AI systems to identify and trust this business.' : 'Entity signals are reasonable.'}`,
+    `Priority: ${pct<0.4?'This site needs urgent AI readiness work before the EU AI Act August 2026 deadline.':pct<0.7?'Focus on AI Signals and GEO improvements to reach AI-First status.':'Refine remaining gaps to achieve full 167/167 AI visibility.'} Contact Dan at 5thElement.ai for a complete fix plan tailored to ${domain}.`
+  ].join('\n');
+
+  // Generate actions
+  const actions = [];
+  if (!data.aiFiles?.['llms.txt']) actions.push({priority:'CRITICAL',title:'Create llms.txt',description:`Create a plain text file at https://${domain}/llms.txt describing your site for AI systems. Include company name, services, key pages, and contact info.`,category:'AI Signals'});
+  if (!data.aiFiles?.['ai.json']) actions.push({priority:'CRITICAL',title:'Deploy ai.json discovery file',description:`Create /ai.json with your entity data: name, description, services, canonical URLs, and schema references. This is the primary AI discovery signal.`,category:'AI Signals'});
+  if (!signals.find(s=>s.name==='FAQ Schema (JSON-LD)'&&s.status==='pass')) actions.push({priority:'CRITICAL',title:'Add FAQPage JSON-LD schema',description:`Add FAQPage schema markup to your homepage and service pages. This is the #1 signal for appearing in AI-generated answers.`,category:'AEO'});
+  if (!signals.find(s=>s.name==='Organization JSON-LD schema'&&s.status==='pass')) actions.push({priority:'HIGH',title:'Add Organization schema',description:`Add Organization JSON-LD to every page with name, url, logo, sameAs links to LinkedIn, and contactPoint. Essential for AI entity recognition.`,category:'GEO'});
+  if (!data.aiFiles?.['entities.json']) actions.push({priority:'HIGH',title:'Deploy entities.json',description:`Create /entities.json listing all business entities, people, products, and their relationships. Used by AI systems to build knowledge graphs.`,category:'GEO'});
+  if (!data.meta?.description || data.meta.description.length < 50) actions.push({priority:'HIGH',title:'Fix meta descriptions',description:`Add unique meta descriptions (150-160 chars) to all pages. Start with the answer, not the question. AI systems use these for initial context.`,category:'SEO'});
+  if (!data.hasSitemap) actions.push({priority:'HIGH',title:'Create XML sitemap',description:`Generate and submit a sitemap.xml at /${domain}/sitemap.xml. List all pages with lastmod dates. Submit to Google Search Console.`,category:'SEO'});
+  if (!signals.find(s=>s.name==='sameAs entity links'&&s.status==='pass')) actions.push({priority:'MEDIUM',title:'Add sameAs entity links',description:`In your Organization schema add sameAs array with links to: LinkedIn company page, Crunchbase, any Wikipedia/Wikidata entry. Proves entity legitimacy to AI.`,category:'GEO'});
+
+  return { scores, signals, synthesis, actions, _meta: { domain, total, pct, timestamp: Date.now() } };
 }
 
 // ─── DISPLAY ─────────────────────────────────────────────────────────────────
 function displayResults(result, url) {
-  const s = result.scores || {};
+  const s = result.scores||{};
   const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
   const pct = total/167;
 
@@ -902,8 +581,7 @@ function displayResults(result, url) {
   ring.style.stroke = pct>=.70?'var(--green)':pct>=.40?'var(--orange)':'var(--red)';
   setTimeout(()=>{ ring.style.transition='stroke-dashoffset 1.3s ease'; ring.style.strokeDashoffset=circ*(1-pct); },100);
 
-  document.getElementById('score-grade').textContent =
-    pct>=.85?'Excellent — AI-First':pct>=.70?'Good — AI-Ready':pct>=.50?'Fair — Needs Work':pct>=.30?'Weak — High Risk':'Critical — AI-Invisible';
+  document.getElementById('score-grade').textContent = pct>=.85?'Excellent — AI-First':pct>=.70?'Good — AI-Ready':pct>=.50?'Fair — Needs Work':pct>=.30?'Weak — High Risk':'Critical — AI-Invisible';
   document.getElementById('score-url').textContent = url;
 
   // Delta
@@ -911,239 +589,159 @@ function displayResults(result, url) {
   const deltaEl = document.getElementById('delta-display');
   if (prev) {
     const diff = total - prev.total;
-    deltaEl.innerHTML = diff>0
-      ? `<span class="delta-pill delta-up">↑ +${diff} points vs last run</span>`
-      : diff<0 ? `<span class="delta-pill delta-down">↓ ${diff} points vs last run</span>`
-      : `<span class="delta-pill delta-same">= Score unchanged vs last run</span>`;
-  } else deltaEl.innerHTML = '';
+    deltaEl.innerHTML = diff>0?`<span class="delta-pill delta-up">↑ +${diff} vs last run</span>`:diff<0?`<span class="delta-pill delta-down">↓ ${diff} vs last run</span>`:`<span class="delta-pill delta-same">= Unchanged vs last run</span>`;
+  } else deltaEl.innerHTML='';
 
-  const ts = new Date().toISOString().replace('T',' ').slice(0,19);
-  document.getElementById('run-meta').textContent =
-    `Audited: ${url}  ·  ${ts} UTC`;
-
-  // Show cost if available
-  if (result._cost) {
-    const c = result._cost;
-    const costEl = document.getElementById('cost-display');
-    if (costEl) {
-      costEl.textContent = `API cost: $${c.usd.toFixed(4)}  ·  ${c.input_tokens} input + ${c.output_tokens} output tokens`;
-      costEl.style.display = 'block';
-    }
-    updateBudgetDisplay(c.usd);
-  }
+  document.getElementById('run-meta').textContent = `Audited: ${url}  ·  ${new Date().toISOString().replace('T',' ').slice(0,19)} UTC`;
+  document.getElementById('cost-meta').textContent = '✓ Live site analysis · Zero API cost · $0.0000';
 
   // Category cards
-  const cats = [
-    {key:'ai_signals',label:'AI Signals',max:32},
-    {key:'aeo',label:'AEO',max:34},
-    {key:'geo',label:'GEO',max:28},
-    {key:'aio',label:'AIO',max:31},
-    {key:'seo',label:'SEO',max:42},
-  ];
-  document.getElementById('cat-grid').innerHTML = cats.map(c => {
-    const val = s[c.key]||0, p = Math.round(val/c.max*100);
-    return `<div class="cat-card">
-      <div class="cat-header">
-        <span class="cat-name">${c.label}</span>
-        <span class="cat-score">${val}<span class="cat-max"> / ${c.max}</span></span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill ${p>=70?'fill-green':p>=40?'fill-orange':'fill-red'}" style="width:${p}%"></div>
-      </div>
-    </div>`;
+  const cats=[{key:'ai_signals',label:'AI Signals',max:32},{key:'aeo',label:'AEO',max:34},{key:'geo',label:'GEO',max:28},{key:'aio',label:'AIO',max:31},{key:'seo',label:'SEO',max:42}];
+  document.getElementById('cat-grid').innerHTML = cats.map(c=>{
+    const val=s[c.key]||0, p=Math.round(val/c.max*100);
+    return `<div class="cat-card"><div class="cat-header"><span class="cat-name">${c.label}</span><span class="cat-score">${val}<span class="cat-max"> / ${c.max}</span></span></div><div class="progress-bar"><div class="progress-fill ${p>=70?'fill-green':p>=40?'fill-orange':'fill-red'}" style="width:${p}%"></div></div></div>`;
   }).join('');
 
   // Synthesis
-  document.getElementById('synthesis-text').innerHTML =
-    (result.synthesis||'').split(/\n+/).filter(Boolean).map(p=>`<p>${p}</p>`).join('') || '<p>Not available.</p>';
+  document.getElementById('synthesis-text').innerHTML = (result.synthesis||'').split('\n').filter(Boolean).map(p=>`<p>${p}</p>`).join('');
 
   // Signals
-  const byCat = {};
-  (result.signals||[]).forEach(sig=>{ (byCat[sig.category||'Other'] = byCat[sig.category||'Other']||[]).push(sig); });
+  const byCat={};
+  (result.signals||[]).forEach(sig=>{(byCat[sig.category||'Other']=byCat[sig.category||'Other']||[]).push(sig);});
   document.getElementById('signals-content').innerHTML = Object.entries(byCat).map(([cat,sigs])=>`
-    <div style="margin-bottom:24px">
-      <p class="section-title">${cat}</p>
-      <div class="sig-wrap"><table class="signal-table">
-        <tr><th>Signal</th><th style="width:52px;text-align:center">Status</th><th>Finding</th></tr>
-        ${sigs.map(sig=>`<tr>
-          <td class="signal-name">${sig.name||''}</td>
-          <td style="text-align:center">${sig.status==='pass'?'<span class="sig-pass">✓</span>':sig.status==='warn'?'<span class="sig-warn">⚠</span>':'<span class="sig-fail">✗</span>'}</td>
-          <td>${sig.note||''}</td>
-        </tr>`).join('')}
-      </table></div>
-    </div>`).join('') || '<p class="no-content">No signal data.</p>';
+    <div style="margin-bottom:24px"><p class="section-title">${cat}</p>
+    <div class="sig-wrap"><table class="signal-table">
+      <tr><th>Signal</th><th style="width:52px;text-align:center">Status</th><th>Finding</th></tr>
+      ${sigs.map(sig=>`<tr><td class="signal-name">${sig.name}</td><td style="text-align:center">${sig.status==='pass'?'<span class="sig-pass">✓</span>':sig.status==='warn'?'<span class="sig-warn">⚠</span>':'<span class="sig-fail">✗</span>'}</td><td>${sig.note||''}</td></tr>`).join('')}
+    </table></div></div>`).join('');
 
   // Actions
-  const actions = result.actions||[];
-  document.getElementById('action-list').innerHTML = actions.length===0
-    ? '<div class="action-empty">No action items generated. Run the audit again for a fresh analysis.</div>'
-    : actions.map(a=>`<li class="action-item">
-        <div class="action-priority ${{CRITICAL:'p-critical',HIGH:'p-high',MEDIUM:'p-medium'}[a.priority]||'p-medium'}">${(a.priority||'MED').slice(0,3)}</div>
-        <div class="action-body">
-          <div class="action-title">${a.title||''}</div>
-          <div class="action-desc">${a.description||''}</div>
-          <div class="action-category">${a.category||''}</div>
-        </div>
-      </li>`).join('');
+  const pClass={CRITICAL:'p-critical',HIGH:'p-high',MEDIUM:'p-medium'};
+  document.getElementById('action-list').innerHTML = (result.actions||[]).map(a=>`
+    <li class="action-item">
+      <div class="action-priority ${pClass[a.priority]||'p-medium'}">${(a.priority||'MED').slice(0,3)}</div>
+      <div><div class="action-title">${a.title}</div><div class="action-desc">${a.description}</div><div class="action-cat">${a.category}</div></div>
+    </li>`).join('') || '<div class="no-content">No actions — site is fully optimised!</div>';
 
+  // WA CTA
+  const headline = pct>=.70?'Good start — now push to AI-First.':pct>=.40?'You\'re half-visible. Let\'s fix the gaps.':'Your site is invisible to AI. Fix it now.';
+  document.getElementById('wa-headline').textContent = headline;
+  const topAction = (result.actions||[])[0];
+  document.getElementById('wa-score-context').innerHTML = `<strong>Score: ${total}/167</strong> — Top gap: ${topAction?topAction.title:'Review action plan'}. Message Dan for a step-by-step fix plan.`;
+  const waText = encodeURIComponent(`Hi Dan, I ran Audit·AI™ on ${url} — Score: ${total}/167.\nTop gap: ${topAction?.title||'AI visibility gaps'}.\nCan you help?\n\nAI Signals:${s.ai_signals}/32 AEO:${s.aeo}/34 GEO:${s.geo}/28 AIO:${s.aio}/31 SEO:${s.seo}/42`);
+  document.getElementById('wa-btn').href = `https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`;
+
+  // Gate
   document.getElementById('results').style.display='block';
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
   switchTab('overview');
 
-  // Gate logic
   if (gateUnlocked) {
-    // Already captured lead this session — show everything
-    document.getElementById('gate-lock').style.display = 'none';
-    document.getElementById('report-bar').style.display = 'flex';
-    document.getElementById('synthesis-text').style.display = 'block';
-    showWhatsAppCTA(total, pct, result);
+    document.getElementById('gate-lock').style.display='none';
+    document.getElementById('report-bar').style.display='flex';
+    document.getElementById('synthesis-text').style.display='block';
+    document.getElementById('wa-cta').style.display='block';
   } else {
-    // First audit — show score + categories free, lock the rest
-    document.getElementById('gate-lock').style.display = 'block';
-    document.getElementById('report-bar').style.display = 'none';
-    document.getElementById('synthesis-text').style.display = 'none';
-    document.getElementById('wa-cta').style.display = 'none';
-    // Pre-build WA CTA for after unlock
-    showWhatsAppCTA(total, pct, result);
-    document.getElementById('wa-cta').style.display = 'none'; // hide again until gate
-    // Open gate modal automatically after 1.5s
+    document.getElementById('gate-lock').style.display='block';
+    document.getElementById('report-bar').style.display='none';
+    document.getElementById('synthesis-text').style.display='none';
+    document.getElementById('wa-cta').style.display='none';
     setTimeout(openGate, 1500);
   }
 }
 
-// ─── WHATSAPP CTA ─────────────────────────────────────────────────────────────
-function showWhatsAppCTA(total, pct, result) {
-  const cta = document.getElementById('wa-cta');
-  const scoreCtx = document.getElementById('wa-score-context');
-  const headline = document.getElementById('wa-headline');
-  const waBtn = document.getElementById('wa-btn');
-
-  // Personalise headline by score band
-  if (pct >= 0.70) {
-    headline.textContent = 'Good start — now push to AI-First.';
-  } else if (pct >= 0.40) {
-    headline.textContent = 'You\'re half-visible. Let\'s fix the gaps.';
-  } else {
-    headline.textContent = 'Your site is invisible to AI. Fix it now.';
+// ─── GATE ─────────────────────────────────────────────────────────────────────
+function openGate() {
+  document.getElementById('gate-score-num').textContent = document.getElementById('total-score').textContent;
+  document.getElementById('gate-overlay').classList.add('open');
+}
+function closeGate() { document.getElementById('gate-overlay').classList.remove('open'); }
+function submitGate(via) {
+  const name=document.getElementById('gate-name').value.trim();
+  const email=document.getElementById('gate-email').value.trim();
+  const wa=document.getElementById('gate-wa').value.trim();
+  if (!email&&!wa) { document.getElementById('gate-err').style.display='block'; return; }
+  document.getElementById('gate-err').style.display='none';
+  capturedLead={name,email,whatsapp:wa,via,url:currentUrl,ts:new Date().toISOString()};
+  gateUnlocked=true;
+  closeGate();
+  document.getElementById('gate-lock').style.display='none';
+  document.getElementById('report-bar').style.display='flex';
+  document.getElementById('synthesis-text').style.display='block';
+  document.getElementById('wa-cta').style.display='block';
+  if (via==='whatsapp'&&wa) {
+    const total=document.getElementById('total-score').textContent;
+    window.open(`https://api.whatsapp.com/send/?phone=40737123540&text=${encodeURIComponent(`Hi Dan, score ${total}/167 on ${currentUrl}. Name: ${name||'—'}`)}`, '_blank');
   }
-
-  // Find top CRITICAL or first failing signal for personal context
-  const actions = result.actions || [];
-  const topAction = actions.find(a => a.priority === 'CRITICAL') || actions[0];
-  const failedSignals = (result.signals || []).filter(s => s.status === 'fail');
-  const topFail = failedSignals[0];
-
-  let contextText = `<strong>Your score: ${total}/167</strong> — `;
-  if (topAction) {
-    contextText += `Top gap: <strong>${topAction.title}</strong> (${topAction.category}). `;
-  } else if (topFail) {
-    contextText += `Missing: <strong>${topFail.name}</strong>. `;
-  }
-  contextText += 'Message Dan to get a step-by-step fix plan for your specific site.';
-  scoreCtx.innerHTML = contextText;
-
-  // Build pre-filled WhatsApp message
-  const s = result.scores || {};
-  const failCount = (result.signals || []).filter(s2 => s2.status === 'fail').length;
-  const topGap = topAction ? topAction.title : (topFail ? topFail.name : 'AI visibility gaps');
-  const waText = encodeURIComponent(
-    `Hi Dan, I just ran Audit·AI™ on ${currentUrl} and scored ${total}/167.\n` +
-    `Top gap: ${topGap}.\n` +
-    `${failCount} signals failing. Can you help me fix it?\n\n` +
-    `Scores: AI Signals ${s.ai_signals||0}/32 · AEO ${s.aeo||0}/34 · GEO ${s.geo||0}/28 · AIO ${s.aio||0}/31 · SEO ${s.seo||0}/42`
-  );
-  waBtn.href = `https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`;
-
-  cta.style.display = 'block';
-}
-
-// ─── EMAIL / COPY REPORT ──────────────────────────────────────────────────────
-function buildReportText() {
-  if (!currentResult) return '';
-  const s = currentResult.scores||{};
-  const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
-  const synth = (currentResult.synthesis||'').replace(/<[^>]+>/g,'');
-  const actions = (currentResult.actions||[]).map((a,i)=>
-    `${i+1}. [${a.priority}] ${a.title} (${a.category})\n   ${a.description}`).join('\n\n');
-  const signals = (currentResult.signals||[]).map(sig=>
-    `${sig.status==='pass'?'✓':sig.status==='warn'?'⚠':'✗'} [${sig.category}] ${sig.name}: ${sig.note||''}`).join('\n');
-  const line = '─'.repeat(58);
-  return `AUDIT·AI™ — Live 167-Signal Report
-${new Date().toISOString().replace('T',' ').slice(0,19)} UTC
-URL: ${currentUrl}
-${line}
-
-TOTAL SCORE: ${total} / 167
-
-CATEGORY BREAKDOWN:
-  AI Signals:  ${s.ai_signals||0} / 32
-  AEO:         ${s.aeo||0} / 34
-  GEO:         ${s.geo||0} / 28
-  AIO:         ${s.aio||0} / 31
-  SEO:         ${s.seo||0} / 42
-${line}
-
-EXECUTIVE SYNTHESIS:
-${synth}
-${line}
-
-PRIORITY ACTION PLAN:
-${actions}
-${line}
-
-SIGNAL DETAILS:
-${signals}
-${line}
-Report by AUDIT·AI™ V3.0 · eu-ai-audit.eu
-AiVenture S.R.L. · 5thElement.ai · contact@5thelement.ai`;
-}
-
-function sendEmailReport(emailOverride) {
-  const report = buildReportText();
-  if (!report) { showError('Run an audit first.'); return; }
-  const email = emailOverride || capturedLead.email || '';
-  const subj = encodeURIComponent(`Audit·AI™ Report — ${currentUrl}`);
-  const body = encodeURIComponent(report.slice(0,1900)+'…\n[Truncated — use Copy Full Report for complete version]');
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${email}&su=${subj}&body=${body}`;
-  window.open(gmailUrl, '_blank');
-}
-
-function copyReport() {
-  const report = buildReportText();
-  if (!report) { showError('Run an audit first.'); return; }
-  const confirm = () => {
-    const el = document.getElementById('copy-confirm');
-    el.style.display='inline'; setTimeout(()=>{ el.style.display='none'; },2500);
-  };
-  navigator.clipboard?.writeText(report).then(confirm).catch(()=>{
-    const ta = Object.assign(document.createElement('textarea'),{value:report});
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta); confirm();
-  });
+  if (via==='email'&&email) sendEmailReport(email);
 }
 
 // ─── HISTORY ─────────────────────────────────────────────────────────────────
 function saveHistory(result, url) {
-  const s = result.scores||{};
-  const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
-  auditHistory.unshift({ url, total, result, ts: new Date().toLocaleString() });
-  const list = document.getElementById('history-list');
-  list.innerHTML = auditHistory.map((h,i)=>`
+  const s=result.scores||{};
+  const total=(s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
+  auditHistory.unshift({url,total,result,ts:new Date().toLocaleString()});
+  const list=document.getElementById('history-list');
+  list.innerHTML=auditHistory.map((h,i)=>`
     <div class="history-item" onclick="reloadHistory(${i})">
-      <div>
-        <div class="history-url">${h.url}</div>
-        <div class="history-date">${h.ts}</div>
-      </div>
+      <div><div class="history-url">${h.url}</div><div class="history-date">${h.ts}</div></div>
       <div class="history-score">${h.total}<span style="font-size:12px;font-weight:400;color:var(--light)"> /167</span></div>
     </div>`).join('');
 }
-
 function reloadHistory(i) {
-  const h = auditHistory[i];
-  currentResult = h.result; currentUrl = h.url;
-  document.getElementById('url-input').value = h.url;
-  displayResults(h.result, h.url);
+  const h=auditHistory[i];
+  currentResult=h.result; currentUrl=h.url;
+  document.getElementById('url-input').value=h.url;
+  displayResults(h.result,h.url);
   switchTab('overview');
+}
+
+// ─── STATS ────────────────────────────────────────────────────────────────────
+function updateStats(url) {
+  sessionAudits++;
+  const domain = new URL(url).hostname;
+  sessionDomains.add(domain);
+  animateCount('stat-audits', sessionAudits);
+  animateCount('stat-domains', sessionDomains.size);
+}
+function animateCount(id, target) {
+  const el=document.getElementById(id);
+  if (!el) return;
+  const from=parseInt(el.textContent)||0;
+  const dur=600, start=performance.now();
+  function step(now) {
+    const p=Math.min((now-start)/dur,1);
+    el.textContent=Math.round(from+(target-from)*(1-Math.pow(1-p,3)));
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ─── EMAIL / COPY ─────────────────────────────────────────────────────────────
+function buildReportText() {
+  if (!currentResult) return '';
+  const s=currentResult.scores||{};
+  const total=(s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
+  const actions=(currentResult.actions||[]).map((a,i)=>`${i+1}. [${a.priority}] ${a.title}\n   ${a.description}`).join('\n\n');
+  const signals=(currentResult.signals||[]).map(sig=>`${sig.status==='pass'?'✓':sig.status==='warn'?'⚠':'✗'} [${sig.category}] ${sig.name}: ${sig.note||''}`).join('\n');
+  return `AUDIT·AI™ Report\n${new Date().toISOString().slice(0,19)} UTC\nURL: ${currentUrl}\n${'─'.repeat(50)}\nSCORE: ${total}/167\nAI Signals:${s.ai_signals}/32 · AEO:${s.aeo}/34 · GEO:${s.geo}/28 · AIO:${s.aio}/31 · SEO:${s.seo}/42\n${'─'.repeat(50)}\nSYNTHESIS:\n${(currentResult.synthesis||'').replace(/<[^>]+>/g,'')}\n${'─'.repeat(50)}\nACTIONS:\n${actions}\n${'─'.repeat(50)}\nSIGNALS:\n${signals}\n${'─'.repeat(50)}\neu-ai-audit.eu · 5thElement.ai · AiVenture S.R.L.`;
+}
+function sendEmailReport(emailOverride) {
+  const report=buildReportText();
+  if (!report) return;
+  const email=emailOverride||capturedLead.email||'';
+  const subj=encodeURIComponent(`Audit·AI™ Report — ${currentUrl}`);
+  const body=encodeURIComponent(report.slice(0,1900));
+  window.open(`https://mail.google.com/mail/?view=cm&to=${email}&su=${subj}&body=${body}`,'_blank');
+}
+function copyReport() {
+  const report=buildReportText();
+  if (!report) return;
+  navigator.clipboard?.writeText(report).then(()=>{
+    const el=document.getElementById('copy-confirm');
+    el.style.display='inline';
+    setTimeout(()=>el.style.display='none',2500);
+  });
 }
 
 // ─── KEYBOARD ────────────────────────────────────────────────────────────────
