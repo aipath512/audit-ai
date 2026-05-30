@@ -382,10 +382,12 @@ body:not(.dark) .btn-wa-sub{color:#166534}
   </div>
 
   <div id="status-bar">
-    <div class="spinner"></div>
-    <div class="status-steps">
-      <div class="status-main" id="status-main">Initialising…</div>
-      <div class="status-sub" id="status-sub"></div>
+    <div style="width:100%">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="spinner"></div>
+        <div class="status-main" id="status-main">Initialising…</div>
+      </div>
+      <div id="progress-log" style="font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.9;max-height:130px;overflow-y:auto"></div>
     </div>
   </div>
   <div id="error-display"></div>
@@ -649,7 +651,24 @@ function switchTab(name) {
 function setStatus(show, main='', sub='') {
   document.getElementById('status-bar').style.display = show ? 'flex' : 'none';
   document.getElementById('status-main').textContent = main;
-  document.getElementById('status-sub').textContent = sub;
+  if (main && show) logProgress(main, sub);
+  if (!show) document.getElementById('progress-log').innerHTML = '';
+}
+
+function logProgress(main, sub) {
+  const log = document.getElementById('progress-log');
+  if (!log) return;
+  const icons = {
+    'Starting': '🚀', 'Search': '🔍', 'Analysing': '🧠',
+    'Building': '📋', 'Web search': '🌐', 'Pass': '⚙️'
+  };
+  const icon = Object.keys(icons).find(k => main.includes(k)) ? icons[Object.keys(icons).find(k => main.includes(k))] : '▸';
+  const line = document.createElement('div');
+  line.style.cssText = 'color:var(--blue);opacity:0;transition:opacity .3s';
+  line.textContent = icon + ' ' + main + (sub ? '  ·  ' + sub : '');
+  log.appendChild(line);
+  setTimeout(() => line.style.opacity = '1', 50);
+  log.scrollTop = log.scrollHeight;
 }
 function showError(msg) {
   document.getElementById('error-display').innerHTML = `<div class="error-box">${msg}</div>`;
@@ -743,78 +762,19 @@ async function callWorker(url, system, messages) {
 
 // ─── PROMPTS ──────────────────────────────────────────────────────────────────
 function buildSystemPrompt() {
-  return `You are an elite AI visibility auditor specialising in AI Signals, AEO, GEO, AIO, and SEO.
+  return `You are an AI visibility auditor. Search the URL, then output ONLY valid JSON — no markdown, no text before or after.
 
-WORKFLOW:
-1. Use web_search to search for the exact URL
-2. Search for robots.txt content on the domain
-3. Search for AI files: llms.txt, ai.json, entities.json, proof.json
-4. Search for schema markup and entity links
-5. Output ONLY the JSON object — no preamble, no markdown fences
+JSON schema:
+{"scores":{"ai_signals":0-32,"aeo":0-34,"geo":0-28,"aio":0-31,"seo":0-42},"signals":[{"category":"AI Signals|AEO|GEO|AIO|SEO","name":"signal name","status":"pass|warn|fail","note":"finding"}],"synthesis":"3 paragraphs about findings","actions":[{"priority":"CRITICAL|HIGH|MEDIUM","title":"action","description":"specific fix","category":"category"}]}
 
-OUTPUT: Return ONLY this JSON structure:
-{
-  "scores": { "ai_signals":<0-32>, "aeo":<0-34>, "geo":<0-28>, "aio":<0-31>, "seo":<0-42> },
-  "signals": [
-    {"category":"AI Signals","name":"GPTBot crawl permission","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AI Signals","name":"ClaudeBot crawl permission","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AI Signals","name":"llms.txt present","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AI Signals","name":"ai.json present","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AI Signals","name":"entities.json present","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AI Signals","name":"proof.json / SHA-256 anchor","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AEO","name":"FAQ Schema (JSON-LD)","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AEO","name":"HowTo Schema","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AEO","name":"Answer-first paragraph structure","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AEO","name":"Speakable Schema","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AEO","name":"Structured Q&A content","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"GEO","name":"Organization JSON-LD","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"GEO","name":"sameAs entity links","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"GEO","name":"LinkedIn entity verification","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"GEO","name":"Wikipedia / Wikidata presence","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AIO","name":"Topical authority depth","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AIO","name":"RAG-ready content chunking","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"AIO","name":"E-E-A-T signals","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"SEO","name":"Title tag optimised","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"SEO","name":"Meta description present","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"SEO","name":"H1 tag present","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"SEO","name":"HTTPS enabled","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"SEO","name":"XML sitemap","status":"pass|warn|fail","note":"<finding>"},
-    {"category":"SEO","name":"Mobile viewport meta","status":"pass|warn|fail","note":"<finding>"}
-  ],
-  "synthesis": "<paragraph 1: specific findings about AI visibility>\n<paragraph 2: biggest gaps and risks>\n<paragraph 3: strategic recommendation>",
-  "actions": [
-    {"priority":"CRITICAL","title":"<specific action>","description":"<exact step-by-step fix>","category":"AI Signals"},
-    {"priority":"CRITICAL","title":"<specific action>","description":"<exact step-by-step fix>","category":"AEO"},
-    {"priority":"HIGH","title":"<specific action>","description":"<exact step-by-step fix>","category":"GEO"},
-    {"priority":"HIGH","title":"<specific action>","description":"<exact step-by-step fix>","category":"AIO"},
-    {"priority":"HIGH","title":"<specific action>","description":"<exact step-by-step fix>","category":"SEO"},
-    {"priority":"MEDIUM","title":"<specific action>","description":"<exact step-by-step fix>","category":"AI Signals"},
-    {"priority":"MEDIUM","title":"<specific action>","description":"<exact step-by-step fix>","category":"AEO"},
-    {"priority":"MEDIUM","title":"<specific action>","description":"<exact step-by-step fix>","category":"SEO"}
-  ]
-}
+Scoring: AI Signals(32): GPTBot+4,ClaudeBot+4,llms.txt+5,ai.json+4,entities.json+4,proof.json+4,intents.json+4,Google-Extended+3. AEO(34): FAQ schema+6,answer-first+5,Q&A+5,HowTo+4,Speakable+4,definitions+5,direct answers+5. GEO(28): Org JSON-LD+5,llms.txt quality+6,sameAs+4,Wikipedia+4,LinkedIn+3,Crunchbase+3,press+3. AIO(31): E-E-A-T+6,topical authority+5,RAG chunking+5,semantic density+5,freshness+4,ChatGPT visible+3,Perplexity cited+3. SEO(42): title+4,meta+4,HTTPS+4,sitemap+4,internal links+4,schema+4,speed+4,H1+3,viewport+3,canonical+3,OG+3,robots+4.
 
-SCORING (based on actual findings only):
-AI Signals(0-32): GPTBot allow=4, ClaudeBot allow=4, Google-Extended=3, llms.txt=5, ai.json=4, entities.json=4, proof.json=4, intents.json=4
-AEO(0-34): FAQ schema=6, HowTo=4, Answer-first=5, Speakable=4, Q&A content=5, definitions=5, direct answers=5
-GEO(0-28): Organization JSON-LD=5, sameAs=4, LinkedIn=3, Wikipedia=4, Crunchbase=3, press=3, llms.txt quality=6
-AIO(0-31): Topical authority=5, RAG chunking=5, E-E-A-T=6, freshness=4, semantic density=5, ChatGPT visible=3, Perplexity cited=3
-SEO(0-42): Title=4, meta desc=4, H1=3, HTTPS=4, sitemap=4, viewport=3, canonical=3, OG tags=3, internal links=4, schema=4, speed=4, robots=4
-
-RULES: Scores must reflect actual findings. Actions must name specific missing files/elements. Synthesis must mention what you found or did not find. Output ONLY the JSON.`;
+Include 15+ signals, 3-paragraph synthesis with specific findings, 6-8 prioritised actions. Output ONLY the JSON object.`;
 }
 
 function buildUserPrompt(url) {
   const domain = url.replace(/https?:\/\//,'').split('/')[0];
-  return `Audit this URL: ${url}
-
-Search 1: Site content — search for "${url}" to read homepage content, title, headings, schema.
-Search 2: robots.txt — search for "${domain}/robots.txt" or "site:${domain} robots.txt".
-Search 3: AI files — search for "${domain} llms.txt" and "${domain} ai.json entities.json".
-Search 4: Schema — search for "${domain} JSON-LD schema organization FAQ".
-Search 5: Entity — search for "${domain} LinkedIn Wikipedia Crunchbase".
-
-After all searches: output ONLY the complete JSON audit report.`;
+  return `Audit ${url}. Search for: site content, robots.txt, llms.txt, ai.json, entities.json, JSON-LD schema, LinkedIn/Wikipedia presence. Output ONLY the JSON audit report.`;
 }
 
 // ─── PARSER ───────────────────────────────────────────────────────────────────
