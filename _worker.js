@@ -26,7 +26,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
     const allowed = ALLOWED_ORIGINS.includes(origin);
     const cors = corsHeaders(allowed ? origin : ALLOWED_ORIGINS[0]);
@@ -53,10 +53,9 @@ export default {
       return handleAudit(request, env, cors);
     }
 
-    return new Response(JSON.stringify({ error: 'Not found' }), {
-      status: 404,
-      headers: { 'Content-Type': 'application/json', ...cors },
-    });
+    // Pass all other requests to Pages static assets (serves index.html)
+    if (env.ASSETS) return env.ASSETS.fetch(request);
+    return new Response('Not found', { status: 404 });
   },
 };
 
