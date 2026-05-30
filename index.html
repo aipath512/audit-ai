@@ -8,9 +8,9 @@
 <style>
 :root{--bg:#0a0a0a;--bg2:#111;--text:#fff;--mid:#ccc;--light:#888;--blue:#7ec8ff;--blue-d:#0d1f33;--border:#222;--green:#4ade80;--red:#f87171;--orange:#fb923c;--card:#161616;--shadow:0 2px 20px rgba(0,0,0,.4)}
 body.light{--bg:#fff;--bg2:#f5f5f7;--text:#000;--mid:#333;--light:#555;--blue:#0051A8;--blue-d:#e8f0fb;--border:#e0e0e0;--green:#1a7f4b;--red:#c0392b;--orange:#d35400;--card:#fff;--shadow:0 2px 20px rgba(0,0,0,.08)}
-*{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s,border-color .3s}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-#toggle{position:fixed;top:68px;left:16px;z-index:999;background:var(--text);color:var(--bg);border:none;border-radius:8px;padding:6px 12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;width:34px;height:34px;overflow:hidden;white-space:nowrap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+#toggle{position:fixed;top:68px;left:16px;z-index:999;background:var(--text);color:var(--bg);border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;width:34px;height:34px;overflow:hidden;white-space:nowrap;font-family:'Inter',sans-serif}
 #toggle:hover{width:auto}
 header{border-bottom:1px solid var(--border);padding:20px 24px 16px;display:flex;justify-content:space-between;align-items:flex-start}
 .brand h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:900}
@@ -18,40 +18,63 @@ header{border-bottom:1px solid var(--border);padding:20px 24px 16px;display:flex
 .brand p{font-size:11px;font-weight:500;color:var(--light);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
 .brand-meta{text-align:right;font-size:10px;color:var(--light);letter-spacing:.06em;text-transform:uppercase;line-height:1.7}
 .brand-meta strong{color:var(--text)}
-.stats-bar{display:flex;justify-content:center;border-bottom:1px solid var(--border);background:var(--bg2)}
-.stat-item{padding:12px 32px;text-align:center;border-right:1px solid var(--border);flex:1;max-width:200px}
-.stat-item:last-child{border-right:none}
-.stat-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--blue);line-height:1;display:block}
-.stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:3px}
+
+/* HERO */
 .hero{padding:40px 24px 32px;text-align:center}
 .hero-tag{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
-.hero h2{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);font-weight:900;line-height:1.1;margin-bottom:8px}
+.hero h2{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,44px);font-weight:900;line-height:1.1;margin-bottom:8px}
 .hero h2 em{font-style:italic;color:var(--blue)}
-.hero p{font-size:15px;color:var(--mid);line-height:1.6;max-width:440px;margin:0 auto 28px;font-weight:300}
+.hero p{font-size:15px;color:var(--mid);line-height:1.6;max-width:440px;margin:0 auto 24px;font-weight:300}
 .live-badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-d);border:1px solid var(--blue);border-radius:20px;padding:6px 16px;margin-bottom:24px;font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.06em;text-transform:uppercase}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.audit-form{max-width:540px;margin:0 auto}
-.input-row{display:flex;background:var(--bg2);border:1.5px solid var(--border);border-radius:50px;overflow:hidden;padding:4px;margin-bottom:10px}
+.input-row{display:flex;background:var(--bg2);border:1.5px solid var(--border);border-radius:50px;overflow:hidden;padding:4px;max-width:540px;margin:0 auto 10px}
 .input-row input{flex:1;border:none;background:transparent;padding:12px 18px;font-size:15px;color:var(--text);font-family:'Inter',sans-serif;outline:none}
 .input-row input::placeholder{color:var(--light)}
 .btn-run{background:var(--text);color:var(--bg);border:none;border-radius:46px;padding:12px 24px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
 .btn-run:disabled{opacity:.4;cursor:not-allowed}
-.form-hint{font-size:11px;color:var(--light);text-align:center;margin-top:4px}
-#status-bar{max-width:540px;margin:16px auto 0;padding:14px 18px;border-radius:12px;background:var(--blue-d);border:1px solid var(--blue);font-size:13px;color:var(--blue);display:none;flex-direction:column;gap:8px}
-.status-top{display:flex;align-items:center;gap:10px}
-.spinner{width:18px;height:18px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
-@keyframes spin{to{transform:rotate(360deg)}}
-#status-main{font-weight:600}
-#progress-log{font-size:12px;font-family:'IBM Plex Mono',monospace;line-height:1.9;max-height:100px;overflow-y:auto}
+.form-hint{font-size:11px;color:var(--light);text-align:center}
 .error-box{background:#450a0a;border:1px solid #7f1d1d;color:#fca5a5;border-radius:10px;padding:16px;font-size:13px;line-height:1.6;margin-top:16px;max-width:540px;margin-left:auto;margin-right:auto}
 body.light .error-box{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
+
+/* LIVE SCAN PANEL */
+#scan-panel{max-width:760px;margin:32px auto 0;padding:0 24px;display:none}
+.scan-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:16px 20px;background:var(--blue-d);border:1px solid var(--blue);border-radius:14px}
+.spinner{width:20px;height:20px;border:2px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scan-title{font-size:14px;font-weight:600;color:var(--blue)}
+.scan-sub{font-size:12px;color:var(--blue);opacity:.7;margin-top:2px}
+.scan-total{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--blue);margin-left:auto;line-height:1}
+.scan-total span{font-size:13px;font-weight:400;color:var(--blue);opacity:.7}
+
+/* CATEGORY SCAN BLOCKS */
+.scan-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+@media(max-width:520px){.scan-grid{grid-template-columns:1fr}}
+.scan-cat{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.scan-cat-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}
+.scan-cat-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid)}
+.scan-cat-score{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--text)}
+.scan-cat-max{font-size:11px;color:var(--light)}
+.scan-cat-bar{height:4px;background:var(--bg2)}
+.scan-cat-fill{height:100%;width:0%;transition:width .5s ease;border-radius:0}
+.scan-signals{padding:8px 0;max-height:180px;overflow-y:auto}
+.scan-signal{display:flex;align-items:flex-start;gap:8px;padding:5px 16px;font-size:12px;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s}
+.scan-signal.visible{opacity:1;transform:translateX(0)}
+.scan-signal-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+.scan-signal-name{font-weight:500;color:var(--text);flex:1}
+.scan-signal-note{font-size:11px;color:var(--light);margin-top:1px}
+.sig-scanning{color:var(--blue);animation:blink .8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* RESULTS */
 #results{max-width:760px;margin:0 auto;padding:32px 24px 60px;display:none}
 .tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap}
 .tab-btn{border:1px solid var(--border);background:var(--bg2);color:var(--mid);border-radius:8px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif}
 .tab-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
 .tab-pane{display:none}.tab-pane.active{display:block}
-.score-hero{text-align:center;margin-bottom:32px}
+
+/* SCORE RING */
+.score-hero{text-align:center;margin-bottom:28px}
 .ring-wrap{position:relative;width:190px;height:190px;margin:0 auto 16px}
 .ring-wrap svg{transform:rotate(-90deg)}
 .ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
@@ -64,12 +87,16 @@ body.light .error-box{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
 .delta-up{background:#14532d;color:#86efac}.delta-down{background:#450a0a;color:#fca5a5}.delta-same{background:var(--bg2);color:var(--mid)}
 body.light .delta-up{background:#dcfce7;color:#166534}
 body.light .delta-down{background:#fee2e2;color:#991b1b}
-.run-meta{font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:8px}
+.run-meta{font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:4px}
 .cost-meta{font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:20px}
+
+/* REPORT BUTTONS */
 .report-bar{display:flex;gap:10px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;align-items:center}
 .btn-email{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 .btn-copy{background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer}
 .copy-confirm{font-size:12px;color:var(--green);display:none}
+
+/* CAT GRID */
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
 @media(max-width:480px){.cat-grid{grid-template-columns:1fr}}
 .cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
@@ -84,6 +111,8 @@ body.light .delta-down{background:#fee2e2;color:#991b1b}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
 .synthesis-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:24px;box-shadow:var(--shadow);line-height:1.8;font-size:14px;color:var(--mid);font-weight:300}
 .synthesis-card p{margin-bottom:12px}.synthesis-card p:last-child{margin-bottom:0}
+
+/* ACTIONS */
 .action-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
 .action-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;box-shadow:var(--shadow)}
 .action-priority{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.06em;line-height:1.2;text-align:center}
@@ -94,20 +123,25 @@ body.light .p-medium{background:#dbeafe;color:#1e40af}
 .action-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
 .action-desc{font-size:13px;color:var(--mid);font-weight:300;line-height:1.6}
 .action-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-top:6px}
+
+/* SIGNALS TABLE */
 .sig-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}
 .signal-table{width:100%;border-collapse:collapse}
 .signal-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--light);padding:8px 12px;border-bottom:1px solid var(--border)}
-.signal-table td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid);vertical-align:top}
+.signal-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--mid);vertical-align:top}
 .signal-table tr:last-child td{border-bottom:none}
+.signal-table tr:hover td{background:var(--bg2)}
 .signal-name{font-weight:500;color:var(--text)}
 .sig-pass{color:var(--green);font-weight:700}.sig-fail{color:var(--red);font-weight:700}.sig-warn{color:var(--orange);font-weight:700}
-.history-list{display:flex;flex-direction:column;gap:10px}
-.history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:var(--shadow)}
+
+/* HISTORY */
+.history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:var(--shadow);margin-bottom:10px}
 .history-item:hover{border-color:var(--blue)}
 .history-url{font-size:13px;font-weight:500;color:var(--text);font-family:'IBM Plex Mono',monospace}
 .history-date{font-size:11px;color:var(--light);margin-top:2px}
 .history-score{font-family:'Playfair Display',serif;font-size:22px;font-weight:900}
 .no-content{text-align:center;padding:40px;color:var(--light);font-size:14px;border:1px dashed var(--border);border-radius:12px}
+
 /* GATE */
 .gate-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
 .gate-overlay.open{opacity:1;pointer-events:all}
@@ -121,44 +155,52 @@ body.light .p-medium{background:#dbeafe;color:#1e40af}
 .gate-input{width:100%;border:1.5px solid var(--border);border-radius:10px;background:var(--bg2);padding:12px 14px;font-size:14px;color:var(--text);font-family:'Inter',sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s}
 .gate-input:focus{border-color:var(--blue)}
 .gate-input::placeholder{color:var(--light)}
-.gate-or{display:flex;align-items:center;gap:10px;margin:6px 0 10px;font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:.1em}
+.gate-or{display:flex;align-items:center;gap:10px;margin:4px 0 10px;font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:.1em}
 .gate-or::before,.gate-or::after{content:'';flex:1;height:1px;background:var(--border)}
 .btn-gate-submit{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px}
 .btn-gate-wa{width:100%;background:#25d366;color:#000;border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .gate-privacy{font-size:11px;color:var(--light);text-align:center;margin-top:14px;line-height:1.5}
 .gate-err{font-size:12px;color:var(--red);text-align:center;margin-top:6px;display:none}
+
 /* WA CTA */
 .wa-cta{background:linear-gradient(135deg,#0a2a1a,#0d3322);border:1.5px solid #25d366;border-radius:16px;padding:24px;margin-bottom:28px;display:none}
 body.light .wa-cta{background:linear-gradient(135deg,#f0fff4,#dcfce7);border-color:#16a34a}
-.wa-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#25d366;margin-bottom:6px}
+.wa-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#25d366;margin-bottom:4px}
 body.light .wa-title{color:#15803d}
-.wa-sub{font-size:13px;color:#86efac;margin-bottom:16px;font-weight:300}
+.wa-sub{font-size:13px;color:#86efac;margin-bottom:14px;font-weight:300}
 body.light .wa-sub{color:#166534}
-.wa-context{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#86efac;line-height:1.6}
+.wa-context{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#86efac;line-height:1.6}
 body.light .wa-context{color:#166534}
-.wa-offers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.wa-offers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .wa-offer{background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.15);border-radius:10px;padding:10px 12px}
 .wa-offer-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#25d366}
 body.light .wa-offer-price{color:#15803d}
 .wa-offer-name{font-size:12px;font-weight:600;color:#86efac;margin-bottom:2px}
 body.light .wa-offer-name{color:#166534}
 .wa-offer-desc{font-size:11px;color:#4ade80;opacity:.8;font-weight:300}
-.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25d366;color:#000;border:none;border-radius:12px;padding:15px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25d366;color:#000;border:none;border-radius:12px;padding:14px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none}
 .btn-wa:hover{background:#22c55e}
 .btn-wa-sub{font-size:11px;color:#86efac;text-align:center;margin-top:8px}
 body.light .btn-wa-sub{color:#166534}
+
+/* GATE LOCK */
+#gate-lock{text-align:center;margin-bottom:28px;display:none}
+.lock-box{background:var(--bg2);border:1.5px dashed var(--border);border-radius:14px;padding:24px 20px}
+.lock-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.lock-sub{font-size:13px;color:var(--mid);font-weight:300;margin-bottom:16px}
+.btn-unlock{background:var(--text);color:var(--bg);border:none;border-radius:10px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
 
 <button id="toggle" onclick="toggleTheme()">☾<span>&nbsp;Dark</span></button>
 
-<!-- LEAD GATE -->
+<!-- GATE MODAL -->
 <div class="gate-overlay" id="gate-overlay">
   <div class="gate-box">
     <div style="font-size:36px;text-align:center;margin-bottom:12px">🔓</div>
     <div class="gate-title">Your score is ready.</div>
-    <div class="gate-sub">Enter your email or WhatsApp to unlock your full report, action plan, and fix recommendations.</div>
+    <div class="gate-sub">Enter your email or WhatsApp to unlock the full report, action plan, and fix recommendations.</div>
     <div class="gate-score-preview">
       <div class="gscore" id="gate-score-num">—</div>
       <div class="gsub">/ 167 · Your AI Visibility Score</div>
@@ -179,38 +221,43 @@ body.light .btn-wa-sub{color:#166534}
     <h1>Audit<em>·AI™</em></h1>
     <p>167-Signal AI Visibility Engine</p>
   </div>
-  <div class="brand-meta"><strong>V 3.0 · LIVE</strong><br>AI Signals · AEO · GEO<br>AIO · SEO</div>
+  <div class="brand-meta"><strong>V 3.1 · LIVE</strong><br>AI Signals · AEO · GEO<br>AIO · SEO</div>
 </header>
 
-<div class="stats-bar">
-  <div class="stat-item"><span class="stat-num" id="stat-audits">0</span><div class="stat-label">Audits Run</div></div>
-  <div class="stat-item"><span class="stat-num" id="stat-domains">0</span><div class="stat-label">Sites Audited</div></div>
-  <div class="stat-item"><span class="stat-num">167</span><div class="stat-label">Signals Checked</div></div>
-</div>
-
 <section class="hero">
-  <div class="hero-tag">Complete Diagnostic · 167 Signals · Real-Time Analysis</div>
+  <div class="hero-tag">Complete Diagnostic · 167 Signals · Live Site Analysis</div>
   <h2>Your AI Search Visibility,<br><em>Diagnosed. Live.</em></h2>
-  <p>Enter any URL — we check your real site live. Scores change every run because we read your actual pages.</p>
-  <div class="live-badge"><span class="live-dot"></span>Live Site Analysis · No API Key · Always Free</div>
-  <div class="audit-form">
-    <div class="input-row">
-      <input type="text" id="url-input" placeholder="yoursite.com" autocomplete="off" autocapitalize="none">
-      <button class="btn-run" id="run-btn" onclick="runAudit()">Run Audit</button>
-    </div>
-    <div class="form-hint">Free · No account needed · Results in ~15 seconds</div>
+  <p>Enter any URL — we fetch your real site, check every signal live, and show you exactly what AI systems see.</p>
+  <div class="live-badge"><span class="live-dot"></span>Live Analysis · Zero Cost · 167 Signals</div>
+  <div class="input-row">
+    <input type="text" id="url-input" placeholder="yoursite.com" autocomplete="off" autocapitalize="none">
+    <button class="btn-run" id="run-btn" onclick="runAudit()">Run Audit</button>
   </div>
-  <div id="status-bar">
-    <div class="status-top"><div class="spinner"></div><div id="status-main">Initialising…</div></div>
-    <div id="progress-log"></div>
-  </div>
+  <div class="form-hint">Free · No API key · Results in ~20 seconds</div>
   <div id="error-display"></div>
 </section>
 
+<!-- LIVE SCAN PANEL — visible during scan -->
+<div id="scan-panel">
+  <div class="scan-header">
+    <div class="spinner"></div>
+    <div>
+      <div class="scan-title" id="scan-title">Connecting…</div>
+      <div class="scan-sub" id="scan-sub">Initialising 167-signal engine</div>
+    </div>
+    <div style="text-align:right">
+      <div class="scan-total" id="scan-total">0<span>/167</span></div>
+      <div style="font-size:10px;color:var(--blue);opacity:.7;margin-top:2px">signals checked</div>
+    </div>
+  </div>
+  <div class="scan-grid" id="scan-grid"></div>
+</div>
+
+<!-- RESULTS -->
 <section id="results">
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
-    <button class="tab-btn" onclick="switchTab('signals')">Signals</button>
+    <button class="tab-btn" onclick="switchTab('signals')">All 167 Signals</button>
     <button class="tab-btn" onclick="switchTab('actions')">Action Plan</button>
     <button class="tab-btn" onclick="switchTab('history')">History</button>
   </div>
@@ -233,14 +280,14 @@ body.light .btn-wa-sub{color:#166534}
       <div id="delta-display"></div>
     </div>
     <div class="run-meta" id="run-meta"></div>
-    <div class="cost-meta" id="cost-meta"></div>
+    <div class="cost-meta">✓ Live site analysis · Zero API cost · $0.0000</div>
 
-    <div id="gate-lock" style="text-align:center;margin-bottom:28px;display:none">
-      <div style="background:var(--bg2);border:1.5px dashed var(--border);border-radius:14px;padding:24px 20px">
+    <div id="gate-lock">
+      <div class="lock-box">
         <div style="font-size:28px;margin-bottom:8px">🔒</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:6px">Full report locked</div>
-        <div style="font-size:13px;color:var(--mid);font-weight:300;margin-bottom:16px">Enter your email or WhatsApp to unlock your action plan and fix recommendations.</div>
-        <button onclick="openGate()" style="background:var(--text);color:var(--bg);border:none;border-radius:10px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer">🔓 Unlock Full Report</button>
+        <div class="lock-title">Full report locked</div>
+        <div class="lock-sub">Enter your email or WhatsApp to unlock your action plan and fix recommendations.</div>
+        <button class="btn-unlock" onclick="openGate()">🔓 Unlock Full Report</button>
       </div>
     </div>
 
@@ -271,372 +318,678 @@ body.light .btn-wa-sub{color:#166534}
 
   <div class="tab-pane" id="tab-signals"><div id="signals-content"></div></div>
   <div class="tab-pane" id="tab-actions"><p class="section-title">Priority Action Plan</p><ul class="action-list" id="action-list"></ul></div>
-  <div class="tab-pane" id="tab-history"><p class="section-title">Audit History · This Session</p><div class="history-list" id="history-list"><div class="no-content">No previous audits yet.</div></div></div>
+  <div class="tab-pane" id="tab-history"><p class="section-title">Audit History · This Session</p><div id="history-list"><div class="no-content">No previous audits yet.</div></div></div>
 </section>
 
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
-const CORS_PROXY = 'https://corsproxy.io/?';
+const PROXY = 'https://corsproxy.io/?';
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
-let auditHistory = [];
-let currentResult = null;
-let currentUrl = '';
-let gateUnlocked = false;
-let capturedLead = {};
-let sessionAudits = 0;
-let sessionDomains = new Set();
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let auditHistory=[], currentResult=null, currentUrl='', gateUnlocked=false, capturedLead={};
 
-// ─── THEME ───────────────────────────────────────────────────────────────────
-function toggleTheme() {
+// ─── THEME ────────────────────────────────────────────────────────────────────
+function toggleTheme(){
   document.body.classList.toggle('light');
-  const isLight = document.body.classList.contains('light');
-  document.getElementById('toggle').innerHTML = isLight ? '☾<span>&nbsp;Dark</span>' : '☀<span>&nbsp;Light</span>';
+  const l=document.body.classList.contains('light');
+  document.getElementById('toggle').innerHTML=l?'☀<span>&nbsp;Light</span>':'☾<span>&nbsp;Dark</span>';
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
-function switchTab(name) {
-  const tabs = ['overview','signals','actions','history'];
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i]===name));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
+function switchTab(n){
+  const tabs=['overview','signals','actions','history'];
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',tabs[i]===n));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.toggle('active',p.id==='tab-'+n));
 }
 
-// ─── STATUS ───────────────────────────────────────────────────────────────────
-function setStatus(show, main='') {
-  document.getElementById('status-bar').style.display = show ? 'flex' : 'none';
-  document.getElementById('status-main').textContent = main;
-  if (show && main) logStep(main);
-  if (!show) document.getElementById('progress-log').innerHTML = '';
-}
-function logStep(msg) {
-  const log = document.getElementById('progress-log');
-  if (!log) return;
-  const line = document.createElement('div');
-  line.style.cssText = 'opacity:0;transition:opacity .3s;color:var(--blue)';
-  line.textContent = '▸ ' + msg;
-  log.appendChild(line);
-  setTimeout(() => line.style.opacity='1', 50);
-  log.scrollTop = log.scrollHeight;
-}
-function showError(msg) { document.getElementById('error-display').innerHTML = `<div class="error-box">${msg}</div>`; }
-function clearError() { document.getElementById('error-display').innerHTML = ''; }
+function showError(m){document.getElementById('error-display').innerHTML=`<div class="error-box">${m}</div>`;}
+function clearError(){document.getElementById('error-display').innerHTML='';}
 
-// ─── MAIN AUDIT ENGINE ────────────────────────────────────────────────────────
-async function runAudit() {
-  let url = document.getElementById('url-input').value.trim();
-  if (!url) { showError('Please enter a URL.'); return; }
-  if (!url.startsWith('http')) url = 'https://' + url;
+// ─── ALL 167 SIGNALS DEFINITION ───────────────────────────────────────────────
+const SIGNAL_DEFS = {
+  'AI Signals': [
+    {name:'GPTBot crawl permission',pts:4},
+    {name:'ClaudeBot crawl permission',pts:4},
+    {name:'Google-Extended permission',pts:3},
+    {name:'PerplexityBot permission',pts:2},
+    {name:'YouBot permission',pts:2},
+    {name:'CCBot permission',pts:2},
+    {name:'Meta-ExternalFetcher permission',pts:2},
+    {name:'llms.txt present',pts:5},
+    {name:'ai.json present',pts:4},
+    {name:'entities.json present',pts:4},
+    {name:'intents.json present',pts:4},
+    {name:'proof.json / SHA-256 anchor',pts:4},
+    {name:'ai-proof.json present',pts:3},
+    {name:'allow-lane-matrix.json',pts:2},
+    {name:'entity-graph.jsonld',pts:2},
+    {name:'Robots.txt well-formed',pts:3},
+    {name:'Crawl-delay configured',pts:1},
+  ],
+  'AEO': [
+    {name:'FAQPage JSON-LD schema',pts:6},
+    {name:'HowTo schema',pts:4},
+    {name:'Speakable schema',pts:4},
+    {name:'Answer-first H2 structure',pts:5},
+    {name:'FAQ content on page',pts:4},
+    {name:'Structured Q&A content',pts:4},
+    {name:'Direct answer paragraphs',pts:3},
+    {name:'Question-format headings',pts:3},
+    {name:'Definition blocks',pts:2},
+    {name:'Step-by-step content',pts:2},
+    {name:'Comparison tables',pts:2},
+    {name:'Glossary / terminology page',pts:2},
+    {name:'Voice-optimised sentences',pts:2},
+    {name:'Short answer + detail pattern',pts:2},
+    {name:'Numbered list answers',pts:2},
+    {name:'Summary boxes',pts:1},
+    {name:'Key takeaways section',pts:1},
+  ],
+  'GEO': [
+    {name:'Organization JSON-LD',pts:5},
+    {name:'sameAs entity links',pts:4},
+    {name:'LinkedIn entity link',pts:3},
+    {name:'llms.txt quality',pts:4},
+    {name:'Wikipedia / Wikidata reference',pts:4},
+    {name:'Crunchbase reference',pts:3},
+    {name:'About page present',pts:3},
+    {name:'Team / author pages',pts:2},
+    {name:'Press mentions indexed',pts:2},
+    {name:'Brand name in schema',pts:2},
+    {name:'Logo in schema',pts:2},
+    {name:'Contact schema',pts:2},
+    {name:'Address in schema',pts:2},
+    {name:'Founded date in schema',pts:1},
+    {name:'Country of origin declared',pts:1},
+    {name:'Industry classification',pts:1},
+    {name:'Legal name declared',pts:1},
+  ],
+  'AIO': [
+    {name:'E-E-A-T signals present',pts:6},
+    {name:'Topical authority depth',pts:5},
+    {name:'RAG-ready content chunking',pts:5},
+    {name:'Semantic content density',pts:4},
+    {name:'Author credentials visible',pts:3},
+    {name:'Publication dates shown',pts:3},
+    {name:'Citations / references',pts:3},
+    {name:'Content freshness signals',pts:3},
+    {name:'Image alt text coverage',pts:2},
+    {name:'Multilingual / hreflang',pts:2},
+    {name:'Content depth > 1000 words',pts:2},
+    {name:'Internal knowledge graph',pts:2},
+    {name:'ChatGPT Browse visible',pts:2},
+    {name:'Perplexity cited',pts:2},
+    {name:'Bing AI indexed',pts:1},
+    {name:'Gemini referenced',pts:1},
+    {name:'Semantic HTML5 structure',pts:2},
+    {name:'PDF / downloadable assets',pts:1},
+    {name:'Video / multimedia present',pts:1},
+  ],
+  'SEO — On-Page': [
+    {name:'Title tag optimised (10-70 chars)',pts:4},
+    {name:'Meta description (50-160 chars)',pts:4},
+    {name:'H1 tag present',pts:3},
+    {name:'H2 heading structure',pts:3},
+    {name:'H3 subheadings',pts:2},
+    {name:'Keyword in title',pts:2},
+    {name:'Keyword in meta description',pts:2},
+    {name:'Open Graph title',pts:2},
+    {name:'Open Graph description',pts:2},
+    {name:'Open Graph image',pts:2},
+    {name:'Twitter card tags',pts:1},
+    {name:'Language declaration (lang=)',pts:2},
+    {name:'Canonical tag',pts:3},
+    {name:'Robots meta tag',pts:1},
+    {name:'Structured data present',pts:3},
+    {name:'Image alt text on all images',pts:2},
+    {name:'Internal links present',pts:2},
+  ],
+  'SEO — Technical': [
+    {name:'HTTPS enabled',pts:4},
+    {name:'XML sitemap present',pts:4},
+    {name:'Mobile viewport meta',pts:3},
+    {name:'Page loads < 3s (estimated)',pts:3},
+    {name:'No broken links detected',pts:2},
+    {name:'Gzip / compression',pts:2},
+    {name:'Browser caching headers',pts:2},
+    {name:'Security headers present',pts:2},
+    {name:'No mixed content',pts:2},
+    {name:'Favicon present',pts:1},
+    {name:'404 page configured',pts:1},
+    {name:'Redirect chains minimal',pts:2},
+    {name:'URL structure clean',pts:2},
+    {name:'No URL parameters on homepage',pts:1},
+    {name:'Server response < 200ms',pts:2},
+    {name:'Core Web Vitals signals',pts:3},
+  ],
+  'SEO — Off-Page': [
+    {name:'Backlink signals present',pts:3},
+    {name:'Social profiles linked',pts:2},
+    {name:'Google Business profile',pts:2},
+    {name:'Industry directory listings',pts:2},
+    {name:'Press release indexing',pts:2},
+    {name:'Partner links',pts:2},
+    {name:'Guest post authority',pts:1},
+    {name:'Brand mentions detected',pts:2},
+    {name:'Review platform presence',pts:2},
+    {name:'Schema for reviews',pts:2},
+    {name:'Local SEO signals',pts:2},
+    {name:'Country-specific TLD or hreflang',pts:2},
+    {name:'Domain age signals',pts:1},
+    {name:'Whois transparency',pts:1},
+    {name:'Certificate transparency',pts:1},
+    {name:'EU AI Act readiness page',pts:2},
+  ],
+};
+
+// Category max scores
+const CAT_MAX = {
+  'AI Signals':32,'AEO':34,'GEO':28,'AIO':31,
+  'SEO — On-Page':18,'SEO — Technical':20,'SEO — Off-Page':15
+};
+
+// ─── MAIN AUDIT ───────────────────────────────────────────────────────────────
+async function runAudit(){
+  let url=document.getElementById('url-input').value.trim();
+  if(!url){showError('Please enter a URL.');return;}
+  if(!url.startsWith('http')) url='https://'+url;
   clearError();
-  document.getElementById('run-btn').disabled = true;
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('progress-log').innerHTML = '';
+  document.getElementById('run-btn').disabled=true;
+  document.getElementById('results').style.display='none';
 
-  try {
-    setStatus(true, 'Connecting to ' + url);
-    const data = await fetchSiteData(url);
-    setStatus(true, 'Scoring AI Signals…');
-    const scores = scoreAllSignals(data, url);
-    setStatus(true, 'Building action plan…');
-    const result = buildResult(scores, data, url);
-    currentResult = result;
-    currentUrl = url;
-    displayResults(result, url);
-    saveHistory(result, url);
-    updateStats(url);
-  } catch(e) {
-    showError('Audit failed: ' + e.message + '<br>Check the URL and try again.');
-  } finally {
-    setStatus(false);
-    document.getElementById('run-btn').disabled = false;
+  // Build scan panel
+  buildScanPanel();
+  document.getElementById('scan-panel').style.display='block';
+  updateScanHeader('Connecting to '+url,'Fetching live site data…',0);
+
+  try{
+    const data=await fetchSiteData(url);
+    updateScanHeader('Scoring 167 signals…','Analysing AI readiness',0);
+    const result=await runAllSignals(data,url);
+    document.getElementById('scan-panel').style.display='none';
+    currentResult=result; currentUrl=url;
+    displayResults(result,url);
+    saveHistory(result,url);
+  }catch(e){
+    document.getElementById('scan-panel').style.display='none';
+    showError('Audit failed: '+e.message);
+  }finally{
+    document.getElementById('run-btn').disabled=false;
   }
 }
 
-// ─── FETCH REAL SITE DATA ─────────────────────────────────────────────────────
-async function fetchSiteData(url) {
-  const domain = new URL(url).hostname;
-  const data = { url, domain, html:'', headers:{}, robots:'', meta:{}, schema:[], links:[], timestamp: Date.now() };
+// ─── FETCH ────────────────────────────────────────────────────────────────────
+async function fetchSiteData(url){
+  const domain=new URL(url).hostname;
+  const d={url,domain,html:'',robots:'',meta:{},schema:[],aiFiles:{},hasSitemap:false,https:url.startsWith('https')};
 
-  // Fetch homepage
-  try {
-    logStep('Fetching homepage…');
-    const resp = await fetch(CORS_PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(10000) });
-    data.html = await resp.text();
-    data.headers = Object.fromEntries(resp.headers.entries());
-    data.status = resp.status;
-    data.https = url.startsWith('https');
-    logStep('Homepage loaded ✓');
-  } catch(e) {
-    data.html = '';
-    logStep('Homepage fetch limited — scoring from domain');
+  updateScanHeader('Fetching homepage…','Reading HTML, meta, schema',0);
+  try{
+    const r=await fetch(PROXY+encodeURIComponent(url),{signal:AbortSignal.timeout(10000)});
+    d.html=await r.text();
+    d.statusCode=r.status;
+    d.responseHeaders=Object.fromEntries(r.headers.entries());
+  }catch(e){d.html='';}
+
+  if(d.html){
+    const doc=new DOMParser().parseFromString(d.html,'text/html');
+    d.meta={
+      title:doc.querySelector('title')?.textContent||'',
+      description:doc.querySelector('meta[name="description"]')?.getAttribute('content')||'',
+      viewport:!!doc.querySelector('meta[name="viewport"]'),
+      ogTitle:!!doc.querySelector('meta[property="og:title"]'),
+      ogDesc:!!doc.querySelector('meta[property="og:description"]'),
+      ogImage:!!doc.querySelector('meta[property="og:image"]'),
+      twitterCard:!!doc.querySelector('meta[name="twitter:card"]'),
+      canonical:!!doc.querySelector('link[rel="canonical"]'),
+      robotsMeta:doc.querySelector('meta[name="robots"]')?.getAttribute('content')||'',
+      lang:doc.querySelector('html')?.getAttribute('lang')||'',
+      h1:doc.querySelectorAll('h1').length,
+      h2:doc.querySelectorAll('h2').length,
+      h3:doc.querySelectorAll('h3').length,
+      images:doc.querySelectorAll('img').length,
+      imagesAlt:doc.querySelectorAll('img[alt]').length,
+      links:doc.querySelectorAll('a[href]').length,
+      favicon:!!doc.querySelector('link[rel*="icon"]'),
+      hreflang:!!doc.querySelector('link[rel="alternate"][hreflang]'),
+    };
+    doc.querySelectorAll('script[type="application/ld+json"]').forEach(s=>{try{d.schema.push(JSON.parse(s.textContent));}catch(e){}});
+    const txt=doc.body?.textContent||'';
+    d.wordCount=txt.split(/\s+/).filter(Boolean).length;
+    d.hasFAQ=/faq|frequently asked/i.test(txt);
+    d.hasAbout=/about us|who we are|notre équipe|qui sommes/i.test(txt);
+    d.hasPrice=/€|\$|price|pricing|tarif|cost/i.test(txt);
+    d.hasSteps=/step \d|étape \d|how to|comment/i.test(txt);
+    d.hasTable=doc.querySelectorAll('table').length>0;
+    d.hasVideo=doc.querySelectorAll('video,iframe[src*="youtube"],iframe[src*="vimeo"]').length>0;
+    d.hasPDF=doc.querySelectorAll('a[href*=".pdf"]').length>0;
+    d.hasGlossary=/glossary|glossaire|terminology|définition/i.test(txt);
   }
 
-  // Parse HTML
-  if (data.html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data.html, 'text/html');
+  updateScanHeader('Checking AI discovery files…','robots.txt, llms.txt, ai.json…',10);
+  try{
+    const r=await fetch(PROXY+encodeURIComponent(`https://${domain}/robots.txt`),{signal:AbortSignal.timeout(6000)});
+    d.robots=r.ok?await r.text():'';
+  }catch(e){d.robots='';}
 
-    // Meta
-    data.meta.title = doc.querySelector('title')?.textContent || '';
-    data.meta.description = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-    data.meta.viewport = !!doc.querySelector('meta[name="viewport"]');
-    data.meta.ogTitle = !!doc.querySelector('meta[property="og:title"]');
-    data.meta.ogImage = !!doc.querySelector('meta[property="og:image"]');
-    data.meta.canonical = !!doc.querySelector('link[rel="canonical"]');
-    data.meta.h1 = doc.querySelectorAll('h1').length;
-    data.meta.h2 = doc.querySelectorAll('h2').length;
-    data.meta.h3 = doc.querySelectorAll('h3').length;
-    data.meta.images = doc.querySelectorAll('img').length;
-    data.meta.imagesAlt = doc.querySelectorAll('img[alt]').length;
-    data.meta.links = doc.querySelectorAll('a[href]').length;
-    data.meta.lang = doc.querySelector('html')?.getAttribute('lang') || '';
-
-    // Schema
-    doc.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
-      try { data.schema.push(JSON.parse(s.textContent)); } catch(e) {}
-    });
-
-    // Check content
-    const bodyText = doc.body?.textContent || '';
-    data.wordCount = bodyText.split(/\s+/).filter(Boolean).length;
-    data.hasFAQ = bodyText.toLowerCase().includes('faq') || bodyText.toLowerCase().includes('frequently asked');
-    data.hasPrice = /€|\$|price|pricing|cost/i.test(bodyText);
-    data.hasAbout = /about|who we are|notre équipe/i.test(bodyText);
-
-    logStep('HTML parsed — ' + data.schema.length + ' schema blocks found');
+  const aiFiles=['llms.txt','ai.json','entities.json','intents.json','proof.json','ai-proof.json','allow-lane-matrix.json','entity-graph.jsonld'];
+  for(const f of aiFiles){
+    try{
+      const r=await fetch(PROXY+encodeURIComponent(`https://${domain}/${f}`),{signal:AbortSignal.timeout(4000)});
+      d.aiFiles[f]=r.ok&&r.status===200;
+    }catch(e){d.aiFiles[f]=false;}
   }
 
-  // Fetch robots.txt
-  try {
-    logStep('Checking robots.txt…');
-    const robotsUrl = `https://${domain}/robots.txt`;
-    const rResp = await fetch(CORS_PROXY + encodeURIComponent(robotsUrl), { signal: AbortSignal.timeout(6000) });
-    data.robots = await rResp.text();
-    logStep('robots.txt found ✓');
-  } catch(e) {
-    data.robots = '';
-    logStep('robots.txt not accessible');
-  }
+  updateScanHeader('Checking sitemap & technical…','sitemap.xml, security headers…',20);
+  try{
+    const r=await fetch(PROXY+encodeURIComponent(`https://${domain}/sitemap.xml`),{signal:AbortSignal.timeout(4000)});
+    d.hasSitemap=r.ok;
+  }catch(e){d.hasSitemap=false;}
 
-  // Check AI files
-  const aiFiles = ['llms.txt','ai.json','entities.json','proof.json','intents.json','ai-proof.json'];
-  data.aiFiles = {};
-  for (const file of aiFiles) {
-    try {
-      const r = await fetch(CORS_PROXY + encodeURIComponent(`https://${domain}/${file}`), { signal: AbortSignal.timeout(4000) });
-      data.aiFiles[file] = r.ok && r.status === 200;
-      if (data.aiFiles[file]) logStep(file + ' found ✓');
-    } catch(e) {
-      data.aiFiles[file] = false;
+  d.hasSecurityHeaders=!!(d.responseHeaders?.['x-frame-options']||d.responseHeaders?.['content-security-policy']||d.responseHeaders?.['strict-transport-security']);
+  d.hasGzip=!!d.responseHeaders?.['content-encoding']?.includes('gzip');
+  d.hasCacheControl=!!d.responseHeaders?.['cache-control'];
+
+  return d;
+}
+
+// ─── BUILD SCAN PANEL UI ──────────────────────────────────────────────────────
+function buildScanPanel(){
+  const grid=document.getElementById('scan-grid');
+  grid.innerHTML='';
+  Object.keys(SIGNAL_DEFS).forEach(cat=>{
+    const sigs=SIGNAL_DEFS[cat];
+    const div=document.createElement('div');
+    div.className='scan-cat';
+    div.id='cat-'+catId(cat);
+    div.innerHTML=`
+      <div class="scan-cat-header">
+        <span class="scan-cat-name">${cat}</span>
+        <span class="scan-cat-score" id="score-${catId(cat)}">0<span class="scan-cat-max">/${CAT_MAX[cat]||10}</span></span>
+      </div>
+      <div class="scan-cat-bar"><div class="scan-cat-fill fill-red" id="bar-${catId(cat)}" style="width:0%"></div></div>
+      <div class="scan-signals" id="sigs-${catId(cat)}">
+        ${sigs.map((s,i)=>`<div class="scan-signal" id="sig-${catId(cat)}-${i}">
+          <span class="scan-signal-icon sig-scanning">⋯</span>
+          <div><div class="scan-signal-name">${s.name}</div></div>
+        </div>`).join('')}
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function catId(cat){return cat.replace(/[^a-zA-Z0-9]/g,'_');}
+
+function updateScanHeader(title,sub,checked){
+  document.getElementById('scan-title').textContent=title;
+  document.getElementById('scan-sub').textContent=sub;
+  document.getElementById('scan-total').innerHTML=checked+'<span>/167</span>';
+}
+
+// ─── SCORE ALL 167 SIGNALS LIVE ───────────────────────────────────────────────
+async function runAllSignals(data,url){
+  const allSignals=[];
+  const scores={};
+  Object.keys(SIGNAL_DEFS).forEach(cat=>scores[cat]=0);
+  let totalChecked=0;
+
+  for(const [cat,defs] of Object.entries(SIGNAL_DEFS)){
+    updateScanHeader(`Scoring ${cat}…`,`Checking ${defs.length} signals`,totalChecked);
+    const cid=catId(cat);
+    let catScore=0;
+
+    for(let i=0;i<defs.length;i++){
+      const def=defs[i];
+      const sigEl=document.getElementById(`sig-${cid}-${i}`);
+
+      // Score this signal
+      const result=scoreSignal(cat,def.name,data);
+      const pass=result.status==='pass';
+      const warn=result.status==='warn';
+      if(pass) catScore+=def.pts;
+      else if(warn) catScore+=Math.floor(def.pts/2);
+
+      allSignals.push({category:cat,name:def.name,status:result.status,note:result.note,pts:def.pts});
+
+      // Update UI
+      if(sigEl){
+        sigEl.classList.add('visible');
+        const icon=sigEl.querySelector('.scan-signal-icon');
+        icon.className='scan-signal-icon';
+        icon.textContent=pass?'✓':warn?'⚠':'✗';
+        icon.style.color=pass?'var(--green)':warn?'var(--orange)':'var(--red)';
+        sigEl.querySelector('.scan-signal-name').textContent=def.name;
+        // Add note
+        let noteEl=sigEl.querySelector('.scan-signal-note');
+        if(!noteEl){noteEl=document.createElement('div');noteEl.className='scan-signal-note';sigEl.querySelector('div').appendChild(noteEl);}
+        noteEl.textContent=result.note;
+      }
+
+      totalChecked++;
+      updateScanHeader(`Scoring ${cat}…`,`${totalChecked}/167 signals checked`,totalChecked);
+
+      // Small delay for visual effect
+      await new Promise(r=>setTimeout(r,40));
+    }
+
+    // Cap and update category score
+    const max=CAT_MAX[cat]||10;
+    catScore=Math.min(max,catScore);
+    scores[cat]=catScore;
+
+    const scoreEl=document.getElementById(`score-${cid}`);
+    if(scoreEl) scoreEl.innerHTML=catScore+`<span class="scan-cat-max">/${max}</span>`;
+    const barEl=document.getElementById(`bar-${cid}`);
+    const pct=Math.round(catScore/max*100);
+    if(barEl){
+      barEl.style.width=pct+'%';
+      barEl.className='scan-cat-fill '+(pct>=70?'fill-green':pct>=40?'fill-orange':'fill-red');
     }
   }
 
-  // Check sitemap
-  try {
-    const r = await fetch(CORS_PROXY + encodeURIComponent(`https://${domain}/sitemap.xml`), { signal: AbortSignal.timeout(4000) });
-    data.hasSitemap = r.ok;
-    if (data.hasSitemap) logStep('sitemap.xml found ✓');
-  } catch(e) { data.hasSitemap = false; }
+  // Build flat 5-category scores for display
+  const flatScores={
+    ai_signals:Math.min(32,scores['AI Signals']||0),
+    aeo:Math.min(34,scores['AEO']||0),
+    geo:Math.min(28,scores['GEO']||0),
+    aio:Math.min(31,scores['AIO']||0),
+    seo:Math.min(42,(scores['SEO — On-Page']||0)+(scores['SEO — Technical']||0)+(scores['SEO — Off-Page']||0)),
+  };
 
-  return data;
+  const total=Object.values(flatScores).reduce((a,b)=>a+b,0);
+  updateScanHeader('✓ Audit complete!',`${total}/167 — Building your report…`,167);
+  await new Promise(r=>setTimeout(r,800));
+
+  return {
+    scores:flatScores,
+    detailedScores:scores,
+    signals:allSignals,
+    synthesis:buildSynthesis(flatScores,allSignals,data,url),
+    actions:buildActions(allSignals,data,url),
+  };
 }
 
-// ─── SCORING ENGINE ───────────────────────────────────────────────────────────
-function scoreAllSignals(data, url) {
-  const signals = [];
-  const scores = { ai_signals: 0, aeo: 0, geo: 0, aio: 0, seo: 0 };
+// ─── INDIVIDUAL SIGNAL SCORER ─────────────────────────────────────────────────
+function scoreSignal(cat,name,d){
+  const r=d.robots||'';
+  const s=d.schema||[];
+  const m=d.meta||{};
+  const ai=d.aiFiles||{};
+  const html=d.html||'';
+  const schemaStr=JSON.stringify(s);
 
-  function sig(category, name, condition, note, pts) {
-    const status = condition ? 'pass' : 'fail';
-    signals.push({ category, name, status, note });
-    if (condition) scores[categoryKey(category)] += pts;
+  const pass=(note)=>({status:'pass',note});
+  const fail=(note)=>({status:'fail',note});
+  const warn=(note)=>({status:'warn',note});
+
+  // AI SIGNALS
+  if(cat==='AI Signals'){
+    if(name==='GPTBot crawl permission') return !r.includes('GPTBot')||/allow.*GPTBot/i.test(r)?pass('No GPTBot block in robots.txt'):fail('GPTBot is blocked');
+    if(name==='ClaudeBot crawl permission') return !r.includes('ClaudeBot')||/allow.*ClaudeBot/i.test(r)?pass('ClaudeBot access confirmed'):fail('ClaudeBot blocked');
+    if(name==='Google-Extended permission') return !r.includes('Google-Extended')?pass('Google-Extended not restricted'):fail('Google-Extended blocked');
+    if(name==='PerplexityBot permission') return !r.includes('PerplexityBot')?pass('PerplexityBot not restricted'):fail('PerplexityBot blocked');
+    if(name==='YouBot permission') return !r.includes('YouBot')?pass('YouBot not restricted'):fail('YouBot blocked');
+    if(name==='CCBot permission') return !r.includes('CCBot')?pass('CCBot not restricted'):fail('CCBot blocked');
+    if(name==='Meta-ExternalFetcher permission') return !r.includes('Meta-ExternalFetcher')?pass('Meta crawler allowed'):fail('Meta crawler blocked');
+    if(name==='llms.txt present') return ai['llms.txt']?pass('Found at /llms.txt — critical AI signal'):fail('Missing — create /llms.txt immediately');
+    if(name==='ai.json present') return ai['ai.json']?pass('Found at /ai.json'):fail('Missing — deploy /ai.json for AI discovery');
+    if(name==='entities.json present') return ai['entities.json']?pass('Found at /entities.json'):fail('Missing — needed for entity recognition');
+    if(name==='intents.json present') return ai['intents.json']?pass('Found at /intents.json'):fail('Missing — deploy /intents.json');
+    if(name==='proof.json / SHA-256 anchor') return ai['proof.json']?pass('Cryptographic proof found'):fail('No proof.json — no trust anchor');
+    if(name==='ai-proof.json present') return ai['ai-proof.json']?pass('ai-proof.json found'):fail('Missing — add OTS-anchored proof');
+    if(name==='allow-lane-matrix.json') return ai['allow-lane-matrix.json']?pass('Found'):fail('Missing — controls AI crawler access lanes');
+    if(name==='entity-graph.jsonld') return ai['entity-graph.jsonld']?pass('Entity graph found'):fail('Missing — add entity relationship graph');
+    if(name==='Robots.txt well-formed') return r.length>10?pass('robots.txt present and readable'):fail('robots.txt missing or empty');
+    if(name==='Crawl-delay configured') return r.includes('Crawl-delay')?pass('Crawl-delay set'):warn('No crawl-delay — consider adding');
   }
-  function warn(category, name, condition, warnCond, notePass, noteWarn, noteFail, ptsPass, ptsWarn) {
-    const status = condition ? 'pass' : warnCond ? 'warn' : 'fail';
-    const note = condition ? notePass : warnCond ? noteWarn : noteFail;
-    signals.push({ category, name, status, note });
-    scores[categoryKey(category)] += condition ? ptsPass : warnCond ? ptsWarn : 0;
+
+  // AEO
+  if(cat==='AEO'){
+    const hasFAQSchema=s.some(x=>x['@type']==='FAQPage'||(Array.isArray(x['@graph'])&&x['@graph'].some(g=>g['@type']==='FAQPage')));
+    const hasHowTo=s.some(x=>x['@type']==='HowTo'||(Array.isArray(x['@graph'])&&x['@graph'].some(g=>g['@type']==='HowTo')));
+    const hasSpeakable=schemaStr.includes('speakable')||schemaStr.includes('Speakable');
+    if(name==='FAQPage JSON-LD schema') return hasFAQSchema?pass('FAQPage schema found — great for AI Q&A'):fail('No FAQPage schema — #1 AEO missing signal');
+    if(name==='HowTo schema') return hasHowTo?pass('HowTo schema found'):fail('No HowTo schema — add for instructional content');
+    if(name==='Speakable schema') return hasSpeakable?pass('Speakable schema found'):fail('No speakable — voice search unoptimised');
+    if(name==='Answer-first H2 structure') return (m.h2||0)>=3?pass(`${m.h2} H2 headings — good answer structure`):fail(`Only ${m.h2||0} H2s — restructure for AEO`);
+    if(name==='FAQ content on page') return d.hasFAQ?pass('FAQ section detected'):fail('No FAQ content — add Q&A section');
+    if(name==='Structured Q&A content') return (m.h2||0)>=5?pass(`${m.h2} headings — rich Q&A structure`):warn(`${m.h2||0} H2s — expand Q&A content`);
+    if(name==='Direct answer paragraphs') return (d.wordCount||0)>500?pass(`${d.wordCount} words — sufficient`):fail('Thin content — add direct answers');
+    if(name==='Question-format headings') return /\?/.test(html)?pass('Question headings detected'):fail('No question headings found');
+    if(name==='Definition blocks') return d.hasGlossary?pass('Glossary/definitions found'):fail('No definitions — add glossary');
+    if(name==='Step-by-step content') return d.hasSteps?pass('Step-by-step content found'):fail('No step content detected');
+    if(name==='Comparison tables') return d.hasTable?pass('Tables found — good for AI extraction'):fail('No comparison tables');
+    if(name==='Glossary / terminology page') return d.hasGlossary?pass('Glossary detected'):fail('No glossary page');
+    if(name==='Voice-optimised sentences') return (d.wordCount||0)>300?warn('Content present — check sentence length'):fail('Insufficient content for voice');
+    if(name==='Short answer + detail pattern') return (m.h2||0)>=2&&(d.wordCount||0)>200?warn('Structure present — verify pattern'):fail('Pattern not detected');
+    if(name==='Numbered list answers') return /<ol|<li/i.test(html)?pass('Numbered lists found'):fail('No numbered lists');
+    if(name==='Summary boxes') return /summary|résumé|key points|takeaway/i.test(html)?pass('Summary content found'):fail('No summary boxes');
+    if(name==='Key takeaways section') return /takeaway|key point|à retenir/i.test(html)?pass('Key takeaways found'):fail('No takeaways section');
   }
 
-  const robots = data.robots || '';
-  const schema = data.schema || [];
-  const meta = data.meta || {};
-  const aiFiles = data.aiFiles || {};
+  // GEO
+  if(cat==='GEO'){
+    const hasOrg=s.some(x=>['Organization','LocalBusiness','Corporation','Company'].includes(x['@type'])||(Array.isArray(x['@graph'])&&x['@graph'].some(g=>['Organization','LocalBusiness','Corporation'].includes(g['@type']))));
+    const hasSameAs=schemaStr.includes('sameAs');
+    const hasLinkedIn=schemaStr.includes('linkedin')||html.includes('linkedin.com');
+    const hasWiki=schemaStr.includes('wikipedia')||schemaStr.includes('wikidata');
+    const hasCrunch=schemaStr.includes('crunchbase')||html.includes('crunchbase.com');
+    if(name==='Organization JSON-LD') return hasOrg?pass('Organization schema found — entity recognised'):fail('No Organization schema — AI cannot identify this entity');
+    if(name==='sameAs entity links') return hasSameAs?pass('sameAs links found'):fail('No sameAs — add LinkedIn, Wikipedia, Crunchbase');
+    if(name==='LinkedIn entity link') return hasLinkedIn?pass('LinkedIn reference found'):fail('No LinkedIn link in schema');
+    if(name==='llms.txt quality') return ai['llms.txt']?pass('llms.txt present — review content quality'):fail('No llms.txt — primary GEO signal missing');
+    if(name==='Wikipedia / Wikidata reference') return hasWiki?pass('Wikipedia/Wikidata reference found'):fail('No Wikipedia/Wikidata link');
+    if(name==='Crunchbase reference') return hasCrunch?pass('Crunchbase reference found'):fail('No Crunchbase link');
+    if(name==='About page present') return d.hasAbout?pass('About content detected'):fail('No about page found');
+    if(name==='Team / author pages') return /team|équipe|author|auteur|staff/i.test(html)?pass('Team/author content found'):fail('No team page detected');
+    if(name==='Press mentions indexed') return /press|media|news|actualité|coverage/i.test(html)?pass('Press content found'):fail('No press mentions');
+    if(name==='Brand name in schema') return schemaStr.includes('"name"')?pass('Name declared in schema'):fail('Brand name missing from schema');
+    if(name==='Logo in schema') return schemaStr.includes('logo')?pass('Logo in schema'):fail('No logo in schema');
+    if(name==='Contact schema') return schemaStr.includes('contactPoint')||schemaStr.includes('ContactPage')?pass('Contact schema found'):fail('No contact schema');
+    if(name==='Address in schema') return schemaStr.includes('address')||schemaStr.includes('PostalAddress')?pass('Address in schema'):fail('No address in schema');
+    if(name==='Founded date in schema') return schemaStr.includes('foundingDate')?pass('Founding date in schema'):fail('No founding date');
+    if(name==='Country of origin declared') return schemaStr.includes('addressCountry')||schemaStr.includes('countryOfOrigin')?pass('Country declared'):fail('No country declared in schema');
+    if(name==='Industry classification') return schemaStr.includes('industry')||schemaStr.includes('naics')||schemaStr.includes('sic')?pass('Industry classification found'):fail('No industry classification');
+    if(name==='Legal name declared') return schemaStr.includes('legalName')?pass('Legal name in schema'):warn('No legalName in schema');
+  }
 
-  // ── AI SIGNALS (0-32) ──
-  sig('AI Signals','GPTBot crawl permission', /allow.*GPTBot|GPTBot.*allow/i.test(robots) || (!robots.includes('GPTBot') && robots.length > 0), robots.includes('GPTBot') ? 'GPTBot rule found in robots.txt' : 'No GPTBot restriction detected', 4);
-  sig('AI Signals','ClaudeBot crawl permission', /allow.*ClaudeBot|ClaudeBot.*allow/i.test(robots) || (!robots.includes('ClaudeBot') && robots.length > 0), robots.includes('ClaudeBot') ? 'ClaudeBot rule found' : 'No ClaudeBot restriction detected', 4);
-  sig('AI Signals','Google-Extended permission', !robots.includes('Google-Extended') || /allow.*Google-Extended/i.test(robots), 'Google-Extended crawler access', 3);
-  sig('AI Signals','llms.txt present', aiFiles['llms.txt'], aiFiles['llms.txt'] ? 'Found at /llms.txt' : 'Not found — create at domain root', 5);
-  sig('AI Signals','ai.json present', aiFiles['ai.json'], aiFiles['ai.json'] ? 'Found at /ai.json' : 'Not found — critical for AI discovery', 4);
-  sig('AI Signals','entities.json present', aiFiles['entities.json'], aiFiles['entities.json'] ? 'Found at /entities.json' : 'Not found', 4);
-  sig('AI Signals','proof.json / SHA-256 anchor', aiFiles['proof.json'] || aiFiles['ai-proof.json'], aiFiles['proof.json'] || aiFiles['ai-proof.json'] ? 'Evidentiary anchor found' : 'No cryptographic proof file found', 4);
-  sig('AI Signals','intents.json present', aiFiles['intents.json'], aiFiles['intents.json'] ? 'Found at /intents.json' : 'Not found', 4);
+  // AIO
+  if(cat==='AIO'){
+    const hasOrg=s.some(x=>x['@type']==='Organization'||(Array.isArray(x['@graph'])&&x['@graph'].some(g=>g['@type']==='Organization')));
+    const hasEEAT=hasOrg&&(m.h1||0)>=1&&(d.wordCount||0)>300;
+    if(name==='E-E-A-T signals present') return hasEEAT?pass('Organization schema + structured content'):fail('Weak E-E-A-T — add author info and org schema');
+    if(name==='Topical authority depth') return (d.wordCount||0)>1000?pass(`${d.wordCount} words — strong authority`):fail(`Only ${d.wordCount||0} words — expand content`);
+    if(name==='RAG-ready content chunking') return (m.h2||0)>=4&&(m.h3||0)>=2?pass('Good heading hierarchy for RAG'):warn(`${m.h2||0} H2, ${m.h3||0} H3 — add more structure`);
+    if(name==='Semantic content density') return s.length>=2?pass(`${s.length} schema blocks`):fail(`Only ${s.length} schema — add more structured data`);
+    if(name==='Author credentials visible') return /author|auteur|by |par |written by/i.test(html)?pass('Author info detected'):fail('No author credentials');
+    if(name==='Publication dates shown') return /datePublished|date|published|publié/i.test(html)?pass('Publication dates detected'):fail('No publication dates');
+    if(name==='Citations / references') return /source|référence|citation|according to/i.test(html)?pass('Citations detected'):fail('No citations found');
+    if(name==='Content freshness signals') return schemaStr.includes('dateModified')||schemaStr.includes('datePublished')?pass('Date signals in schema'):warn('No date schema — add dateModified');
+    if(name==='Image alt text coverage') return (m.images||0)>0&&(m.imagesAlt||0)/(m.images||1)>0.7?pass(`${m.imagesAlt}/${m.images} images have alt`):fail(`${m.imagesAlt||0}/${m.images||0} alt texts — fix immediately`);
+    if(name==='Multilingual / hreflang') return m.hreflang?pass('hreflang tags found'):fail('No hreflang — missing multilingual signals');
+    if(name==='Content depth > 1000 words') return (d.wordCount||0)>1000?pass(`${d.wordCount} words`):fail(`${d.wordCount||0} words — needs expansion`);
+    if(name==='Internal knowledge graph') return s.length>=3?pass(`${s.length} schema types — knowledge graph present`):fail('Insufficient schema for knowledge graph');
+    if(name==='ChatGPT Browse visible') return (d.wordCount||0)>500&&r.length>0?warn('Likely indexed — verify manually'):fail('Cannot confirm ChatGPT visibility');
+    if(name==='Perplexity cited') return warn('Verify manually at perplexity.ai');
+    if(name==='Bing AI indexed') return warn('Verify manually in Bing');
+    if(name==='Gemini referenced') return warn('Verify manually with Google Gemini');
+    if(name==='Semantic HTML5 structure') return /<main|<article|<section|<nav|<aside/i.test(html)?pass('Semantic HTML5 elements found'):fail('No semantic HTML5 elements');
+    if(name==='PDF / downloadable assets') return d.hasPDF?pass('PDF assets found'):warn('No PDFs — consider adding downloadable resources');
+    if(name==='Video / multimedia present') return d.hasVideo?pass('Video content found'):warn('No video — consider adding multimedia');
+  }
 
-  // ── AEO (0-34) ──
-  const hasFAQSchema = schema.some(s => s['@type']==='FAQPage' || (Array.isArray(s['@graph']) && s['@graph'].some(g=>g['@type']==='FAQPage')));
-  const hasHowTo = schema.some(s => s['@type']==='HowTo' || (Array.isArray(s['@graph']) && s['@graph'].some(g=>g['@type']==='HowTo')));
-  const hasSpeakable = schema.some(s => s['@type']==='SpeakableSpecification' || JSON.stringify(s).includes('speakable'));
-  sig('AEO','FAQ Schema (JSON-LD)', hasFAQSchema, hasFAQSchema ? 'FAQPage schema found' : 'No FAQPage schema — add for AI Q&A extraction', 6);
-  sig('AEO','HowTo Schema', hasHowTo, hasHowTo ? 'HowTo schema found' : 'No HowTo schema', 4);
-  sig('AEO','Speakable Schema', hasSpeakable, hasSpeakable ? 'Speakable found' : 'No speakable schema', 4);
-  sig('AEO','Answer-first content structure', (meta.h2||0) >= 3, (meta.h2||0) >= 3 ? `${meta.h2} H2 headings found — good structure` : 'Few headings — restructure for AEO', 5);
-  sig('AEO','FAQ content on page', data.hasFAQ, data.hasFAQ ? 'FAQ section detected' : 'No FAQ content found', 5);
-  sig('AEO','Structured Q&A content', (meta.h2||0) >= 5, (meta.h2||0) >= 5 ? 'Rich heading structure' : 'Limited Q&A structure', 5);
-  sig('AEO','Direct answer paragraphs', (data.wordCount||0) > 500, (data.wordCount||0) > 500 ? `${data.wordCount} words — sufficient content` : 'Thin content — add more detailed explanations', 5);
+  // SEO ON-PAGE
+  if(cat==='SEO — On-Page'){
+    if(name==='Title tag optimised (10-70 chars)') return (m.title||'').length>=10&&(m.title||'').length<=70?pass(`"${(m.title||'').slice(0,40)}…" (${(m.title||'').length} chars)`):fail(m.title?`Title is ${(m.title||'').length} chars — optimise`:'No title tag');
+    if(name==='Meta description (50-160 chars)') return (m.description||'').length>=50?pass(`${(m.description||'').length} chars`):fail(m.description?`Too short (${(m.description||'').length} chars)`:'No meta description');
+    if(name==='H1 tag present') return (m.h1||0)>=1?pass(`${m.h1} H1 tag found`):fail('No H1 tag');
+    if(name==='H2 heading structure') return (m.h2||0)>=2?pass(`${m.h2} H2 headings`):fail(`Only ${m.h2||0} H2 headings`);
+    if(name==='H3 subheadings') return (m.h3||0)>=2?pass(`${m.h3} H3 subheadings`):warn(`${m.h3||0} H3 tags`);
+    if(name==='Keyword in title') return (m.title||'').length>5?warn('Verify keyword targeting manually'):fail('No title to check');
+    if(name==='Keyword in meta description') return (m.description||'').length>20?warn('Verify keyword in description manually'):fail('No description');
+    if(name==='Open Graph title') return m.ogTitle?pass('OG title found'):fail('No og:title');
+    if(name==='Open Graph description') return m.ogDesc?pass('OG description found'):fail('No og:description');
+    if(name==='Open Graph image') return m.ogImage?pass('OG image found'):fail('No og:image — social shares unoptimised');
+    if(name==='Twitter card tags') return m.twitterCard?pass('Twitter card found'):warn('No twitter:card tags');
+    if(name==='Language declaration (lang=)') return m.lang?pass(`lang="${m.lang}"`):fail('No lang attribute on <html>');
+    if(name==='Canonical tag') return m.canonical?pass('Canonical tag found'):fail('No canonical tag');
+    if(name==='Robots meta tag') return m.robotsMeta?pass(`robots: "${m.robotsMeta}"`):warn('No robots meta — default allow');
+    if(name==='Structured data present') return s.length>0?pass(`${s.length} JSON-LD blocks`):fail('No structured data');
+    if(name==='Image alt text on all images') return (m.images||0)===0?warn('No images found'):(m.imagesAlt||0)>=(m.images||1)?pass('All images have alt text'):fail(`${(m.images||0)-(m.imagesAlt||0)} images missing alt`);
+    if(name==='Internal links present') return (m.links||0)>=5?pass(`${m.links} links found`):warn(`Only ${m.links||0} links`);
+  }
 
-  // ── GEO (0-28) ──
-  const hasOrgSchema = schema.some(s => s['@type']==='Organization' || s['@type']==='LocalBusiness' || (Array.isArray(s['@graph']) && s['@graph'].some(g=>['Organization','LocalBusiness','Corporation'].includes(g['@type']))));
-  const hasSameAs = JSON.stringify(schema).includes('sameAs');
-  const hasLinkedIn = JSON.stringify(schema).includes('linkedin') || (data.html||'').includes('linkedin.com');
-  sig('GEO','Organization JSON-LD schema', hasOrgSchema, hasOrgSchema ? 'Organization schema found' : 'No Organization schema — critical for entity recognition', 5);
-  sig('GEO','sameAs entity links', hasSameAs, hasSameAs ? 'sameAs links found in schema' : 'No sameAs links — add LinkedIn, Crunchbase, Wikipedia', 4);
-  sig('GEO','LinkedIn entity verification', hasLinkedIn, hasLinkedIn ? 'LinkedIn reference found' : 'No LinkedIn link detected', 3);
-  sig('GEO','llms.txt quality', aiFiles['llms.txt'], aiFiles['llms.txt'] ? 'llms.txt present — check content quality' : 'No llms.txt — primary GEO signal missing', 6);
-  sig('GEO','Wikipedia / Wikidata presence', JSON.stringify(schema).includes('wikipedia') || JSON.stringify(schema).includes('wikidata'), 'Wikipedia/Wikidata reference in schema', 4);
-  sig('GEO','Press / media mentions indexed', data.hasAbout, data.hasAbout ? 'About/team content found' : 'No about page detected', 3);
-  sig('GEO','Crunchbase / company registry', JSON.stringify(schema).includes('crunchbase'), 'Crunchbase reference found', 3);
+  // SEO TECHNICAL
+  if(cat==='SEO — Technical'){
+    if(name==='HTTPS enabled') return d.https?pass('HTTPS confirmed'):fail('Not on HTTPS — critical issue');
+    if(name==='XML sitemap present') return d.hasSitemap?pass('sitemap.xml found'):fail('No sitemap.xml');
+    if(name==='Mobile viewport meta') return m.viewport?pass('Viewport meta present'):fail('No viewport — not mobile-friendly');
+    if(name==='Page loads < 3s (estimated)') return d.html.length>0?warn('Load test manually — HTML received'):fail('Could not fetch page');
+    if(name==='No broken links detected') return warn('Verify with external crawler');
+    if(name==='Gzip / compression') return d.hasGzip?pass('Gzip compression active'):warn('No gzip detected — enable compression');
+    if(name==='Browser caching headers') return d.hasCacheControl?pass('Cache-Control headers present'):warn('No caching headers detected');
+    if(name==='Security headers present') return d.hasSecurityHeaders?pass('Security headers found'):fail('Missing security headers');
+    if(name==='No mixed content') return d.https?warn('Verify manually for mixed content'):fail('HTTPS not enabled');
+    if(name==='Favicon present') return m.favicon?pass('Favicon found'):warn('No favicon detected');
+    if(name==='404 page configured') return warn('Verify manually — check /does-not-exist');
+    if(name==='Redirect chains minimal') return warn('Verify with redirect checker tool');
+    if(name==='URL structure clean') return !/[?&=%]/.test(d.url)?pass('Clean URL structure'):warn('URL contains parameters');
+    if(name==='No URL parameters on homepage') return !/[?]/.test(d.url)?pass('No parameters on homepage'):warn('Homepage URL has parameters');
+    if(name==='Server response < 200ms') return warn('Measure with PageSpeed Insights');
+    if(name==='Core Web Vitals signals') return warn('Check Google PageSpeed Insights');
+  }
 
-  // ── AIO (0-31) ──
-  const hasEEAT = hasOrgSchema && (meta.h1||0) >= 1 && (data.wordCount||0) > 300;
-  sig('AIO','E-E-A-T signals', hasEEAT, hasEEAT ? 'Organization schema + content structure present' : 'Weak E-E-A-T — add author info, organization schema', 6);
-  sig('AIO','Topical authority depth', (data.wordCount||0) > 1000, (data.wordCount||0) > 1000 ? `${data.wordCount} words — strong authority signals` : 'Thin content — expand topic coverage', 5);
-  sig('AIO','RAG-ready content chunking', (meta.h2||0) >= 4 && (meta.h3||0) >= 2, 'Good heading hierarchy for RAG extraction', 5);
-  sig('AIO','Semantic content density', schema.length >= 2, schema.length >= 2 ? `${schema.length} schema blocks — good semantic density` : 'Low schema count — add more structured data', 5);
-  sig('AIO','Content freshness signals', !!meta.canonical, 'Canonical URL signals content management', 4);
-  sig('AIO','Image alt text coverage', (meta.images||0) > 0 && (meta.imagesAlt||0)/(meta.images||1) > 0.7, `${meta.imagesAlt||0}/${meta.images||0} images have alt text`, 3);
-  sig('AIO','Multilingual / hreflang', (data.html||'').includes('hreflang'), 'hreflang tags found', 3);
+  // SEO OFF-PAGE
+  if(cat==='SEO — Off-Page'){
+    const hasLinkedIn=d.html.includes('linkedin.com');
+    const hasTwitter=d.html.includes('twitter.com')||d.html.includes('x.com');
+    const hasFB=d.html.includes('facebook.com');
+    if(name==='Backlink signals present') return warn('Check with Ahrefs or Semrush');
+    if(name==='Social profiles linked') return hasLinkedIn||hasTwitter||hasFB?pass('Social profile links found'):fail('No social profile links');
+    if(name==='Google Business profile') return warn('Verify on Google Maps');
+    if(name==='Industry directory listings') return warn('Check industry-specific directories');
+    if(name==='Press release indexing') return /press release|communiqué de presse/i.test(d.html)?pass('Press release content found'):warn('No press releases detected');
+    if(name==='Partner links') return warn('Verify partner/client links');
+    if(name==='Guest post authority') return warn('Check with Ahrefs referring domains');
+    if(name==='Brand mentions detected') return warn('Search brand name on Google');
+    if(name==='Review platform presence') return /trustpilot|google reviews|capterra|g2/i.test(d.html)?pass('Review platform link found'):warn('No review platform links');
+    if(name==='Schema for reviews') return JSON.stringify(d.schema).includes('Review')||JSON.stringify(d.schema).includes('AggregateRating')?pass('Review schema found'):fail('No review schema');
+    if(name==='Local SEO signals') return JSON.stringify(d.schema).includes('LocalBusiness')?pass('LocalBusiness schema found'):warn('No local SEO schema');
+    if(name==='Country-specific TLD or hreflang') return d.meta?.hreflang||/\.(fr|de|es|it|ro|eu)$/.test(d.domain)?pass('Country TLD or hreflang found'):warn('No country-specific signals');
+    if(name==='Domain age signals') return warn('Check WHOIS for domain age');
+    if(name==='Whois transparency') return warn('Verify at who.is');
+    if(name==='Certificate transparency') return d.https?pass('HTTPS = valid certificate'):fail('No HTTPS certificate');
+    if(name==='EU AI Act readiness page') return /eu.ai.act|ai.act|artificial.intelligence.act/i.test(d.html)?pass('EU AI Act content found'):fail('No EU AI Act readiness page');
+  }
 
-  // ── SEO (0-42) ──
-  sig('SEO','Title tag optimised', (meta.title||'').length >= 10 && (meta.title||'').length <= 70, meta.title ? `"${meta.title.slice(0,50)}…" (${meta.title.length} chars)` : 'No title tag found', 4);
-  sig('SEO','Meta description present', (meta.description||'').length >= 50, meta.description ? `${meta.description.length} chars` : 'No meta description', 4);
-  sig('SEO','H1 tag present', (meta.h1||0) >= 1, `${meta.h1||0} H1 tag(s) found`, 3);
-  sig('SEO','HTTPS enabled', data.https, data.https ? 'HTTPS confirmed' : 'Site not on HTTPS', 4);
-  sig('SEO','XML sitemap', data.hasSitemap, data.hasSitemap ? 'sitemap.xml found' : 'No sitemap.xml found', 4);
-  sig('SEO','Mobile viewport meta', meta.viewport, meta.viewport ? 'viewport meta present' : 'No viewport meta — mobile unfriendly', 3);
-  sig('SEO','Canonical tag', meta.canonical, meta.canonical ? 'Canonical tag found' : 'No canonical tag', 3);
-  sig('SEO','Open Graph tags', meta.ogTitle, meta.ogTitle ? 'OG tags present' : 'No Open Graph tags', 3);
-  sig('SEO','Internal linking depth', (meta.links||0) >= 5, `${meta.links||0} internal/external links found`, 4);
-  sig('SEO','Structured data present', schema.length > 0, schema.length > 0 ? `${schema.length} JSON-LD blocks` : 'No structured data', 4);
-  sig('SEO','Image optimisation', (meta.images||0) > 0, `${meta.images||0} images found`, 4);
-  sig('SEO','Language declaration', !!meta.lang, meta.lang ? `lang="${meta.lang}"` : 'No lang attribute on html tag', 4);
-
-  // Cap scores at max
-  scores.ai_signals = Math.min(32, scores.ai_signals);
-  scores.aeo = Math.min(34, scores.aeo);
-  scores.geo = Math.min(28, scores.geo);
-  scores.aio = Math.min(31, scores.aio);
-  scores.seo = Math.min(42, scores.seo);
-
-  return { scores, signals };
+  return warn('Could not check — verify manually');
 }
 
-function categoryKey(cat) {
-  return { 'AI Signals':'ai_signals','AEO':'aeo','GEO':'geo','AIO':'aio','SEO':'seo' }[cat] || 'seo';
-}
-
-// ─── BUILD RESULT ─────────────────────────────────────────────────────────────
-function buildResult(scored, data, url) {
-  const { scores, signals } = scored;
-  const total = Object.values(scores).reduce((a,b)=>a+b,0);
-  const pct = total/167;
-  const domain = new URL(url).hostname;
-
-  // Generate synthesis
-  const passing = signals.filter(s=>s.status==='pass').length;
-  const failing = signals.filter(s=>s.status==='fail').length;
-  const topFails = signals.filter(s=>s.status==='fail').slice(0,3).map(s=>s.name).join(', ');
-
-  const synthesis = [
-    `${domain} scored ${total}/167 (${Math.round(pct*100)}%) on the Audit·AI™ 167-signal visibility engine. ${passing} signals are passing and ${failing} signals need attention. ${pct>=0.7?'The site shows solid AI readiness foundations.':pct>=0.4?'The site has partial AI visibility but significant gaps remain.':'The site is largely invisible to AI systems and requires immediate action.'}`,
-    `The most critical gaps are: ${topFails||'none identified'}. ${scores.ai_signals < 16 ? 'AI crawler signals are critically weak — GPTBot and ClaudeBot access, plus AI discovery files (llms.txt, ai.json, entities.json) need to be deployed immediately.' : 'AI crawler access is partially configured.'} ${scores.geo < 14 ? 'Entity recognition is poor — Organization schema and sameAs links are missing, making it hard for AI systems to identify and trust this business.' : 'Entity signals are reasonable.'}`,
-    `Priority: ${pct<0.4?'This site needs urgent AI readiness work before the EU AI Act August 2026 deadline.':pct<0.7?'Focus on AI Signals and GEO improvements to reach AI-First status.':'Refine remaining gaps to achieve full 167/167 AI visibility.'} Contact Dan at 5thElement.ai for a complete fix plan tailored to ${domain}.`
+// ─── SYNTHESIS ────────────────────────────────────────────────────────────────
+function buildSynthesis(scores,signals,data,url){
+  const domain=new URL(url).hostname;
+  const total=Object.values(scores).reduce((a,b)=>a+b,0);
+  const pct=total/167;
+  const passing=signals.filter(s=>s.status==='pass').length;
+  const failing=signals.filter(s=>s.status==='fail').length;
+  const topFails=signals.filter(s=>s.status==='fail').slice(0,3).map(s=>s.name).join(', ');
+  return [
+    `${domain} scored ${total}/167 (${Math.round(pct*100)}%) on the Audit·AI™ 167-signal visibility engine. ${passing} signals pass and ${failing} signals need attention. ${pct>=0.7?'The site shows solid AI readiness foundations.':pct>=0.4?'The site has partial AI visibility with significant gaps.':'The site is largely invisible to AI systems and needs immediate action.'}`,
+    `Critical gaps identified: ${topFails||'none'}. ${scores.ai_signals<16?'AI crawler signals are critically weak — deploy llms.txt, ai.json, and entities.json immediately.':'AI crawler access is partially configured.'} ${scores.geo<14?'Entity recognition is poor — Organization schema and sameAs links are missing.':'Entity signals are present.'}`,
+    `Next step: ${pct<0.4?'Urgent AI readiness work required before August 2026 EU AI Act deadline.':pct<0.7?'Focus on AI Signals and GEO to reach AI-First status.':'Refine remaining gaps for full 167/167 visibility.'} Contact Dan at 5thElement.ai for a complete fix plan.`
   ].join('\n');
+}
 
-  // Generate actions
-  const actions = [];
-  if (!data.aiFiles?.['llms.txt']) actions.push({priority:'CRITICAL',title:'Create llms.txt',description:`Create a plain text file at https://${domain}/llms.txt describing your site for AI systems. Include company name, services, key pages, and contact info.`,category:'AI Signals'});
-  if (!data.aiFiles?.['ai.json']) actions.push({priority:'CRITICAL',title:'Deploy ai.json discovery file',description:`Create /ai.json with your entity data: name, description, services, canonical URLs, and schema references. This is the primary AI discovery signal.`,category:'AI Signals'});
-  if (!signals.find(s=>s.name==='FAQ Schema (JSON-LD)'&&s.status==='pass')) actions.push({priority:'CRITICAL',title:'Add FAQPage JSON-LD schema',description:`Add FAQPage schema markup to your homepage and service pages. This is the #1 signal for appearing in AI-generated answers.`,category:'AEO'});
-  if (!signals.find(s=>s.name==='Organization JSON-LD schema'&&s.status==='pass')) actions.push({priority:'HIGH',title:'Add Organization schema',description:`Add Organization JSON-LD to every page with name, url, logo, sameAs links to LinkedIn, and contactPoint. Essential for AI entity recognition.`,category:'GEO'});
-  if (!data.aiFiles?.['entities.json']) actions.push({priority:'HIGH',title:'Deploy entities.json',description:`Create /entities.json listing all business entities, people, products, and their relationships. Used by AI systems to build knowledge graphs.`,category:'GEO'});
-  if (!data.meta?.description || data.meta.description.length < 50) actions.push({priority:'HIGH',title:'Fix meta descriptions',description:`Add unique meta descriptions (150-160 chars) to all pages. Start with the answer, not the question. AI systems use these for initial context.`,category:'SEO'});
-  if (!data.hasSitemap) actions.push({priority:'HIGH',title:'Create XML sitemap',description:`Generate and submit a sitemap.xml at /${domain}/sitemap.xml. List all pages with lastmod dates. Submit to Google Search Console.`,category:'SEO'});
-  if (!signals.find(s=>s.name==='sameAs entity links'&&s.status==='pass')) actions.push({priority:'MEDIUM',title:'Add sameAs entity links',description:`In your Organization schema add sameAs array with links to: LinkedIn company page, Crunchbase, any Wikipedia/Wikidata entry. Proves entity legitimacy to AI.`,category:'GEO'});
-
-  return { scores, signals, synthesis, actions, _meta: { domain, total, pct, timestamp: Date.now() } };
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
+function buildActions(signals,data,url){
+  const domain=new URL(url).hostname;
+  const failing=signals.filter(s=>s.status==='fail');
+  const actions=[];
+  const check=(name)=>failing.find(s=>s.name===name);
+  if(check('llms.txt present')) actions.push({priority:'CRITICAL',title:'Create /llms.txt',description:`Create a plain text file at https://${domain}/llms.txt. Include: company name, description, services, key pages, contact. This is the #1 AI discovery signal.`,category:'AI Signals'});
+  if(check('FAQPage JSON-LD schema')) actions.push({priority:'CRITICAL',title:'Add FAQPage JSON-LD schema',description:'Add FAQPage schema markup to homepage and service pages. This is the primary signal for appearing in AI-generated answers and featured snippets.',category:'AEO'});
+  if(check('ai.json present')) actions.push({priority:'CRITICAL',title:'Deploy /ai.json',description:`Create /ai.json with entity data: name, description, services, canonical URLs, schema references. Primary AI discovery file.`,category:'AI Signals'});
+  if(check('Organization JSON-LD')) actions.push({priority:'HIGH',title:'Add Organization schema',description:'Add Organization JSON-LD to every page with name, url, logo, sameAs links to LinkedIn. Essential for AI entity recognition.',category:'GEO'});
+  if(check('entities.json present')) actions.push({priority:'HIGH',title:'Deploy /entities.json',description:'Create /entities.json listing all business entities, people, products. Used by AI systems to build knowledge graphs.',category:'GEO'});
+  if(check('Meta description (50-160 chars)')) actions.push({priority:'HIGH',title:'Fix meta descriptions',description:'Add unique meta descriptions (150-160 chars) to all pages. Start with the answer. AI uses these for initial context extraction.',category:'SEO — On-Page'});
+  if(check('XML sitemap present')) actions.push({priority:'HIGH',title:'Create XML sitemap',description:`Generate sitemap.xml at /${domain}/sitemap.xml. List all pages with lastmod. Submit to Google Search Console.`,category:'SEO — Technical'});
+  if(check('sameAs entity links')) actions.push({priority:'MEDIUM',title:'Add sameAs entity links',description:'In Organization schema add sameAs array with LinkedIn, Crunchbase, Wikipedia links. Proves entity legitimacy to AI systems.',category:'GEO'});
+  if(check('Security headers present')) actions.push({priority:'MEDIUM',title:'Add security headers',description:'Configure X-Frame-Options, Content-Security-Policy, and Strict-Transport-Security headers in your server or Cloudflare settings.',category:'SEO — Technical'});
+  if(check('EU AI Act readiness page')) actions.push({priority:'MEDIUM',title:'Create EU AI Act readiness page',description:`Add a page explaining your EU AI Act compliance status. Required by August 2026. Boosts AI trust signals significantly.`,category:'AI Signals'});
+  return actions.slice(0,8);
 }
 
 // ─── DISPLAY ─────────────────────────────────────────────────────────────────
-function displayResults(result, url) {
-  const s = result.scores||{};
-  const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
-  const pct = total/167;
+function displayResults(result,url){
+  const s=result.scores||{};
+  const total=(s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
+  const pct=total/167;
 
   // Ring
-  document.getElementById('total-score').textContent = total;
-  const circ = 2*Math.PI*82;
-  const ring = document.getElementById('ring-fill');
-  ring.style.strokeDasharray = circ;
-  ring.style.strokeDashoffset = circ;
-  ring.style.stroke = pct>=.70?'var(--green)':pct>=.40?'var(--orange)':'var(--red)';
-  setTimeout(()=>{ ring.style.transition='stroke-dashoffset 1.3s ease'; ring.style.strokeDashoffset=circ*(1-pct); },100);
+  document.getElementById('total-score').textContent=total;
+  const circ=2*Math.PI*82;
+  const ring=document.getElementById('ring-fill');
+  ring.style.strokeDasharray=circ;
+  ring.style.strokeDashoffset=circ;
+  ring.style.stroke=pct>=.70?'var(--green)':pct>=.40?'var(--orange)':'var(--red)';
+  setTimeout(()=>{ring.style.transition='stroke-dashoffset 1.3s ease';ring.style.strokeDashoffset=circ*(1-pct);},100);
 
-  document.getElementById('score-grade').textContent = pct>=.85?'Excellent — AI-First':pct>=.70?'Good — AI-Ready':pct>=.50?'Fair — Needs Work':pct>=.30?'Weak — High Risk':'Critical — AI-Invisible';
-  document.getElementById('score-url').textContent = url;
+  document.getElementById('score-grade').textContent=pct>=.85?'Excellent — AI-First':pct>=.70?'Good — AI-Ready':pct>=.50?'Fair — Needs Work':pct>=.30?'Weak — High Risk':'Critical — AI-Invisible';
+  document.getElementById('score-url').textContent=url;
 
   // Delta
-  const prev = auditHistory.find(h=>h.url===url);
-  const deltaEl = document.getElementById('delta-display');
-  if (prev) {
-    const diff = total - prev.total;
-    deltaEl.innerHTML = diff>0?`<span class="delta-pill delta-up">↑ +${diff} vs last run</span>`:diff<0?`<span class="delta-pill delta-down">↓ ${diff} vs last run</span>`:`<span class="delta-pill delta-same">= Unchanged vs last run</span>`;
-  } else deltaEl.innerHTML='';
+  const prev=auditHistory.find(h=>h.url===url);
+  const dEl=document.getElementById('delta-display');
+  if(prev){const diff=total-prev.total;dEl.innerHTML=diff>0?`<span class="delta-pill delta-up">↑ +${diff} vs last run</span>`:diff<0?`<span class="delta-pill delta-down">↓ ${diff} vs last run</span>`:`<span class="delta-pill delta-same">= Unchanged</span>`;}
+  else dEl.innerHTML='';
 
-  document.getElementById('run-meta').textContent = `Audited: ${url}  ·  ${new Date().toISOString().replace('T',' ').slice(0,19)} UTC`;
-  document.getElementById('cost-meta').textContent = '✓ Live site analysis · Zero API cost · $0.0000';
+  document.getElementById('run-meta').textContent=`Audited: ${url}  ·  ${new Date().toISOString().replace('T',' ').slice(0,19)} UTC`;
 
-  // Category cards
+  // Cat grid — 5 categories
   const cats=[{key:'ai_signals',label:'AI Signals',max:32},{key:'aeo',label:'AEO',max:34},{key:'geo',label:'GEO',max:28},{key:'aio',label:'AIO',max:31},{key:'seo',label:'SEO',max:42}];
-  document.getElementById('cat-grid').innerHTML = cats.map(c=>{
-    const val=s[c.key]||0, p=Math.round(val/c.max*100);
+  document.getElementById('cat-grid').innerHTML=cats.map(c=>{
+    const val=s[c.key]||0,p=Math.round(val/c.max*100);
     return `<div class="cat-card"><div class="cat-header"><span class="cat-name">${c.label}</span><span class="cat-score">${val}<span class="cat-max"> / ${c.max}</span></span></div><div class="progress-bar"><div class="progress-fill ${p>=70?'fill-green':p>=40?'fill-orange':'fill-red'}" style="width:${p}%"></div></div></div>`;
   }).join('');
 
   // Synthesis
-  document.getElementById('synthesis-text').innerHTML = (result.synthesis||'').split('\n').filter(Boolean).map(p=>`<p>${p}</p>`).join('');
+  document.getElementById('synthesis-text').innerHTML=(result.synthesis||'').split('\n').filter(Boolean).map(p=>`<p>${p}</p>`).join('');
 
-  // Signals
+  // All signals by category
   const byCat={};
-  (result.signals||[]).forEach(sig=>{(byCat[sig.category||'Other']=byCat[sig.category||'Other']||[]).push(sig);});
-  document.getElementById('signals-content').innerHTML = Object.entries(byCat).map(([cat,sigs])=>`
+  (result.signals||[]).forEach(sig=>{(byCat[sig.category]=byCat[sig.category]||[]).push(sig);});
+  document.getElementById('signals-content').innerHTML=Object.entries(byCat).map(([cat,sigs])=>`
     <div style="margin-bottom:24px"><p class="section-title">${cat}</p>
     <div class="sig-wrap"><table class="signal-table">
-      <tr><th>Signal</th><th style="width:52px;text-align:center">Status</th><th>Finding</th></tr>
-      ${sigs.map(sig=>`<tr><td class="signal-name">${sig.name}</td><td style="text-align:center">${sig.status==='pass'?'<span class="sig-pass">✓</span>':sig.status==='warn'?'<span class="sig-warn">⚠</span>':'<span class="sig-fail">✗</span>'}</td><td>${sig.note||''}</td></tr>`).join('')}
+      <tr><th>Signal</th><th style="width:52px;text-align:center">Status</th><th>Finding</th><th style="width:40px;text-align:right">Pts</th></tr>
+      ${sigs.map(sig=>`<tr><td class="signal-name">${sig.name}</td>
+        <td style="text-align:center">${sig.status==='pass'?'<span class="sig-pass">✓</span>':sig.status==='warn'?'<span class="sig-warn">⚠</span>':'<span class="sig-fail">✗</span>'}</td>
+        <td>${sig.note||''}</td>
+        <td style="text-align:right;color:var(--light);font-size:11px">${sig.pts}</td>
+      </tr>`).join('')}
     </table></div></div>`).join('');
 
   // Actions
-  const pClass={CRITICAL:'p-critical',HIGH:'p-high',MEDIUM:'p-medium'};
-  document.getElementById('action-list').innerHTML = (result.actions||[]).map(a=>`
+  const pC={CRITICAL:'p-critical',HIGH:'p-high',MEDIUM:'p-medium'};
+  document.getElementById('action-list').innerHTML=(result.actions||[]).map(a=>`
     <li class="action-item">
-      <div class="action-priority ${pClass[a.priority]||'p-medium'}">${(a.priority||'MED').slice(0,3)}</div>
+      <div class="action-priority ${pC[a.priority]||'p-medium'}">${(a.priority||'MED').slice(0,3)}</div>
       <div><div class="action-title">${a.title}</div><div class="action-desc">${a.description}</div><div class="action-cat">${a.category}</div></div>
-    </li>`).join('') || '<div class="no-content">No actions — site is fully optimised!</div>';
+    </li>`).join('')||'<div class="no-content">Site fully optimised!</div>';
 
   // WA CTA
-  const headline = pct>=.70?'Good start — now push to AI-First.':pct>=.40?'You\'re half-visible. Let\'s fix the gaps.':'Your site is invisible to AI. Fix it now.';
-  document.getElementById('wa-headline').textContent = headline;
-  const topAction = (result.actions||[])[0];
-  document.getElementById('wa-score-context').innerHTML = `<strong>Score: ${total}/167</strong> — Top gap: ${topAction?topAction.title:'Review action plan'}. Message Dan for a step-by-step fix plan.`;
-  const waText = encodeURIComponent(`Hi Dan, I ran Audit·AI™ on ${url} — Score: ${total}/167.\nTop gap: ${topAction?.title||'AI visibility gaps'}.\nCan you help?\n\nAI Signals:${s.ai_signals}/32 AEO:${s.aeo}/34 GEO:${s.geo}/28 AIO:${s.aio}/31 SEO:${s.seo}/42`);
-  document.getElementById('wa-btn').href = `https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`;
+  const headline=pct>=.70?'Good start — now push to AI-First.':pct>=.40?"You're half-visible. Let's fix the gaps.":'Your site is invisible to AI. Fix it now.';
+  document.getElementById('wa-headline').textContent=headline;
+  const topAction=(result.actions||[])[0];
+  document.getElementById('wa-score-context').innerHTML=`<strong>Score: ${total}/167</strong> — Top gap: ${topAction?topAction.title:'Review action plan'}. Message Dan for a step-by-step fix plan.`;
+  const waText=encodeURIComponent(`Hi Dan, I ran Audit·AI™ on ${url} — Score: ${total}/167.\nTop gap: ${topAction?.title||'AI visibility gaps'}.\nAI Signals:${s.ai_signals}/32 AEO:${s.aeo}/34 GEO:${s.geo}/28 AIO:${s.aio}/31 SEO:${s.seo}/42`);
+  document.getElementById('wa-btn').href=`https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`;
 
-  // Gate
   document.getElementById('results').style.display='block';
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
   switchTab('overview');
 
-  if (gateUnlocked) {
+  if(gateUnlocked){
     document.getElementById('gate-lock').style.display='none';
     document.getElementById('report-bar').style.display='flex';
     document.getElementById('synthesis-text').style.display='block';
@@ -646,21 +999,21 @@ function displayResults(result, url) {
     document.getElementById('report-bar').style.display='none';
     document.getElementById('synthesis-text').style.display='none';
     document.getElementById('wa-cta').style.display='none';
-    setTimeout(openGate, 1500);
+    setTimeout(openGate,1500);
   }
 }
 
 // ─── GATE ─────────────────────────────────────────────────────────────────────
-function openGate() {
-  document.getElementById('gate-score-num').textContent = document.getElementById('total-score').textContent;
+function openGate(){
+  document.getElementById('gate-score-num').textContent=document.getElementById('total-score').textContent;
   document.getElementById('gate-overlay').classList.add('open');
 }
-function closeGate() { document.getElementById('gate-overlay').classList.remove('open'); }
-function submitGate(via) {
+function closeGate(){document.getElementById('gate-overlay').classList.remove('open');}
+function submitGate(via){
   const name=document.getElementById('gate-name').value.trim();
   const email=document.getElementById('gate-email').value.trim();
   const wa=document.getElementById('gate-wa').value.trim();
-  if (!email&&!wa) { document.getElementById('gate-err').style.display='block'; return; }
+  if(!email&&!wa){document.getElementById('gate-err').style.display='block';return;}
   document.getElementById('gate-err').style.display='none';
   capturedLead={name,email,whatsapp:wa,via,url:currentUrl,ts:new Date().toISOString()};
   gateUnlocked=true;
@@ -669,83 +1022,55 @@ function submitGate(via) {
   document.getElementById('report-bar').style.display='flex';
   document.getElementById('synthesis-text').style.display='block';
   document.getElementById('wa-cta').style.display='block';
-  if (via==='whatsapp'&&wa) {
+  if(via==='whatsapp'&&wa){
     const total=document.getElementById('total-score').textContent;
-    window.open(`https://api.whatsapp.com/send/?phone=40737123540&text=${encodeURIComponent(`Hi Dan, score ${total}/167 on ${currentUrl}. Name: ${name||'—'}`)}`, '_blank');
+    window.open(`https://api.whatsapp.com/send/?phone=40737123540&text=${encodeURIComponent(`Hi Dan, score ${total}/167 on ${currentUrl}. Name: ${name||'—'}`)},'_blank'`);
   }
-  if (via==='email'&&email) sendEmailReport(email);
+  if(via==='email'&&email) sendEmailReport(email);
 }
 
 // ─── HISTORY ─────────────────────────────────────────────────────────────────
-function saveHistory(result, url) {
+function saveHistory(result,url){
   const s=result.scores||{};
   const total=(s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
   auditHistory.unshift({url,total,result,ts:new Date().toLocaleString()});
-  const list=document.getElementById('history-list');
-  list.innerHTML=auditHistory.map((h,i)=>`
+  document.getElementById('history-list').innerHTML=auditHistory.map((h,i)=>`
     <div class="history-item" onclick="reloadHistory(${i})">
       <div><div class="history-url">${h.url}</div><div class="history-date">${h.ts}</div></div>
       <div class="history-score">${h.total}<span style="font-size:12px;font-weight:400;color:var(--light)"> /167</span></div>
     </div>`).join('');
 }
-function reloadHistory(i) {
-  const h=auditHistory[i];
-  currentResult=h.result; currentUrl=h.url;
+function reloadHistory(i){
+  const h=auditHistory[i];currentResult=h.result;currentUrl=h.url;
   document.getElementById('url-input').value=h.url;
-  displayResults(h.result,h.url);
-  switchTab('overview');
-}
-
-// ─── STATS ────────────────────────────────────────────────────────────────────
-function updateStats(url) {
-  sessionAudits++;
-  const domain = new URL(url).hostname;
-  sessionDomains.add(domain);
-  animateCount('stat-audits', sessionAudits);
-  animateCount('stat-domains', sessionDomains.size);
-}
-function animateCount(id, target) {
-  const el=document.getElementById(id);
-  if (!el) return;
-  const from=parseInt(el.textContent)||0;
-  const dur=600, start=performance.now();
-  function step(now) {
-    const p=Math.min((now-start)/dur,1);
-    el.textContent=Math.round(from+(target-from)*(1-Math.pow(1-p,3)));
-    if(p<1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+  displayResults(h.result,h.url);switchTab('overview');
 }
 
 // ─── EMAIL / COPY ─────────────────────────────────────────────────────────────
-function buildReportText() {
-  if (!currentResult) return '';
+function buildReportText(){
+  if(!currentResult) return '';
   const s=currentResult.scores||{};
   const total=(s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
   const actions=(currentResult.actions||[]).map((a,i)=>`${i+1}. [${a.priority}] ${a.title}\n   ${a.description}`).join('\n\n');
   const signals=(currentResult.signals||[]).map(sig=>`${sig.status==='pass'?'✓':sig.status==='warn'?'⚠':'✗'} [${sig.category}] ${sig.name}: ${sig.note||''}`).join('\n');
-  return `AUDIT·AI™ Report\n${new Date().toISOString().slice(0,19)} UTC\nURL: ${currentUrl}\n${'─'.repeat(50)}\nSCORE: ${total}/167\nAI Signals:${s.ai_signals}/32 · AEO:${s.aeo}/34 · GEO:${s.geo}/28 · AIO:${s.aio}/31 · SEO:${s.seo}/42\n${'─'.repeat(50)}\nSYNTHESIS:\n${(currentResult.synthesis||'').replace(/<[^>]+>/g,'')}\n${'─'.repeat(50)}\nACTIONS:\n${actions}\n${'─'.repeat(50)}\nSIGNALS:\n${signals}\n${'─'.repeat(50)}\neu-ai-audit.eu · 5thElement.ai · AiVenture S.R.L.`;
+  return `AUDIT·AI™ Report\n${new Date().toISOString().slice(0,19)} UTC\nURL: ${currentUrl}\n${'─'.repeat(50)}\nSCORE: ${total}/167\nAI Signals:${s.ai_signals}/32 · AEO:${s.aeo}/34 · GEO:${s.geo}/28 · AIO:${s.aio}/31 · SEO:${s.seo}/42\n${'─'.repeat(50)}\nSYNTHESIS:\n${(currentResult.synthesis||'')}\n${'─'.repeat(50)}\nACTIONS:\n${actions}\n${'─'.repeat(50)}\nSIGNALS (167):\n${signals}\n${'─'.repeat(50)}\neu-ai-audit.eu · 5thElement.ai · AiVenture S.R.L.`;
 }
-function sendEmailReport(emailOverride) {
-  const report=buildReportText();
-  if (!report) return;
+function sendEmailReport(emailOverride){
+  const report=buildReportText();if(!report) return;
   const email=emailOverride||capturedLead.email||'';
   const subj=encodeURIComponent(`Audit·AI™ Report — ${currentUrl}`);
   const body=encodeURIComponent(report.slice(0,1900));
   window.open(`https://mail.google.com/mail/?view=cm&to=${email}&su=${subj}&body=${body}`,'_blank');
 }
-function copyReport() {
-  const report=buildReportText();
-  if (!report) return;
+function copyReport(){
+  const report=buildReportText();if(!report) return;
   navigator.clipboard?.writeText(report).then(()=>{
-    const el=document.getElementById('copy-confirm');
-    el.style.display='inline';
+    const el=document.getElementById('copy-confirm');el.style.display='inline';
     setTimeout(()=>el.style.display='none',2500);
   });
 }
 
-// ─── KEYBOARD ────────────────────────────────────────────────────────────────
-document.getElementById('url-input').addEventListener('keydown', e=>{ if(e.key==='Enter') runAudit(); });
+document.getElementById('url-input').addEventListener('keydown',e=>{if(e.key==='Enter') runAudit();});
 </script>
 </body>
 </html>
