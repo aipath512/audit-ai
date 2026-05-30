@@ -658,6 +658,7 @@ function setStatus(show, main='', sub='') {
 function logProgress(main, sub) {
   const log = document.getElementById('progress-log');
   if (!log) return;
+  document.getElementById('status-bar').style.display = 'flex';
   const icons = {
     'Starting': '🚀', 'Search': '🔍', 'Analysing': '🧠',
     'Building': '📋', 'Web search': '🌐', 'Pass': '⚙️'
@@ -729,11 +730,12 @@ async function runAgenticAudit(url) {
       const toolResults = [];
       for (const block of data.content) {
         if (block.type !== 'tool_use') continue;
-        setStatus(true, `Web search: ${block.input?.query || 'fetching…'}`, `Pass ${iterations}`);
+        const q = block.input?.query || 'fetching…';
+        setStatus(true, `🔍 Searching: ${q}`, `Pass ${iterations}`);
         toolResults.push({
           type: 'tool_result',
           tool_use_id: block.id,
-          content: `Search for "${block.input?.query}" completed. Analyse results and continue building the audit JSON.`
+          content: `Search completed for: ${q}. Use findings to score signals accurately.`
         });
       }
       messages.push({ role:'user', content: toolResults });
@@ -762,14 +764,14 @@ async function callWorker(url, system, messages) {
 
 // ─── PROMPTS ──────────────────────────────────────────────────────────────────
 function buildSystemPrompt() {
-  return `You are an AI visibility auditor. Search the URL, then output ONLY valid JSON — no markdown, no text before or after.
+  return `You are an AI visibility auditor. Use web_search to research the URL. Then respond with ONLY a raw JSON object — absolutely no text before or after, no markdown fences, no explanation. Start your response with { and end with }.
 
-JSON schema:
-{"scores":{"ai_signals":0-32,"aeo":0-34,"geo":0-28,"aio":0-31,"seo":0-42},"signals":[{"category":"AI Signals|AEO|GEO|AIO|SEO","name":"signal name","status":"pass|warn|fail","note":"finding"}],"synthesis":"3 paragraphs about findings","actions":[{"priority":"CRITICAL|HIGH|MEDIUM","title":"action","description":"specific fix","category":"category"}]}
+The JSON must have exactly these keys:
+{"scores":{"ai_signals":0,"aeo":0,"geo":0,"aio":0,"seo":0},"signals":[{"category":"AI Signals","name":"GPTBot permission","status":"pass","note":"found in robots.txt"}],"synthesis":"paragraph1\nparagraph2\nparagraph3","actions":[{"priority":"CRITICAL","title":"Add llms.txt","description":"Create llms.txt at root","category":"AI Signals"}]}
 
-Scoring: AI Signals(32): GPTBot+4,ClaudeBot+4,llms.txt+5,ai.json+4,entities.json+4,proof.json+4,intents.json+4,Google-Extended+3. AEO(34): FAQ schema+6,answer-first+5,Q&A+5,HowTo+4,Speakable+4,definitions+5,direct answers+5. GEO(28): Org JSON-LD+5,llms.txt quality+6,sameAs+4,Wikipedia+4,LinkedIn+3,Crunchbase+3,press+3. AIO(31): E-E-A-T+6,topical authority+5,RAG chunking+5,semantic density+5,freshness+4,ChatGPT visible+3,Perplexity cited+3. SEO(42): title+4,meta+4,HTTPS+4,sitemap+4,internal links+4,schema+4,speed+4,H1+3,viewport+3,canonical+3,OG+3,robots+4.
-
-Include 15+ signals, 3-paragraph synthesis with specific findings, 6-8 prioritised actions. Output ONLY the JSON object.`;
+Score ranges: ai_signals 0-32, aeo 0-34, geo 0-28, aio 0-31, seo 0-42.
+Include 12+ signals across all 5 categories. Include 6+ actions. Write 3 synthesis paragraphs.
+YOUR ENTIRE RESPONSE MUST BE VALID JSON STARTING WITH { AND ENDING WITH }. NO OTHER TEXT.`;
 }
 
 function buildUserPrompt(url) {
