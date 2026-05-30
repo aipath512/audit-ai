@@ -865,54 +865,19 @@ Output ONLY the JSON audit report. No text before or after. Start with { end wit
 
 // ─── PARSER ───────────────────────────────────────────────────────────────────
 function parseAuditJSON(text, url) {
-  // Step 1: strip markdown fences
-  let clean = text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+  // Model was prefilled with { so text starts with JSON content
+  let clean = text.trim();
+  // Ensure starts with {
+  if (!clean.startsWith('{')) clean = '{' + clean;
+  // Strip any trailing text after last }
+  const last = clean.lastIndexOf('}');
+  if (last !== -1) clean = clean.slice(0, last + 1);
 
-  // Step 2: direct parse
-  try { return validate(JSON.parse(clean)); } catch(e) {}
-
-  // Step 3: extract outermost { }
-  const s = clean.indexOf('{');
-  const e = clean.lastIndexOf('}');
-  if (s !== -1 && e !== -1 && e > s) {
-    try { return validate(JSON.parse(clean.slice(s, e+1))); } catch(e2) {}
+  try { return validate(JSON.parse(clean)); } catch(e) {
+    console.error('Parse error:', e.message);
+    console.error('Raw text:', text);
+    throw new Error('Audit failed to parse. Please try again — usually works on second attempt.');
   }
-
-  // Step 4: find first { that starts a valid JSON block
-  let pos = 0;
-  while (pos < clean.length) {
-    const start = clean.indexOf('{', pos);
-    if (start === -1) break;
-    for (let end = clean.lastIndexOf('}'); end > start; end = clean.lastIndexOf('}', end-1)) {
-      try {
-        const candidate = clean.slice(start, end+1);
-        return validate(JSON.parse(candidate));
-      } catch(e3) {}
-    }
-    pos = start + 1;
-  }
-
-  // Step 5: build minimal valid object from what we can extract
-  console.error('Raw AI response:', text);
-  // Try to at least extract scores with regex
-  const scoreMatch = text.match(/"ai_signals"\s*:\s*(\d+)/);
-  if (scoreMatch) {
-    const minimal = {
-      scores: {
-        ai_signals: parseInt(text.match(/"ai_signals"\s*:\s*(\d+)/)?.[1]||0),
-        aeo: parseInt(text.match(/"aeo"\s*:\s*(\d+)/)?.[1]||0),
-        geo: parseInt(text.match(/"geo"\s*:\s*(\d+)/)?.[1]||0),
-        aio: parseInt(text.match(/"aio"\s*:\s*(\d+)/)?.[1]||0),
-        seo: parseInt(text.match(/"seo"\s*:\s*(\d+)/)?.[1]||0),
-      },
-      signals: [],
-      synthesis: 'Partial result — full synthesis unavailable. Please run the audit again.',
-      actions: []
-    };
-    return validate(minimal);
-  }
-
-  throw new Error('Could not parse AI response. The model returned unexpected format. Please try again.');
 }
 function validate(obj) {
   if (!obj.scores) obj.scores = { ai_signals:0, aeo:0, geo:0, aio:0, seo:0 };

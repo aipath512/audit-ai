@@ -127,16 +127,29 @@ async function handleAudit(request, env, cors) {
       'x-api-key': env.ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01',
     },
+    // Force JSON by prefilling assistant turn with {
+    const messages = body.messages;
+    const lastMsg = messages[messages.length - 1];
+    // Add assistant prefill to force pure JSON output
+    const messagesWithPrefill = [
+      ...messages,
+      { role: 'assistant', content: '{' }
+    ];
+
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1500,
+      max_tokens: 2000,
       system: body.system,
-      messages: body.messages,
-      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+      messages: messagesWithPrefill,
+      // No web search — uses model knowledge to reduce token costs
     }),
   });
 
   const data = await anthropicResp.json();
+  // Restore the prefilled { to the response text
+  if (data.content && data.content[0] && data.content[0].type === 'text') {
+    data.content[0].text = '{' + data.content[0].text;
+  }
 
   if (!anthropicResp.ok) {
     return new Response(JSON.stringify({
@@ -151,6 +164,14 @@ async function handleAudit(request, env, cors) {
   if (env.RATE_KV) {
     updateCounters(env, domain).catch(() => {});
   }
+
+  // Add cost calculation to response
+  const usage = data.usage || {};
+  const inputTokens = usage.input_tokens || 0;
+  const outputTokens = usage.output_tokens || 0;
+  // Haiku pricing: $0.80/1M input, $4.00/1M output
+  const cost = ((inputTokens * 0.80) + (outputTokens * 4.00)) / 1_000_000;
+  data._cost = { input_tokens: inputTokens, output_tokens: outputTokens, usd: parseFloat(cost.toFixed(6)) };
 
   return new Response(JSON.stringify(data), {
     status: 200,
