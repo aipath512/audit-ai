@@ -128,7 +128,7 @@ async function handleAudit(request, env, cors) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-5',
+      model: 'claude-sonnet-4-6',
       max_tokens: 4096,
       system: body.system,
       messages: body.messages,
