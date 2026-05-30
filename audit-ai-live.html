@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit·AI™ — Live 167-Signal Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#ffffff;--bg2:#f5f5f7;--text:#000000;--mid:#333333;--light:#555555;
+  --blue:#0051A8;--blue-light:#e8f0fb;--border:#e0e0e0;
+  --green:#1a7f4b;--red:#c0392b;--orange:#d35400;
+  --card:#ffffff;--shadow:0 2px 20px rgba(0,0,0,0.08);
+}
+body.dark {
+  --bg:#0a0a0a;--bg2:#111111;--text:#ffffff;--mid:#cccccc;--light:#aaaaaa;
+  --blue:#7ec8ff;--blue-light:#0d1f33;--border:#2a2a2a;
+  --green:#4ade80;--red:#f87171;--orange:#fb923c;
+  --card:#161616;--shadow:0 2px 20px rgba(0,0,0,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s,border-color .3s}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* TOGGLE */
+#toggle{position:fixed;top:68px;left:16px;z-index:999;background:var(--text);color:var(--bg);
+  border:none;border-radius:8px;padding:6px 12px;font-family:'Inter',sans-serif;font-size:13px;
+  font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;
+  width:34px;height:34px;overflow:hidden;white-space:nowrap}
+#toggle:hover{width:auto}
+
+/* HEADER */
+header{border-bottom:1px solid var(--border);padding:20px 24px 16px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.brand h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text)}
+.brand h1 em{font-style:italic;color:var(--blue)}
+.brand p{font-size:11px;font-weight:500;color:var(--light);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.brand-meta{text-align:right;font-size:10px;color:var(--light);letter-spacing:.06em;text-transform:uppercase;line-height:1.7}
+.brand-meta strong{color:var(--text)}
+
+/* STATS BAR */
+.stats-bar{
+  display:flex;justify-content:center;gap:0;
+  border-bottom:1px solid var(--border);background:var(--bg2);
+}
+.stat-item{
+  padding:12px 32px;text-align:center;border-right:1px solid var(--border);
+  flex:1;max-width:200px;
+}
+.stat-item:last-child{border-right:none}
+.stat-num{
+  font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--blue);
+  line-height:1;display:block;
+}
+.stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:3px}
+
+/* HERO */
+.hero{padding:40px 24px 32px;text-align:center}
+.hero-tag{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+.hero h2{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:8px}
+.hero h2 em{font-style:italic;color:var(--blue)}
+.hero p{font-size:15px;color:var(--mid);line-height:1.6;max-width:440px;margin:0 auto 28px;font-weight:300}
+.live-badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-light);
+  border:1px solid var(--blue);border-radius:20px;padding:6px 16px;margin-bottom:24px;
+  font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.06em;text-transform:uppercase}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* FORM */
+.audit-form{max-width:540px;margin:0 auto}
+.input-row{display:flex;background:var(--bg2);border:1.5px solid var(--border);
+  border-radius:50px;overflow:hidden;padding:4px;margin-bottom:10px}
+.input-row input{flex:1;border:none;background:transparent;padding:12px 18px;
+  font-size:15px;color:var(--text);font-family:'Inter',sans-serif;outline:none}
+.input-row input::placeholder{color:var(--light)}
+.btn-run{background:var(--text);color:var(--bg);border:none;border-radius:46px;
+  padding:12px 24px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;white-space:nowrap;letter-spacing:-.01em}
+.btn-run:disabled{opacity:.4;cursor:not-allowed}
+.email-row{display:flex;gap:8px;margin-bottom:6px}
+.email-row input{flex:1;border:1px solid var(--border);border-radius:10px;
+  background:var(--bg2);padding:10px 14px;font-size:13px;color:var(--text);
+  font-family:'Inter',sans-serif;outline:none}
+.email-row input::placeholder{color:var(--light)}
+.form-hint{font-size:11px;color:var(--light);text-align:center;margin-top:4px}
+
+/* STATUS */
+#status-bar{max-width:540px;margin:16px auto 0;padding:14px 18px;border-radius:12px;
+  background:var(--blue-light);border:1px solid var(--blue);font-size:13px;color:var(--blue);
+  display:none;align-items:center;gap:12px}
+.spinner{width:18px;height:18px;border:2px solid var(--blue);border-top-color:transparent;
+  border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-steps{flex:1}
+.status-main{font-weight:600;margin-bottom:2px}
+.status-sub{font-size:11px;opacity:.8}
+
+/* ERROR */
+.error-box{background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:16px;
+  color:#991b1b;font-size:13px;line-height:1.6;margin-top:16px;
+  max-width:540px;margin-left:auto;margin-right:auto}
+body.dark .error-box{background:#450a0a;border-color:#7f1d1d;color:#fca5a5}
+
+/* RESULTS */
+#results{max-width:760px;margin:0 auto;padding:32px 24px 60px;display:none}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap}
+.tab-btn{border:1px solid var(--border);background:var(--bg2);color:var(--mid);
+  border-radius:8px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;
+  font-family:'Inter',sans-serif}
+.tab-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* SCORE RING */
+.score-hero{text-align:center;margin-bottom:32px}
+.ring-wrap{position:relative;width:190px;height:190px;margin:0 auto 16px}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-center .score-num{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;color:var(--text);line-height:1}
+.ring-center .score-denom{font-size:14px;color:var(--light)}
+.ring-center .score-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:4px}
+.score-grade{font-size:14px;font-weight:600;color:var(--mid);margin-bottom:4px}
+.score-url{font-size:12px;color:var(--light);font-family:'IBM Plex Mono',monospace}
+.delta-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;
+  border-radius:20px;font-size:12px;font-weight:600;margin-top:10px}
+.delta-up{background:#dcfce7;color:#166534}
+.delta-down{background:#fee2e2;color:#991b1b}
+.delta-same{background:var(--bg2);color:var(--mid)}
+body.dark .delta-up{background:#14532d;color:#86efac}
+body.dark .delta-down{background:#450a0a;color:#fca5a5}
+
+/* REPORT BUTTONS */
+.report-bar{display:flex;gap:10px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;align-items:center}
+.btn-email{background:var(--blue);color:#fff;border:none;border-radius:10px;
+  padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:8px}
+.btn-email:hover{opacity:.85}
+.btn-copy{background:var(--bg2);color:var(--text);border:1px solid var(--border);
+  border-radius:10px;padding:12px 22px;font-family:'Inter',sans-serif;font-size:13px;
+  font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px}
+.btn-copy:hover{border-color:var(--blue);color:var(--blue)}
+.copy-confirm{font-size:12px;color:var(--green);display:none}
+
+/* CAT GRID */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+@media(max-width:480px){.cat-grid{grid-template-columns:1fr}}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cat-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid)}
+.cat-score{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text)}
+.cat-max{font-size:12px;color:var(--light)}
+.progress-bar{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
+.fill-green{background:var(--green)}.fill-orange{background:var(--orange)}.fill-red{background:var(--red)}
+
+/* SECTION TITLE */
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--light);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* SYNTHESIS */
+.synthesis-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:22px;margin-bottom:24px;box-shadow:var(--shadow);line-height:1.8;
+  font-size:14px;color:var(--mid);font-weight:300}
+.synthesis-card strong{color:var(--text);font-weight:600}
+.synthesis-card p{margin-bottom:12px}
+.synthesis-card p:last-child{margin-bottom:0}
+
+/* ACTIONS */
+.action-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.action-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;display:flex;gap:14px;align-items:flex-start;box-shadow:var(--shadow)}
+.action-priority{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.06em;line-height:1.2;text-align:center}
+.p-critical{background:#fee2e2;color:#991b1b}
+.p-high{background:#fef3c7;color:#92400e}
+.p-medium{background:#dbeafe;color:#1e40af}
+body.dark .p-critical{background:#450a0a;color:#fca5a5}
+body.dark .p-high{background:#431407;color:#fed7aa}
+body.dark .p-medium{background:#1e3a5f;color:#93c5fd}
+.action-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.action-desc{font-size:13px;color:var(--mid);font-weight:300;line-height:1.6}
+.action-category{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-top:6px}
+.action-empty{text-align:center;padding:40px;color:var(--light);font-size:14px;
+  border:1px dashed var(--border);border-radius:12px}
+
+/* SIGNALS */
+.sig-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}
+.signal-table{width:100%;border-collapse:collapse}
+.signal-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--light);padding:8px 12px;border-bottom:1px solid var(--border)}
+.signal-table td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid);vertical-align:top}
+.signal-table tr:last-child td{border-bottom:none}
+.signal-table tr:hover td{background:var(--bg2)}
+.signal-name{font-weight:500;color:var(--text)}
+.sig-pass{color:var(--green);font-size:15px;font-weight:700}
+.sig-fail{color:var(--red);font-size:15px;font-weight:700}
+.sig-warn{color:var(--orange);font-size:15px;font-weight:700}
+
+/* HISTORY */
+.history-list{display:flex;flex-direction:column;gap:10px}
+.history-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;box-shadow:var(--shadow)}
+.history-item:hover{border-color:var(--blue)}
+.history-url{font-size:13px;font-weight:500;color:var(--text);font-family:'IBM Plex Mono',monospace}
+.history-score{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--text)}
+.history-date{font-size:11px;color:var(--light);margin-top:2px}
+.no-content{text-align:center;padding:40px;color:var(--light);font-size:14px;
+  border:1px dashed var(--border);border-radius:12px}
+.run-meta{font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:24px}
+
+/* WHATSAPP CTA */
+.wa-cta {
+  background:linear-gradient(135deg,#0a2a1a 0%,#0d3322 100%);
+  border:1.5px solid #25d366;border-radius:16px;padding:24px 24px 20px;
+  margin-bottom:28px;position:relative;overflow:hidden;
+}
+body:not(.dark) .wa-cta {
+  background:linear-gradient(135deg,#f0fff4 0%,#dcfce7 100%);
+  border-color:#16a34a;
+}
+.wa-cta::before {
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(37,211,102,0.08);pointer-events:none;
+}
+.wa-cta-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.wa-icon{width:48px;height:48px;border-radius:12px;background:#25d366;
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.wa-cta-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;
+  color:#25d366;line-height:1.2;margin-bottom:4px}
+body:not(.dark) .wa-cta-title{color:#15803d}
+.wa-cta-sub{font-size:13px;color:#86efac;font-weight:300;line-height:1.5}
+body:not(.dark) .wa-cta-sub{color:#166534}
+.wa-score-pill{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);
+  border-radius:8px;padding:8px 14px;margin-bottom:14px;width:100%}
+body:not(.dark) .wa-score-pill{background:rgba(22,163,74,0.1);border-color:rgba(22,163,74,0.3)}
+.wa-score-pill-text{font-size:13px;color:#86efac;line-height:1.5;font-weight:300}
+body:not(.dark) .wa-score-pill-text{color:#166534}
+.wa-score-pill-text strong{color:#25d366;font-weight:700}
+body:not(.dark) .wa-score-pill-text strong{color:#15803d}
+.wa-offers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+@media(max-width:440px){.wa-offers{grid-template-columns:1fr}}
+.wa-offer{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);
+  border-radius:10px;padding:10px 12px}
+body:not(.dark) .wa-offer{background:rgba(22,163,74,0.07);border-color:rgba(22,163,74,0.2)}
+.wa-offer-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#25d366}
+body:not(.dark) .wa-offer-price{color:#15803d}
+.wa-offer-name{font-size:12px;font-weight:600;color:#86efac;margin-bottom:2px}
+body:not(.dark) .wa-offer-name{color:#166534}
+.wa-offer-desc{font-size:11px;color:#4ade80;opacity:.8;font-weight:300}
+body:not(.dark) .wa-offer-desc{color:#166534}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  background:#25d366;color:#000;border:none;border-radius:12px;
+  padding:15px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;text-decoration:none;letter-spacing:-.01em}
+.btn-wa:hover{background:#22c55e;transform:translateY(-1px)}
+.btn-wa-sub{font-size:11px;color:#86efac;text-align:center;margin-top:8px;font-weight:300}
+body:not(.dark) .btn-wa-sub{color:#166534}
+
+/* LEAD GATE MODAL */
+.gate-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.78);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.gate-overlay.open{opacity:1;pointer-events:all}
+.gate-box{
+  background:var(--card);border:1.5px solid var(--border);border-radius:20px;
+  padding:32px 28px;max-width:420px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,0.5);
+  transform:translateY(24px);transition:transform .3s;
+}
+.gate-overlay.open .gate-box{transform:translateY(0)}
+.gate-icon{font-size:36px;margin-bottom:12px;text-align:center}
+.gate-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;
+  color:var(--text);text-align:center;margin-bottom:6px;line-height:1.2}
+.gate-sub{font-size:13px;color:var(--mid);text-align:center;margin-bottom:20px;
+  font-weight:300;line-height:1.6}
+.gate-score-preview{
+  background:var(--blue-light);border:1px solid var(--blue);border-radius:10px;
+  padding:12px 16px;margin-bottom:20px;text-align:center;
+}
+.gate-score-preview .gscore{font-family:'Playfair Display',serif;font-size:32px;
+  font-weight:900;color:var(--blue);line-height:1}
+.gate-score-preview .gsub{font-size:11px;color:var(--mid);margin-top:2px;
+  text-transform:uppercase;letter-spacing:.08em}
+.gate-input{width:100%;border:1.5px solid var(--border);border-radius:10px;
+  background:var(--bg2);padding:12px 14px;font-size:14px;color:var(--text);
+  font-family:'Inter',sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s}
+.gate-input:focus{border-color:var(--blue)}
+.gate-input::placeholder{color:var(--light)}
+.gate-or{display:flex;align-items:center;gap:10px;margin:6px 0 10px;
+  font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:.1em}
+.gate-or::before,.gate-or::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-gate-submit{width:100%;background:var(--text);color:var(--bg);border:none;
+  border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;
+  font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:-.01em}
+.btn-gate-submit:hover{opacity:.85}
+.btn-gate-wa{width:100%;background:#25d366;color:#000;border:none;
+  border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;
+  font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-gate-wa:hover{background:#22c55e}
+.gate-privacy{font-size:11px;color:var(--light);text-align:center;margin-top:14px;line-height:1.5}
+.gate-err{font-size:12px;color:var(--red);text-align:center;margin-top:6px;display:none}
+</style>
+</head>
+<body class="dark">
+
+<!-- LEAD GATE MODAL -->
+<div class="gate-overlay" id="gate-overlay">
+  <div class="gate-box">
+    <div class="gate-icon">🔓</div>
+    <div class="gate-title">Your score is ready.</div>
+    <div class="gate-sub">Enter your email <em>or</em> WhatsApp number to unlock your full report, action plan, and fix recommendations.</div>
+    <div class="gate-score-preview">
+      <div class="gscore" id="gate-score-num">—</div>
+      <div class="gsub">/ 167 · Your AI Visibility Score</div>
+    </div>
+    <input class="gate-input" type="text" id="gate-name" placeholder="Your name">
+    <input class="gate-input" type="email" id="gate-email" placeholder="your@email.com">
+    <div class="gate-or">or</div>
+    <input class="gate-input" type="tel" id="gate-wa" placeholder="WhatsApp number  e.g. +33 6 12 34 56 78">
+    <div class="gate-err" id="gate-err">Please enter your email or WhatsApp number to continue.</div>
+    <button class="btn-gate-submit" onclick="submitGate('email')">✉ Send Me the Full Report</button>
+    <button class="btn-gate-wa" onclick="submitGate('whatsapp')">💬 Get Report on WhatsApp</button>
+    <div class="gate-privacy">🔒 Your details go directly to Dan · Never shared · No spam</div>
+  </div>
+</div>
+
+<button id="toggle" onclick="toggleTheme()">☀<span>&nbsp;Light</span></button>
+
+<header>
+  <div class="brand">
+    <h1>Audit<em>·AI™</em></h1>
+    <p>167-Signal Live AI Visibility Engine</p>
+  </div>
+  <div class="brand-meta">
+    <strong>V 3.0 · LIVE</strong><br>
+    AI Signals · AEO · GEO<br>
+    AIO · SEO
+  </div>
+</header>
+
+<!-- LIVE STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num" id="stat-audits">—</span>
+    <div class="stat-label">Audits Run</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" id="stat-domains">—</span>
+    <div class="stat-label">Sites Audited</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">167</span>
+    <div class="stat-label">Signals Checked</div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-tag">Complete Diagnostic · 167 Signals · Live AI Analysis</div>
+  <h2>Your AI Search Visibility,<br><em>Diagnosed. Live.</em></h2>
+  <p>Enter any URL — Claude audits it live with real web search. Every run scores the actual current state of your site.</p>
+
+  <div class="live-badge">
+    <span class="live-dot"></span>
+    Powered by Claude · Agentic Multi-Step · No API Key Needed
+  </div>
+
+  <div class="audit-form">
+    <div class="input-row">
+      <input type="text" id="url-input" placeholder="yoursite.com" autocomplete="off" autocapitalize="none">
+      <button class="btn-run" id="run-btn" onclick="runAudit()">Run Audit</button>
+    </div>
+    <div class="form-hint">Free · No account needed · Results in ~30 seconds</div>
+  </div>
+
+  <div id="status-bar">
+    <div class="spinner"></div>
+    <div class="status-steps">
+      <div class="status-main" id="status-main">Initialising…</div>
+      <div class="status-sub" id="status-sub"></div>
+    </div>
+  </div>
+  <div id="error-display"></div>
+</section>
+
+<section id="results">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('signals')">Signals</button>
+    <button class="tab-btn" onclick="switchTab('actions')">Action Plan</button>
+    <button class="tab-btn" onclick="switchTab('history')">History</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="tab-pane active" id="tab-overview">
+    <div class="score-hero">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 190 190" width="190" height="190">
+          <circle cx="95" cy="95" r="82" fill="none" stroke="var(--border)" stroke-width="11"/>
+          <circle id="ring-fill" cx="95" cy="95" r="82" fill="none" stroke="var(--blue)" stroke-width="11"
+            stroke-dasharray="515" stroke-dashoffset="515" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-center">
+          <div class="score-num" id="total-score">0</div>
+          <div class="score-denom">/ 167</div>
+          <div class="score-label">Total Score</div>
+        </div>
+      </div>
+      <div class="score-grade" id="score-grade">—</div>
+      <div class="score-url" id="score-url"></div>
+      <div id="delta-display"></div>
+    </div>
+
+    <div class="run-meta" id="run-meta"></div>
+
+    <!-- LOCKED: shown before gate -->
+    <div id="gate-lock" style="text-align:center;margin-bottom:28px;display:none">
+      <div style="background:var(--bg2);border:1.5px dashed var(--border);border-radius:14px;padding:24px 20px">
+        <div style="font-size:28px;margin-bottom:8px">🔒</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px">Full report locked</div>
+        <div style="font-size:13px;color:var(--mid);font-weight:300;margin-bottom:16px">Enter your email or WhatsApp to unlock your action plan, signal detail, and fix recommendations.</div>
+        <button onclick="openGate()" style="background:var(--text);color:var(--bg);border:none;border-radius:10px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer">🔓 Unlock Full Report</button>
+      </div>
+    </div>
+
+    <!-- UNLOCKED: shown after gate -->
+    <div class="report-bar" id="report-bar" style="display:none">
+      <button class="btn-email" onclick="sendEmailReport()">✉ Send Report by Email</button>
+      <button class="btn-copy" onclick="copyReport()">⎘ Copy Full Report</button>
+      <span class="copy-confirm" id="copy-confirm">✓ Copied!</span>
+    </div>
+
+    <div class="cat-grid" id="cat-grid"></div>
+
+    <p class="section-title">AI Executive Synthesis</p>
+    <div class="synthesis-card" id="synthesis-text"></div>
+
+    <!-- WHATSAPP CTA — auto-generated after every audit -->
+    <div class="wa-cta" id="wa-cta" style="display:none">
+      <div class="wa-cta-top">
+        <div class="wa-icon">💬</div>
+        <div>
+          <div class="wa-cta-title" id="wa-headline">Fix your AI visibility — today.</div>
+          <div class="wa-cta-sub">Dan Ionesco · Founder, 5thElement.ai · Replies within 1 hour</div>
+        </div>
+      </div>
+      <div class="wa-score-pill">
+        <span class="wa-score-pill-text" id="wa-score-context">Your site scored — analysing gaps…</span>
+      </div>
+      <div class="wa-offers">
+        <div class="wa-offer">
+          <div class="wa-offer-name">AUDIT-AI™ Setup</div>
+          <div class="wa-offer-price">€49</div>
+          <div class="wa-offer-desc">One-time · Full 167-signal fix plan</div>
+        </div>
+        <div class="wa-offer">
+          <div class="wa-offer-name">AI-READY Website</div>
+          <div class="wa-offer-price">€2,500</div>
+          <div class="wa-offer-desc">All 167 signals green · Edge deploy</div>
+        </div>
+        <div class="wa-offer">
+          <div class="wa-offer-name">Monthly Tracking</div>
+          <div class="wa-offer-price">€19/mo</div>
+          <div class="wa-offer-desc">Score alerts · Regression detection</div>
+        </div>
+        <div class="wa-offer">
+          <div class="wa-offer-name">EU AI Act Package</div>
+          <div class="wa-offer-price">€1,500</div>
+          <div class="wa-offer-desc">EU Representative + AI trust layer</div>
+        </div>
+      </div>
+      <a id="wa-btn" href="#" target="_blank" class="btn-wa">
+        <span>💬</span> WhatsApp Dan Now — Get Your Fix Plan
+      </a>
+      <div class="btn-wa-sub">+40 737 123 540 · Free 15-min consultation · No commitment</div>
+    </div>
+  </div>
+
+  <!-- SIGNALS -->
+  <div class="tab-pane" id="tab-signals">
+    <div id="signals-content"></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="tab-pane" id="tab-actions">
+    <p class="section-title">Priority Action Plan</p>
+    <ul class="action-list" id="action-list"></ul>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="tab-pane" id="tab-history">
+    <p class="section-title">Audit History · This Session</p>
+    <div class="history-list" id="history-list">
+      <div class="no-content">No previous audits yet.</div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+// Point this to your deployed Cloudflare Worker URL
+const WORKER_URL = 'https://audit-ai.YOUR-SUBDOMAIN.workers.dev';
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let auditHistory = [];
+let currentResult = null;
+let currentUrl = '';
+let gateUnlocked = false;  // persists for session — once unlocked, stays open
+let capturedLead = {};     // {name, email, whatsapp}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  loadStats();
+  setInterval(loadStats, 30000); // refresh every 30s
+});
+
+async function loadStats() {
+  try {
+    const resp = await fetch(`${WORKER_URL}/stats`);
+    if (!resp.ok) return;
+    const data = await resp.json();
+    animateCount('stat-audits', data.total_audits || 0);
+    animateCount('stat-domains', data.unique_domains || 0);
+  } catch(e) {
+    // Worker not deployed yet — show dashes
+  }
+}
+
+function animateCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const current = parseInt(el.textContent.replace(/[^0-9]/g,'')) || 0;
+  if (current === target) return;
+  const duration = 800;
+  const start = performance.now();
+  const from = current;
+  function step(now) {
+    const pct = Math.min((now - start) / duration, 1);
+    const val = Math.round(from + (target - from) * easeOut(pct));
+    el.textContent = val.toLocaleString();
+    if (pct < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+// ─── LEAD GATE ────────────────────────────────────────────────────────────────
+function openGate() {
+  // Pre-fill score in modal
+  const score = document.getElementById('total-score').textContent;
+  document.getElementById('gate-score-num').textContent = score;
+  document.getElementById('gate-overlay').classList.add('open');
+}
+
+function closeGate() {
+  document.getElementById('gate-overlay').classList.remove('open');
+}
+
+function submitGate(via) {
+  const name  = document.getElementById('gate-name').value.trim();
+  const email = document.getElementById('gate-email').value.trim();
+  const wa    = document.getElementById('gate-wa').value.trim();
+  const errEl = document.getElementById('gate-err');
+
+  // Need at least email or WA
+  if (!email && !wa) {
+    errEl.style.display = 'block';
+    errEl.textContent = 'Please enter your email or WhatsApp number to continue.';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  // Save lead
+  capturedLead = { name, email, whatsapp: wa, via, url: currentUrl, ts: new Date().toISOString() };
+
+  // Send lead to Worker (non-blocking)
+  saveLead(capturedLead);
+
+  // Unlock the UI
+  gateUnlocked = true;
+  closeGate();
+  unlockResults();
+
+  // If they chose WhatsApp, open WA immediately
+  if (via === 'whatsapp' && wa) {
+    const s = currentResult?.scores || {};
+    const total = document.getElementById('total-score').textContent;
+    const waText = encodeURIComponent(
+      `Hi Dan, I just ran Audit·AI™ on ${currentUrl} — Score: ${total}/167.\n` +
+      `Please send me the full report.\nMy name: ${name||'—'}`
+    );
+    window.open(`https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`, '_blank');
+  }
+
+  // If email, send report
+  if (via === 'email' && email) {
+    sendEmailReport(email);
+  }
+}
+
+function unlockResults() {
+  document.getElementById('gate-lock').style.display = 'none';
+  document.getElementById('report-bar').style.display = 'flex';
+  // Show synthesis, signals, actions, wa-cta
+  document.getElementById('synthesis-text').style.display = 'block';
+  document.getElementById('wa-cta').style.display = 'block';
+  // Switch to actions tab to show value immediately
+  switchTab('actions');
+  setTimeout(() => switchTab('overview'), 100);
+}
+
+async function saveLead(lead) {
+  try {
+    await fetch(`${WORKER_URL}/lead`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(lead)
+    });
+  } catch(e) {
+    // Silently fail — never block user for this
+    console.log('Lead save failed silently:', e.message);
+  }
+}
+
+// ─── THEME ───────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  document.body.classList.toggle('light');
+  const isDark = document.body.classList.contains('dark');
+  document.getElementById('toggle').innerHTML = isDark ? '☀<span>&nbsp;Light</span>' : '☾<span>&nbsp;Dark</span>';
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  const tabs = ['overview','signals','actions','history'];
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i]===name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
+}
+
+// ─── STATUS / ERROR ───────────────────────────────────────────────────────────
+function setStatus(show, main='', sub='') {
+  document.getElementById('status-bar').style.display = show ? 'flex' : 'none';
+  document.getElementById('status-main').textContent = main;
+  document.getElementById('status-sub').textContent = sub;
+}
+function showError(msg) {
+  document.getElementById('error-display').innerHTML = `<div class="error-box">${msg}</div>`;
+}
+function clearError() { document.getElementById('error-display').innerHTML = ''; }
+
+// ─── MAIN ENTRY ──────────────────────────────────────────────────────────────
+async function runAudit() {
+  let url = document.getElementById('url-input').value.trim();
+  if (!url) { showError('Please enter a URL to audit.'); return; }
+  if (!url.startsWith('http')) url = 'https://' + url;
+  clearError();
+  document.getElementById('run-btn').disabled = true;
+  document.getElementById('results').style.display = 'none';
+  setStatus(true, 'Starting live AI audit…', 'Connecting to Claude with web search');
+  try {
+    const result = await runAgenticAudit(url);
+    currentResult = result;
+    currentUrl = url;
+    displayResults(result, url);
+    saveHistory(result, url);
+    loadStats(); // refresh counter after audit
+  } catch(e) {
+    showError('Audit failed: ' + (e.message || 'Unknown error. Please try again.'));
+    console.error(e);
+  } finally {
+    setStatus(false);
+    document.getElementById('run-btn').disabled = false;
+  }
+}
+
+// ─── AGENTIC MULTI-TURN LOOP ──────────────────────────────────────────────────
+async function runAgenticAudit(url) {
+  const SYSTEM = buildSystemPrompt();
+  const messages = [{ role:'user', content: buildUserPrompt(url) }];
+  let iterations = 0;
+  const MAX_ITER = 6;
+
+  while (iterations < MAX_ITER) {
+    iterations++;
+    setStatus(true,
+      iterations===1 ? 'Searching the web for site data…' :
+      iterations===2 ? 'Analysing AI-readiness signals…' :
+      'Building action plan & synthesis…',
+      `Pass ${iterations} of up to ${MAX_ITER}`
+    );
+
+    const data = await callWorker(url, SYSTEM, messages);
+
+    messages.push({ role:'assistant', content: data.content });
+
+    if (data.stop_reason === 'end_turn') {
+      const text = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+      return parseAuditJSON(text, url);
+    }
+
+    if (data.stop_reason === 'tool_use') {
+      const toolResults = [];
+      for (const block of data.content) {
+        if (block.type !== 'tool_use') continue;
+        setStatus(true, `Web search: ${block.input?.query || 'fetching…'}`, `Pass ${iterations}`);
+        toolResults.push({
+          type: 'tool_result',
+          tool_use_id: block.id,
+          content: `Search for "${block.input?.query}" completed. Analyse results and continue building the audit JSON.`
+        });
+      }
+      messages.push({ role:'user', content: toolResults });
+      continue;
+    }
+
+    const text = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    if (text.includes('"scores"')) return parseAuditJSON(text, url);
+    throw new Error(`Unexpected stop: ${data.stop_reason}`);
+  }
+  throw new Error('Audit exceeded maximum passes. Try again.');
+}
+
+async function callWorker(url, system, messages) {
+  const resp = await fetch(`${WORKER_URL}/audit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system, messages, audited_url: url })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(()=>({}));
+    throw new Error(err.error || `Worker error ${resp.status}`);
+  }
+  return resp.json();
+}
+
+// ─── PROMPTS ──────────────────────────────────────────────────────────────────
+function buildSystemPrompt() {
+  return `You are an elite AI visibility auditor specialising in AI Signals, AEO, GEO, AIO, and SEO.
+
+WORKFLOW:
+1. Use web_search to search for the exact URL
+2. Search for robots.txt content on the domain
+3. Search for AI files: llms.txt, ai.json, entities.json, proof.json
+4. Search for schema markup and entity links
+5. Output ONLY the JSON object — no preamble, no markdown fences
+
+OUTPUT: Return ONLY this JSON structure:
+{
+  "scores": { "ai_signals":<0-32>, "aeo":<0-34>, "geo":<0-28>, "aio":<0-31>, "seo":<0-42> },
+  "signals": [
+    {"category":"AI Signals","name":"GPTBot crawl permission","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AI Signals","name":"ClaudeBot crawl permission","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AI Signals","name":"llms.txt present","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AI Signals","name":"ai.json present","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AI Signals","name":"entities.json present","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AI Signals","name":"proof.json / SHA-256 anchor","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AEO","name":"FAQ Schema (JSON-LD)","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AEO","name":"HowTo Schema","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AEO","name":"Answer-first paragraph structure","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AEO","name":"Speakable Schema","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AEO","name":"Structured Q&A content","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"GEO","name":"Organization JSON-LD","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"GEO","name":"sameAs entity links","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"GEO","name":"LinkedIn entity verification","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"GEO","name":"Wikipedia / Wikidata presence","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AIO","name":"Topical authority depth","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AIO","name":"RAG-ready content chunking","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"AIO","name":"E-E-A-T signals","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"SEO","name":"Title tag optimised","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"SEO","name":"Meta description present","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"SEO","name":"H1 tag present","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"SEO","name":"HTTPS enabled","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"SEO","name":"XML sitemap","status":"pass|warn|fail","note":"<finding>"},
+    {"category":"SEO","name":"Mobile viewport meta","status":"pass|warn|fail","note":"<finding>"}
+  ],
+  "synthesis": "<paragraph 1: specific findings about AI visibility>\n<paragraph 2: biggest gaps and risks>\n<paragraph 3: strategic recommendation>",
+  "actions": [
+    {"priority":"CRITICAL","title":"<specific action>","description":"<exact step-by-step fix>","category":"AI Signals"},
+    {"priority":"CRITICAL","title":"<specific action>","description":"<exact step-by-step fix>","category":"AEO"},
+    {"priority":"HIGH","title":"<specific action>","description":"<exact step-by-step fix>","category":"GEO"},
+    {"priority":"HIGH","title":"<specific action>","description":"<exact step-by-step fix>","category":"AIO"},
+    {"priority":"HIGH","title":"<specific action>","description":"<exact step-by-step fix>","category":"SEO"},
+    {"priority":"MEDIUM","title":"<specific action>","description":"<exact step-by-step fix>","category":"AI Signals"},
+    {"priority":"MEDIUM","title":"<specific action>","description":"<exact step-by-step fix>","category":"AEO"},
+    {"priority":"MEDIUM","title":"<specific action>","description":"<exact step-by-step fix>","category":"SEO"}
+  ]
+}
+
+SCORING (based on actual findings only):
+AI Signals(0-32): GPTBot allow=4, ClaudeBot allow=4, Google-Extended=3, llms.txt=5, ai.json=4, entities.json=4, proof.json=4, intents.json=4
+AEO(0-34): FAQ schema=6, HowTo=4, Answer-first=5, Speakable=4, Q&A content=5, definitions=5, direct answers=5
+GEO(0-28): Organization JSON-LD=5, sameAs=4, LinkedIn=3, Wikipedia=4, Crunchbase=3, press=3, llms.txt quality=6
+AIO(0-31): Topical authority=5, RAG chunking=5, E-E-A-T=6, freshness=4, semantic density=5, ChatGPT visible=3, Perplexity cited=3
+SEO(0-42): Title=4, meta desc=4, H1=3, HTTPS=4, sitemap=4, viewport=3, canonical=3, OG tags=3, internal links=4, schema=4, speed=4, robots=4
+
+RULES: Scores must reflect actual findings. Actions must name specific missing files/elements. Synthesis must mention what you found or did not find. Output ONLY the JSON.`;
+}
+
+function buildUserPrompt(url) {
+  const domain = url.replace(/https?:\/\//,'').split('/')[0];
+  return `Audit this URL: ${url}
+
+Search 1: Site content — search for "${url}" to read homepage content, title, headings, schema.
+Search 2: robots.txt — search for "${domain}/robots.txt" or "site:${domain} robots.txt".
+Search 3: AI files — search for "${domain} llms.txt" and "${domain} ai.json entities.json".
+Search 4: Schema — search for "${domain} JSON-LD schema organization FAQ".
+Search 5: Entity — search for "${domain} LinkedIn Wikipedia Crunchbase".
+
+After all searches: output ONLY the complete JSON audit report.`;
+}
+
+// ─── PARSER ───────────────────────────────────────────────────────────────────
+function parseAuditJSON(text, url) {
+  let clean = text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+  try { return validate(JSON.parse(clean)); } catch(e) {}
+  const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
+  if (s !== -1 && e !== -1) {
+    try { return validate(JSON.parse(clean.slice(s, e+1))); } catch(e2) {}
+  }
+  console.error('Raw:', text);
+  throw new Error('Could not parse AI response. Logged to console. Try again.');
+}
+function validate(obj) {
+  if (!obj.scores) obj.scores = { ai_signals:0, aeo:0, geo:0, aio:0, seo:0 };
+  if (!Array.isArray(obj.signals)) obj.signals = [];
+  if (!obj.synthesis) obj.synthesis = 'Synthesis not available.';
+  if (!Array.isArray(obj.actions)) obj.actions = [];
+  return obj;
+}
+
+// ─── DISPLAY ─────────────────────────────────────────────────────────────────
+function displayResults(result, url) {
+  const s = result.scores || {};
+  const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
+  const pct = total/167;
+
+  // Ring
+  document.getElementById('total-score').textContent = total;
+  const circ = 2*Math.PI*82;
+  const ring = document.getElementById('ring-fill');
+  ring.style.strokeDasharray = circ;
+  ring.style.strokeDashoffset = circ;
+  ring.style.stroke = pct>=.70?'var(--green)':pct>=.40?'var(--orange)':'var(--red)';
+  setTimeout(()=>{ ring.style.transition='stroke-dashoffset 1.3s ease'; ring.style.strokeDashoffset=circ*(1-pct); },100);
+
+  document.getElementById('score-grade').textContent =
+    pct>=.85?'Excellent — AI-First':pct>=.70?'Good — AI-Ready':pct>=.50?'Fair — Needs Work':pct>=.30?'Weak — High Risk':'Critical — AI-Invisible';
+  document.getElementById('score-url').textContent = url;
+
+  // Delta
+  const prev = auditHistory.find(h=>h.url===url);
+  const deltaEl = document.getElementById('delta-display');
+  if (prev) {
+    const diff = total - prev.total;
+    deltaEl.innerHTML = diff>0
+      ? `<span class="delta-pill delta-up">↑ +${diff} points vs last run</span>`
+      : diff<0 ? `<span class="delta-pill delta-down">↓ ${diff} points vs last run</span>`
+      : `<span class="delta-pill delta-same">= Score unchanged vs last run</span>`;
+  } else deltaEl.innerHTML = '';
+
+  document.getElementById('run-meta').textContent =
+    `Audited: ${url}  ·  ${new Date().toISOString().replace('T',' ').slice(0,19)} UTC`;
+
+  // Category cards
+  const cats = [
+    {key:'ai_signals',label:'AI Signals',max:32},
+    {key:'aeo',label:'AEO',max:34},
+    {key:'geo',label:'GEO',max:28},
+    {key:'aio',label:'AIO',max:31},
+    {key:'seo',label:'SEO',max:42},
+  ];
+  document.getElementById('cat-grid').innerHTML = cats.map(c => {
+    const val = s[c.key]||0, p = Math.round(val/c.max*100);
+    return `<div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">${c.label}</span>
+        <span class="cat-score">${val}<span class="cat-max"> / ${c.max}</span></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill ${p>=70?'fill-green':p>=40?'fill-orange':'fill-red'}" style="width:${p}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Synthesis
+  document.getElementById('synthesis-text').innerHTML =
+    (result.synthesis||'').split(/\n+/).filter(Boolean).map(p=>`<p>${p}</p>`).join('') || '<p>Not available.</p>';
+
+  // Signals
+  const byCat = {};
+  (result.signals||[]).forEach(sig=>{ (byCat[sig.category||'Other'] = byCat[sig.category||'Other']||[]).push(sig); });
+  document.getElementById('signals-content').innerHTML = Object.entries(byCat).map(([cat,sigs])=>`
+    <div style="margin-bottom:24px">
+      <p class="section-title">${cat}</p>
+      <div class="sig-wrap"><table class="signal-table">
+        <tr><th>Signal</th><th style="width:52px;text-align:center">Status</th><th>Finding</th></tr>
+        ${sigs.map(sig=>`<tr>
+          <td class="signal-name">${sig.name||''}</td>
+          <td style="text-align:center">${sig.status==='pass'?'<span class="sig-pass">✓</span>':sig.status==='warn'?'<span class="sig-warn">⚠</span>':'<span class="sig-fail">✗</span>'}</td>
+          <td>${sig.note||''}</td>
+        </tr>`).join('')}
+      </table></div>
+    </div>`).join('') || '<p class="no-content">No signal data.</p>';
+
+  // Actions
+  const actions = result.actions||[];
+  document.getElementById('action-list').innerHTML = actions.length===0
+    ? '<div class="action-empty">No action items generated. Run the audit again for a fresh analysis.</div>'
+    : actions.map(a=>`<li class="action-item">
+        <div class="action-priority ${{CRITICAL:'p-critical',HIGH:'p-high',MEDIUM:'p-medium'}[a.priority]||'p-medium'}">${(a.priority||'MED').slice(0,3)}</div>
+        <div class="action-body">
+          <div class="action-title">${a.title||''}</div>
+          <div class="action-desc">${a.description||''}</div>
+          <div class="action-category">${a.category||''}</div>
+        </div>
+      </li>`).join('');
+
+  document.getElementById('results').style.display='block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+  switchTab('overview');
+
+  // Gate logic
+  if (gateUnlocked) {
+    // Already captured lead this session — show everything
+    document.getElementById('gate-lock').style.display = 'none';
+    document.getElementById('report-bar').style.display = 'flex';
+    document.getElementById('synthesis-text').style.display = 'block';
+    showWhatsAppCTA(total, pct, result);
+  } else {
+    // First audit — show score + categories free, lock the rest
+    document.getElementById('gate-lock').style.display = 'block';
+    document.getElementById('report-bar').style.display = 'none';
+    document.getElementById('synthesis-text').style.display = 'none';
+    document.getElementById('wa-cta').style.display = 'none';
+    // Pre-build WA CTA for after unlock
+    showWhatsAppCTA(total, pct, result);
+    document.getElementById('wa-cta').style.display = 'none'; // hide again until gate
+    // Open gate modal automatically after 1.5s
+    setTimeout(openGate, 1500);
+  }
+}
+
+// ─── WHATSAPP CTA ─────────────────────────────────────────────────────────────
+function showWhatsAppCTA(total, pct, result) {
+  const cta = document.getElementById('wa-cta');
+  const scoreCtx = document.getElementById('wa-score-context');
+  const headline = document.getElementById('wa-headline');
+  const waBtn = document.getElementById('wa-btn');
+
+  // Personalise headline by score band
+  if (pct >= 0.70) {
+    headline.textContent = 'Good start — now push to AI-First.';
+  } else if (pct >= 0.40) {
+    headline.textContent = 'You\'re half-visible. Let\'s fix the gaps.';
+  } else {
+    headline.textContent = 'Your site is invisible to AI. Fix it now.';
+  }
+
+  // Find top CRITICAL or first failing signal for personal context
+  const actions = result.actions || [];
+  const topAction = actions.find(a => a.priority === 'CRITICAL') || actions[0];
+  const failedSignals = (result.signals || []).filter(s => s.status === 'fail');
+  const topFail = failedSignals[0];
+
+  let contextText = `<strong>Your score: ${total}/167</strong> — `;
+  if (topAction) {
+    contextText += `Top gap: <strong>${topAction.title}</strong> (${topAction.category}). `;
+  } else if (topFail) {
+    contextText += `Missing: <strong>${topFail.name}</strong>. `;
+  }
+  contextText += 'Message Dan to get a step-by-step fix plan for your specific site.';
+  scoreCtx.innerHTML = contextText;
+
+  // Build pre-filled WhatsApp message
+  const s = result.scores || {};
+  const failCount = (result.signals || []).filter(s2 => s2.status === 'fail').length;
+  const topGap = topAction ? topAction.title : (topFail ? topFail.name : 'AI visibility gaps');
+  const waText = encodeURIComponent(
+    `Hi Dan, I just ran Audit·AI™ on ${currentUrl} and scored ${total}/167.\n` +
+    `Top gap: ${topGap}.\n` +
+    `${failCount} signals failing. Can you help me fix it?\n\n` +
+    `Scores: AI Signals ${s.ai_signals||0}/32 · AEO ${s.aeo||0}/34 · GEO ${s.geo||0}/28 · AIO ${s.aio||0}/31 · SEO ${s.seo||0}/42`
+  );
+  waBtn.href = `https://api.whatsapp.com/send/?phone=40737123540&text=${waText}`;
+
+  cta.style.display = 'block';
+}
+
+// ─── EMAIL / COPY REPORT ──────────────────────────────────────────────────────
+function buildReportText() {
+  if (!currentResult) return '';
+  const s = currentResult.scores||{};
+  const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
+  const synth = (currentResult.synthesis||'').replace(/<[^>]+>/g,'');
+  const actions = (currentResult.actions||[]).map((a,i)=>
+    `${i+1}. [${a.priority}] ${a.title} (${a.category})\n   ${a.description}`).join('\n\n');
+  const signals = (currentResult.signals||[]).map(sig=>
+    `${sig.status==='pass'?'✓':sig.status==='warn'?'⚠':'✗'} [${sig.category}] ${sig.name}: ${sig.note||''}`).join('\n');
+  const line = '─'.repeat(58);
+  return `AUDIT·AI™ — Live 167-Signal Report
+${new Date().toISOString().replace('T',' ').slice(0,19)} UTC
+URL: ${currentUrl}
+${line}
+
+TOTAL SCORE: ${total} / 167
+
+CATEGORY BREAKDOWN:
+  AI Signals:  ${s.ai_signals||0} / 32
+  AEO:         ${s.aeo||0} / 34
+  GEO:         ${s.geo||0} / 28
+  AIO:         ${s.aio||0} / 31
+  SEO:         ${s.seo||0} / 42
+${line}
+
+EXECUTIVE SYNTHESIS:
+${synth}
+${line}
+
+PRIORITY ACTION PLAN:
+${actions}
+${line}
+
+SIGNAL DETAILS:
+${signals}
+${line}
+Report by AUDIT·AI™ V3.0 · eu-ai-audit.eu
+AiVenture S.R.L. · 5thElement.ai · contact@5thelement.ai`;
+}
+
+function sendEmailReport(emailOverride) {
+  const report = buildReportText();
+  if (!report) { showError('Run an audit first.'); return; }
+  const email = emailOverride || capturedLead.email || '';
+  const subj = encodeURIComponent(`Audit·AI™ Report — ${currentUrl}`);
+  const body = encodeURIComponent(report.slice(0,1900)+'…\n[Truncated — use Copy Full Report for complete version]');
+  window.location.href = `mailto:${email}?subject=${subj}&body=${body}`;
+}
+
+function copyReport() {
+  const report = buildReportText();
+  if (!report) { showError('Run an audit first.'); return; }
+  const confirm = () => {
+    const el = document.getElementById('copy-confirm');
+    el.style.display='inline'; setTimeout(()=>{ el.style.display='none'; },2500);
+  };
+  navigator.clipboard?.writeText(report).then(confirm).catch(()=>{
+    const ta = Object.assign(document.createElement('textarea'),{value:report});
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); confirm();
+  });
+}
+
+// ─── HISTORY ─────────────────────────────────────────────────────────────────
+function saveHistory(result, url) {
+  const s = result.scores||{};
+  const total = (s.ai_signals||0)+(s.aeo||0)+(s.geo||0)+(s.aio||0)+(s.seo||0);
+  auditHistory.unshift({ url, total, result, ts: new Date().toLocaleString() });
+  const list = document.getElementById('history-list');
+  list.innerHTML = auditHistory.map((h,i)=>`
+    <div class="history-item" onclick="reloadHistory(${i})">
+      <div>
+        <div class="history-url">${h.url}</div>
+        <div class="history-date">${h.ts}</div>
+      </div>
+      <div class="history-score">${h.total}<span style="font-size:12px;font-weight:400;color:var(--light)"> /167</span></div>
+    </div>`).join('');
+}
+
+function reloadHistory(i) {
+  const h = auditHistory[i];
+  currentResult = h.result; currentUrl = h.url;
+  document.getElementById('url-input').value = h.url;
+  displayResults(h.result, h.url);
+  switchTab('overview');
+}
+
+// ─── KEYBOARD ────────────────────────────────────────────────────────────────
+document.getElementById('url-input').addEventListener('keydown', e=>{ if(e.key==='Enter') runAudit(); });
+</script>
+</body>
+</html>
