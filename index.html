@@ -263,6 +263,24 @@ body:not(.dark) .wa-offer-desc{color:#166534}
 .btn-wa-sub{font-size:11px;color:#86efac;text-align:center;margin-top:8px;font-weight:300}
 body:not(.dark) .btn-wa-sub{color:#166534}
 
+
+/* BUDGET TRACKER */
+.budget-bar {
+  max-width:540px;margin:12px auto 0;
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.budget-item { text-align:center;flex:1;min-width:80px; }
+.budget-num { font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--text) }
+.budget-label { font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px }
+.budget-input-row { display:flex;gap:6px;align-items:center;margin-top:8px;max-width:540px;margin-left:auto;margin-right:auto }
+.budget-input-row input { width:100px;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg2);padding:7px 10px;font-size:13px;color:var(--text);
+  font-family:'IBM Plex Mono',monospace;outline:none;text-align:center }
+.budget-set-btn { background:var(--text);color:var(--bg);border:none;border-radius:8px;
+  padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif }
+.budget-divider { width:1px;height:32px;background:var(--border) }
+
 /* LEAD GATE MODAL */
 .gate-overlay{
   position:fixed;inset:0;z-index:2000;
@@ -379,6 +397,38 @@ body:not(.dark) .btn-wa-sub{color:#166534}
       <button class="btn-run" id="run-btn" onclick="runAudit()">Run Audit</button>
     </div>
     <div class="form-hint">Free · No account needed · Results in ~30 seconds</div>
+
+  <div class="budget-input-row">
+    <span style="font-size:12px;color:var(--light)">Session budget $</span>
+    <input type="number" id="budget-input" value="1.00" step="0.50" min="0.10">
+    <button class="budget-set-btn" onclick="setBudget()">Set</button>
+  </div>
+  <div class="budget-bar" id="budget-bar">
+    <div class="budget-item">
+      <div class="budget-num" id="b-budget">$1.00</div>
+      <div class="budget-label">Budget</div>
+    </div>
+    <div class="budget-divider"></div>
+    <div class="budget-item">
+      <div class="budget-num" id="b-spent">$0.0000</div>
+      <div class="budget-label">Spent</div>
+    </div>
+    <div class="budget-divider"></div>
+    <div class="budget-item">
+      <div class="budget-num" id="b-remaining">$1.00</div>
+      <div class="budget-label">Remaining</div>
+    </div>
+    <div class="budget-divider"></div>
+    <div class="budget-item">
+      <div class="budget-num" id="b-audits">0</div>
+      <div class="budget-label">Audits Run</div>
+    </div>
+    <div class="budget-divider"></div>
+    <div class="budget-item">
+      <div class="budget-num" id="b-last">—</div>
+      <div class="budget-label">Last Cost</div>
+    </div>
+  </div>
   </div>
 
   <div id="status-bar">
@@ -422,6 +472,7 @@ body:not(.dark) .btn-wa-sub{color:#166534}
     </div>
 
     <div class="run-meta" id="run-meta"></div>
+    <div id="cost-display" style="display:none;font-size:11px;color:var(--light);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:12px;margin-top:-16px"></div>
 
     <!-- LOCKED: shown before gate -->
     <div id="gate-lock" style="text-align:center;margin-bottom:28px;display:none">
@@ -553,6 +604,36 @@ function animateCount(id, target) {
   requestAnimationFrame(step);
 }
 function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+
+// ─── BUDGET TRACKER ───────────────────────────────────────────────────────────
+let sessionBudget = 1.00;
+let sessionSpent = 0;
+let sessionAudits = 0;
+
+function setBudget() {
+  const val = parseFloat(document.getElementById('budget-input').value) || 1.00;
+  sessionBudget = val;
+  sessionSpent = 0;
+  sessionAudits = 0;
+  updateBudgetDisplay(0);
+}
+
+function updateBudgetDisplay(cost) {
+  sessionSpent += cost;
+  sessionAudits += cost > 0 ? 1 : 0;
+  const remaining = Math.max(0, sessionBudget - sessionSpent);
+  document.getElementById('b-budget').textContent = '$' + sessionBudget.toFixed(2);
+  document.getElementById('b-spent').textContent = '$' + sessionSpent.toFixed(4);
+  document.getElementById('b-remaining').textContent = '$' + remaining.toFixed(4);
+  document.getElementById('b-audits').textContent = sessionAudits;
+  if (cost > 0) document.getElementById('b-last').textContent = '$' + cost.toFixed(4);
+
+  // Warn if over 80% budget used
+  const pct = sessionSpent / sessionBudget;
+  const remaining_el = document.getElementById('b-remaining');
+  remaining_el.style.color = pct >= 1 ? 'var(--red)' : pct >= 0.8 ? 'var(--orange)' : 'var(--green)';
+}
 
 // ─── LEAD GATE ────────────────────────────────────────────────────────────────
 function openGate() {
@@ -706,7 +787,7 @@ async function runAgenticAudit(url) {
   const SYSTEM = buildSystemPrompt();
   const messages = [{ role:'user', content: buildUserPrompt(url) }];
   let iterations = 0;
-  const MAX_ITER = 2;
+  const MAX_ITER = 1;
 
   while (iterations < MAX_ITER) {
     iterations++;
@@ -764,19 +845,22 @@ async function callWorker(url, system, messages) {
 
 // ─── PROMPTS ──────────────────────────────────────────────────────────────────
 function buildSystemPrompt() {
-  return `You are an AI visibility auditor. Use web_search to research the URL. Then respond with ONLY a raw JSON object — absolutely no text before or after, no markdown fences, no explanation. Start your response with { and end with }.
+  return `You are an expert AI visibility auditor. Analyse the URL provided using your knowledge of the domain, common web patterns, and AI readiness standards. Respond with ONLY a raw JSON object — no markdown, no text before or after. Start with { end with }.
 
-The JSON must have exactly these keys:
-{"scores":{"ai_signals":0,"aeo":0,"geo":0,"aio":0,"seo":0},"signals":[{"category":"AI Signals","name":"GPTBot permission","status":"pass","note":"found in robots.txt"}],"synthesis":"paragraph1\nparagraph2\nparagraph3","actions":[{"priority":"CRITICAL","title":"Add llms.txt","description":"Create llms.txt at root","category":"AI Signals"}]}
+JSON structure:
+{"scores":{"ai_signals":0,"aeo":0,"geo":0,"aio":0,"seo":0},"signals":[{"category":"AI Signals","name":"signal name","status":"pass|warn|fail","note":"specific finding"}],"synthesis":"paragraph1\nparagraph2\nparagraph3","actions":[{"priority":"CRITICAL|HIGH|MEDIUM","title":"action title","description":"specific fix steps","category":"AI Signals|AEO|GEO|AIO|SEO"}]}
 
 Score ranges: ai_signals 0-32, aeo 0-34, geo 0-28, aio 0-31, seo 0-42.
-Include 12+ signals across all 5 categories. Include 6+ actions. Write 3 synthesis paragraphs.
-YOUR ENTIRE RESPONSE MUST BE VALID JSON STARTING WITH { AND ENDING WITH }. NO OTHER TEXT.`;
+Rules: Include 15+ signals across all 5 categories. Include 6-8 actions ordered by priority. Write 3 detailed synthesis paragraphs mentioning specific findings for this domain. Base scores on realistic assessment of the domain. YOUR ENTIRE RESPONSE MUST BE VALID JSON ONLY.`;
 }
 
 function buildUserPrompt(url) {
   const domain = url.replace(/https?:\/\//,'').split('/')[0];
-  return `Audit ${url}. Search for: site content, robots.txt, llms.txt, ai.json, entities.json, JSON-LD schema, LinkedIn/Wikipedia presence. Output ONLY the JSON audit report.`;
+  return `Perform a complete AI visibility audit for: ${url} (domain: ${domain})
+
+Assess this domain across all 5 categories based on your knowledge of the site, common patterns for this type of business, and AI readiness standards. Be specific about ${domain} in your findings.
+
+Output ONLY the JSON audit report. No text before or after. Start with { end with }.`;
 }
 
 // ─── PARSER ───────────────────────────────────────────────────────────────────
@@ -828,8 +912,20 @@ function displayResults(result, url) {
       : `<span class="delta-pill delta-same">= Score unchanged vs last run</span>`;
   } else deltaEl.innerHTML = '';
 
+  const ts = new Date().toISOString().replace('T',' ').slice(0,19);
   document.getElementById('run-meta').textContent =
-    `Audited: ${url}  ·  ${new Date().toISOString().replace('T',' ').slice(0,19)} UTC`;
+    `Audited: ${url}  ·  ${ts} UTC`;
+
+  // Show cost if available
+  if (result._cost) {
+    const c = result._cost;
+    const costEl = document.getElementById('cost-display');
+    if (costEl) {
+      costEl.textContent = `API cost: $${c.usd.toFixed(4)}  ·  ${c.input_tokens} input + ${c.output_tokens} output tokens`;
+      costEl.style.display = 'block';
+    }
+    updateBudgetDisplay(c.usd);
+  }
 
   // Category cards
   const cats = [
