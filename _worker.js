@@ -53,6 +53,34 @@ export default {
       return handleAudit(request, env, cors);
     }
 
+    // ── GET /fetch?url=... ── proxy fetch for audit engine ──────────────────
+    if (request.method === 'GET' && url.pathname === '/fetch') {
+      const target = url.searchParams.get('url');
+      if (!target) return jsonError('Missing url param', 400, cors);
+      try {
+        const resp = await fetch(target, {
+          headers: {
+            'User-Agent': 'AuditAI-Bot/3.0 (+https://eu-ai-audit.eu)',
+            'Accept': 'text/html,application/xhtml+xml,*/*',
+          },
+          redirect: 'follow',
+          cf: { timeout: 10000 }
+        });
+        const body = await resp.text();
+        return new Response(body, {
+          status: 200,
+          headers: {
+            'Content-Type': resp.headers.get('content-type') || 'text/html',
+            'X-Final-Url': resp.url,
+            'X-Status': String(resp.status),
+            ...cors
+          }
+        });
+      } catch(e) {
+        return jsonError('Fetch failed: ' + e.message, 502, cors);
+      }
+    }
+
     // Pass all other requests to Pages static assets (serves index.html)
     if (env.ASSETS) return env.ASSETS.fetch(request);
     return new Response('Not found', { status: 404 });
